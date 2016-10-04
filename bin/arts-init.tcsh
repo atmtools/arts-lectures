@@ -25,3 +25,6 @@ endif
 
 # Limit ARTS CPU usage to four cores.
 setenv OMP_NUM_THREADS 4
+
+# Load latest MATLAB version.
+module unload matlab && module load matlab/2016
