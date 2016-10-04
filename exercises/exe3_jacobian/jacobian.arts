@@ -62,7 +62,7 @@ abs_linesReadFromSplitArtscat(
 abs_lines_per_speciesCreateFromLines
 
 # Atmospheric scenario
-AtmRawRead( "planets/Earth/Fascod/midlatitude-summer/midlatitude-summer" )
+AtmRawRead( basename="planets/Earth/Fascod/midlatitude-summer/midlatitude-summer" )
 
 # Non reflecting surface
 VectorSetConstant( surface_scalar_reflectivity, 1, 0.4 )
@@ -127,6 +127,7 @@ yCalc
 # Write output
 WriteXML( "ascii", iy, "results/bt.xml" )
 WriteXML( "ascii", f_grid, "results/f_grid.xml" )
+WriteXML( "ascii", abs_species, "results/species.xml" )
 WriteXML( "ascii", y_aux, "results/y_aux.xml" )
 WriteXML( "ascii", jacobian, "results/jacobian.xml" )
 WriteXML( "ascii", z_field, "results/z_field.xml" )
