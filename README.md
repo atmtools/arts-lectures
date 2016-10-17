@@ -1,7 +1,7 @@
 # Infrastructure for the course 'Applied Remote Sensing'.
 
 ## Recommendations
-The course draaw heavily on performing practical exercises using the
+The course draws heavily on performing practical exercises using the
 [Atmospheric Radiative Transer Simulator][ARTS]. You either have to
 [get your own version][get-arts] or use the preconfigured environment on
 `lehre3` (`squall3`).
