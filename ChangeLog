@@ -1,5 +1,11 @@
 2016-10-17  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* Made numbering format of slides and exercises consistent.
+
+	* Converted all doc files to docx.
+
+2016-10-17  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* exercises/exe2_absorption: Added second exercise.
 
 	* exercises/exe2_absorption/exe2_description.docx:
