@@ -1,5 +1,11 @@
 2016-10-17  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* Adjusted numbering of solutions.
+
+	* ChangeLog: Fixed syntax.
+
+2016-10-17  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* Made numbering format of slides and exercises consistent.
 
 	* Converted all doc files to docx.
@@ -26,4 +32,4 @@
 
 	* slides/01-introduction.pptx: Created.
 
-	* slides/02-rotational_spectra.pptx Created.
+	* slides/02-rotational_spectra.pptx: Created.
