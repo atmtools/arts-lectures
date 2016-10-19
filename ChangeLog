@@ -1,5 +1,19 @@
 2016-10-19  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* solutions/Makefile.inc: Define basic targets.
+
+	* solutions/01-rotational_spectra/Makefile,
+	solutions/02-absorption/Makefile,
+	solutions/03-rtcalc/Makefile,
+	solutions/04-jacobian/Makefile,
+	solutions/05-olr/Makefile:
+
+	Use targets defined in Makefile.inc.
+
+	Currently the Makefiles in the sub-directories only include Makefile.inc.
+
+2016-10-19  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* solutions/Makefile:
 
 	Makefile for interaction with Makefiles in all sub-directories.
