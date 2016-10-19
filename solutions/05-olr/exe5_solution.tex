@@ -1,21 +1,6 @@
 \documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
-\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
-\usepackage[english]{babel} 
-\usepackage{amsmath,amsfonts,amsthm} 
-\usepackage{graphicx}
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{float}
-\numberwithin{figure}{section} 
-\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
-
-
-\title{	
-\normalfont \normalsize 
-\textsc{Practical exercise with ARTS, OSF SoSe16} \\ [25pt] % Your university, school and/or department name(s)
-%\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
-\huge Exercise 4: Outgoing Longwave Radiation \\ % The assignment title
-}
+\input{../common/header.tex}
+\title{ Exercise 4: Outgoing Longwave Radiation}
 
 \author{sample solution}
 \date{\normalsize\today} 
@@ -45,7 +30,7 @@ direction (one hemisphere) it is the power that the atmosphere looses to space p
 	\item Use the plot to explain the atmospheric greenhouse effect to your neighbor. \ \\
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 	\includegraphics[width=0.9\textwidth]{plots/olr.pdf}
 	\caption{spectrum of outgoing longwave radiation and Planck curves for different temperatures}
@@ -66,19 +51,19 @@ you can make changes to the atmospheric composition. There are three possibiliti
 
 Each group should investigate one parameter. Change it, and calculate the spectrum, then make a plot. 
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 	\includegraphics[width=0.7\textwidth]{plots/olr_+T.pdf}
 	\caption{spectrum of outgoing longwave radiation for higher Temperature (+1K)}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 	\includegraphics[width=0.7\textwidth]{plots/olr_+CO2.pdf}
 	\caption{spectrum of outgoing longwave radiation for higher $CO_{2}$ concentration}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 	\includegraphics[width=0.7\textwidth]{plots/olr_+H2O.pdf}
 	\caption{spectrum of outgoing longwave radiation for higher $H_{2}O$ concentration}

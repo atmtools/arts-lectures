@@ -1,3 +1,31 @@
+2016-10-19  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* solutions/Makefile:
+
+	Makefile for interaction with Makefiles in all sub-directories.
+
+	* solutions/Makefile.inc: Variable definitions used in all Makefiles.
+
+	* solutions/01-rotational_spectra/Makefile,
+	solutions/02-absorption/Makefile,
+	solutions/03-rtcalc/Makefile,
+	solutions/04-jacobian/Makefile,
+	solutions/05-olr/Makefile:
+
+	Makefiles to compile LaTeX source to PDF (also cleanup).
+
+	* solutions/common, solutions/common/header.tex:
+
+	Common definitions for all LaTeX files.
+
+	* solutions/01-rotational_spectra/exe1_solution.tex,
+	solutions/02-absorption/exe2_absoroption.tex,
+	solutions/03-rtcalc/exe3_solution.tex,
+	solutions/04-jacobian/exe4_solution.tex,
+	solutions/05-olr/exe5_solution.tex:
+
+	Include common definitions in header.
+
 2016-10-17  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* Adjusted numbering of solutions.

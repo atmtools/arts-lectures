@@ -1,25 +1,8 @@
-
 \documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
-\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
-\usepackage[english]{babel} 
-\usepackage{amsmath,amsfonts,amsthm} 
-\usepackage{graphicx}
-\usepackage{caption}
-\usepackage{float}
-\usepackage{subcaption}
-\usepackage{paralist}
-\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
-
-
-\title{	
-\normalfont \normalsize 
-\textsc{Practical exercise with ARTS, OSF SoSe15} \\ [25pt] % Your university, school and/or department name(s)
-%\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
-\huge Exercise 2: Atmospheric Brightness Temperature Spectra \\ % The assignment title
-}
-
-\author{sample solution}
-\date{\normalsize\today} 
+\input{../common/header.tex}
+\title{Exercise 2: Atmospheric Brightness Temperature Spectra}
+\author{Sample Solution}
+\date{Effective: 19.10.2016}
 
 \begin{document}
 
@@ -65,13 +48,13 @@ Use the ARTS control file ``rtcalc.arts'' and Matlab plotting script ``plot\_bt.
 
 Brightness temperature is a unit for intensity. It is the temperature that a blackbody should have to give the same intensity as measured. Mathematically, the transformation between intensity in SI units and intensity in brightness temperature is done with the Planck formula. Calculate and display the atmospheric brightness temperature spectrum for different hypothetical sensors:
 
-\begin{compactenum}[a)]
+\begin{itemize}
 \item A ground-based sensor looking in the zenith direction.
 \item A sensor on an airplane (z = 10 km) looking in the zenith direction. 
-\end{compactenum}
+\end{itemize}
 
 % figures abs cross sections
-\begin{figure}[H]
+\begin{figure}[h]
  \centering
  \begin{subfigure}[h!]{0.46\textwidth}
  \includegraphics[width=\textwidth]{plots/bt_N2+O2+H2O_0km_0deg.pdf}
@@ -106,7 +89,7 @@ Make the same calculation for a satellite sensor (z = 800 km) looking nadir (str
 	\item Explain the funny shape of the O2 line at 120 GHz.
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
  \includegraphics[width=0.6\textwidth]{plots/bt_N2+O2+H2O_800km_180deg.pdf}
  \caption{brightness temperature seen from a sensor looking down. }
