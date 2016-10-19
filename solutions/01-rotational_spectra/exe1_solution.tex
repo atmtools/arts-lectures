@@ -1,7 +1,7 @@
-\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+\documentclass[paper=a4, fontsize=11pt]{scrartcl}
 \input{../common/header.tex}
 
-\title{Exercise 1: Calculation of Absorption Coefficients}
+\title{Exercise 1: Rotational Spectra}
 \author{Sample Solution}
 \date{Effective: 19.10.2016}
 
@@ -10,15 +10,14 @@
 
 \maketitle
 
-\section{Absorption cross sections of different molecules}
-Calculate the absorption cross sections in the microwave spectral range for the
+1. Calculate the absorption cross sections in the microwave spectral range for the
 following molecules:
 \begin{itemize}
-    \item HCl
-    \item ClO
-    \item CO
-    \item $N_{2}O$
-    \item $O_{3}$
+    \item $HCl$
+    \item $ClO$
+    \item $CO$
+    \item $N_2O$
+    \item $O_3$
 \end{itemize}
 Unless otherwise specified use the parameter setting as given in the example
 file \path{absorption.arts}.
@@ -32,79 +31,70 @@ file \path{absorption.arts}.
     \end{subfigure}
     \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[width=\textwidth]{plots/plot_xsec_CO_800hPa_300K.pdf}
-        \caption{CO}
+        \caption{$CO$}
     \end{subfigure}
-
     \begin{subfigure}[b]{0.45\textwidth}
         \includegraphics[width=\textwidth]{plots/plot_xsec_N2O_800hPa_300K.pdf}
-        \caption{N2O}
+        \caption{$N_2O$}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\textwidth}
         \includegraphics[width=\textwidth]{plots/plot_xsec_O3_800hPa_300K.pdf}
-        \caption{O3}
+        \caption{$O_3$}
     \end{subfigure}
-
     \begin{subfigure}[b]{0.45\textwidth}
         \includegraphics[width=\textwidth]{plots/plot_xsec_ClO_800hPa_300K.pdf}
-        \caption{ClO}
+        \caption{$ClO$}
     \end{subfigure}
 
-    \caption{absorption cross sections of the molecules HCL, ClO, CO, N2O and O3.}
-    \label{fig:abs_molucules}
+    \caption{Absorption cross sections of the molecules $HCl$, $ClO$, $CO$,
+    $N_2O$ and $O_3$.}
+    \label{fig:abs_molecules}
 \end{figure}
 
 \begin{itemize}
-    \item Estimate the rotational constant B for HCl and for CO.
+    \item Estimate the rotational constant $B$ for $HCl$ and for $CO$.
     \begin{itemize}
-        \item
+        \item $B_{HCl} \approx 300$\,GHz
+        \item $B_{CO} \approx 100$\,GHz
     \end{itemize}
-    \item Why is B larger for HCl than for CO?
+    \item Why is B larger for $HCl$ than for $CO$?
     \begin{itemize}
-        \item
+        \item The reduced mass $\mu$ is larger for $HCl$. This is caused by a
+            larger molecule in general and a larger mass difference of the
+            atoms inside the molecule.
     \end{itemize}
-    \item Do you have any idea why $N_{2}O$ behaves like a diatomic molecule - and $O_{3}$ not?
+    \item Do you have any idea why $N_{2}O$ behaves like a diatomic molecule -
+        and $O_{3}$ not?
     \begin{itemize}
-        \item
-    \end{itemize}
-\end{itemize}
-
-\section{Pressure dependency of the abs cross section}
-Choose an individual line and perform calculations over a restricted frequency
-range for four different pressures (1hPa, 10hPa, 100hPa, 1000hPa). Keep the
-temperature and constituent mixing ratio constant.
-
-% figures abs cross sections
-\begin{figure}[t!]
-    \centering
-    \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{plots/plot_xsec_O3_1000hPa_300K.pdf}
-        \caption{1000 hPa}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{plots/plot_xsec_O3_800hPa_300K.pdf}
-        \caption{800 hPa}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{plots/plot_xsec_O3_100hPa_300K.pdf}
-        \caption{100 hPa}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{plots/plot_xsec_O3_10hPa_300K.pdf}
-        \caption{10 hPa}
-    \end{subfigure}
-
-    \caption{absorption cross sections for O3 at two different pressure levels.}
-    \label{fig:abs_pressure}
-\end{figure}
-
-\begin{itemize}
-    \item How does the shape of the spectral lines change?
-    \begin{itemize}
-        \item
-    \end{itemize}
-    \item How does the absoption coefficient in the line center change, if pressure is changed?
-    \begin{itemize}
-        \item
+        \item The angles between the atoms inside the molecule differ. $N_2O$
+            has flat angles and therefore momentums of inertia like a linear
+            molecule ($I_A = 0, I_B = I_C$). $O_3$ has a more complex structure
+            with differing momentums of inertia ($I_A \neq I_B \neq I_C$).
     \end{itemize}
 \end{itemize}
+
+2. Investigate other molecules!
+
+\clearpage
+3. Show for a diatomic molecule that the moment of inertia is given by $I = \mu r_0^2$.
+\begin{equation*}
+  I = \sum_i m_i r_i^2 = m_1 r_1^2 + m_2 r_2^2
+\end{equation*}
+The center of gravity is defined as $m_1 r_1 = m_2 r_2$. Insert this and you get
+\begin{align}
+  I &= m_2 r_2 r_1 + m_1 r_1 r_2 \nonumber\\
+    &= r_1 r_2 (m_1 + m_2) \label{eq:a}
+\end{align}
+We can do more with the center of gravity equation:
+\begin{align}
+  m_1 r_1 &= m_2 r_2 = m_2 \overbrace{(r_0 - r_1)}^\text{from def.} = m_2 r_0 - m_2 r_1 \nonumber\\
+  (m_1 + m_2) r_1 &= m_2 r_0 \nonumber\\
+  r_1 &= \frac{m_2 r_0}{m_1 + m_2} \label{eq:b}\\
+  r_2 &= \frac{m_1 r_0}{m_1 + m_2} \label{eq:c}
+\end{align}
+Insert (\ref{eq:b}) and (\ref{eq:c}) into (\ref{eq:a}):
+\begin{align*}
+  I &= \frac{m_2r_0 \; m_1r_0 \; (m_1 + m_2)}{(m_1 + m_2)(m_1 + m_2)} \\
+    &= \frac{m_1m_2}{m_1 + m_2} r_0^2 = \mu r_0^2 \qquad\square
+\end{align*}
 \end{document}

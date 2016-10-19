@@ -1,5 +1,32 @@
 2016-10-19  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* exercises/01-rotational_spectra/exe1_description.docx,
+	exercises/01-rotational_spectra/exe1_description.pdf:
+
+	Export first exercise to PDF.
+
+	* slides/01-introduction.pdf, slides/02-rotational_spectra.pdf:
+
+	Export slides to PDF.
+
+	* solutions/01-rotational_spectra/exe1_solution.pdf,
+	solutions/01-rotational_spectra/exe1_solution.tex:
+
+	Added content to solutions for first exercise.
+
+	Export first exercise to PDF.
+
+	* solutions/02-absorption/exe2_absoroption.tex,
+	solutions/02-absorption/plots,
+	solutions/02-absorption/plots/plot_xsec_O3_1000hPa_300K.pdf,
+	solutions/02-absorption/plots/plot_xsec_O3_100hPa_300K.pdf,
+	solutions/02-absorption/plots/plot_xsec_O3_10hPa_300K.pdf,
+	solutions/02-absorption/plots/plot_xsec_O3_800hPa_300K.pdf:
+
+	Moved a lot of content and plots from first exercise to second.
+
+2016-10-19  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* solutions/Makefile.inc: Define basic targets.
 
 	* solutions/01-rotational_spectra/Makefile,
