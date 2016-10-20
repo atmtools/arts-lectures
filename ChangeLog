@@ -1,3 +1,7 @@
+2016-10-20  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* bin/arts-init.tcsh: Fixed typo in modulefile.
+
 2016-10-20  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
 
 	* slides/01-introduction*: Added roadmap.

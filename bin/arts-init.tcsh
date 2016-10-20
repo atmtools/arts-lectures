@@ -27,4 +27,4 @@ endif
 setenv OMP_NUM_THREADS 4
 
 # Load latest MATLAB version.
-module unload matlab && module load matlab/2016
+module unload matlab && module load matlab/2016a
