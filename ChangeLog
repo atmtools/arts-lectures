@@ -1,5 +1,9 @@
 2016-10-20  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* bin/arts-init.tcsh: Fixed bug in tcsh setup...
+
+2016-10-20  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* README.md:
 
 	Added information about Python 3 environment.
