@@ -41,15 +41,19 @@ atmlab_init
 ```
 
 ### typhon
-The recommended way to install typhon is to use [`conda`][Anaconda].
+After running the initialisation scripts the default system python interpreter
+should be replaced. You can check this by running.
 
 ```bash
-conda install -c rttools typhon
+python --version
 ```
 
-Alternative installation methods can be found in the [online
-documentation][typhon].
+The output should show a Python version 3.5.2 or higher. If this is the case
+you should be able to use the typhon package.
 
+```python
+import typhon
+```
 
 [ARTS]: http://radiativetransfer.org/
 [Anaconda]: https://www.continuum.io/downloads

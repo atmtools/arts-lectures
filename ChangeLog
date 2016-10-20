@@ -1,5 +1,17 @@
 2016-10-20  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* README.md:
+
+	Added information about Python 3 environment.
+
+	* bin/arts-init.bash, bin/arts-init.tcsh:
+
+	Unload the default python module.
+
+	Set PATH to include our Anaconda3 distribution.
+
+2016-10-20  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* bin/arts-init.tcsh: Fixed typo in modulefile.
 
 2016-10-20  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>

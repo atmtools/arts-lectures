@@ -22,3 +22,7 @@ export OMP_NUM_THREADS=4
 
 # Load latest MATLAB version.
 module unload matlab && module load matlab/2016a
+
+# Setup Python 3 environent (using Anaconda).
+module unload python
+export PATH="/scratch/lehre/rtcourse/anaconda3/bin:$PATH"
