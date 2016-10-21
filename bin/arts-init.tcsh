@@ -16,18 +16,17 @@ else
     setenv ARTS_DATA_PATH "/scratch/lehre/rtcourse/arts-xml-data"
 endif
 setenv ARTS_DATA_PATH "/scratch/lehre/rtcourse/catalogue:$ARTS_DATA_PATH"
-# ... and the MATLAB package atmlab.
-if ( $?MATLABPATH ) then
-    setenv MATLABPATH "/scratch/lehre/rtcourse/atmlab/atmlab:$MATLABPATH"
-else
-    setenv MATLABPATH "/scratch/lehre/rtcourse/atmlab/atmlab"
-endif
 
 # Limit ARTS CPU usage to four cores.
 setenv OMP_NUM_THREADS 4
 
 # Load latest MATLAB version.
 module unload matlab && module load matlab/2016a
+if ( $?MATLABPATH ) then
+    setenv MATLABPATH "/scratch/lehre/rtcourse/atmlab/atmlab:$MATLABPATH"
+else
+    setenv MATLABPATH "/scratch/lehre/rtcourse/atmlab/atmlab"
+endif
 
 # Setup Python 3 environent (using Anaconda).
 module unload python

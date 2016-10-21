@@ -1,3 +1,10 @@
+2016-10-21  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* bin/arts-init.bash, bin/arts-init.tcsh:
+
+	Restructured the order of settings. The blocks are now divided into an
+	ARTS, Matlab and Python section.
+
 2016-10-20  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* bin/arts-init.tcsh: Fixed bug in tcsh setup...
