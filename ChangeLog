@@ -1,5 +1,13 @@
 2016-10-21  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* exercises/01-rotational_spectra/plot_xsec.py:
+
+	Python script to demonstrate the usage of typhon to load ARTS XML files.
+	The script loads and plots the absorption cross sections for the first
+	exercise.
+
+2016-10-21  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* bin/arts-init.bash, bin/arts-init.tcsh:
 
 	Restructured the order of settings. The blocks are now divided into an
