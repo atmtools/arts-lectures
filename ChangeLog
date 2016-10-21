@@ -2,6 +2,13 @@
 
 	* exercises/01-rotational_spectra/plot_xsec.py:
 
+	Use Agg-backend so that plots are generated even if no X-server is
+	connected.
+
+2016-10-21  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/01-rotational_spectra/plot_xsec.py:
+
 	Python script to demonstrate the usage of typhon to load ARTS XML files.
 	The script loads and plots the absorption cross sections for the first
 	exercise.

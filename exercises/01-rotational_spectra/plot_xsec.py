@@ -7,9 +7,11 @@
 """Load and plot absorption cross sections corresponding
 to arts output from "absorption.arts".
 """
+import matplotlib
+matplotlib.use('Agg')  # Use Agg-backend to produce plots without X-Server
+import matplotlib.pyplot as plt
 from typhon.arts import xml
 from typhon.plots import styles
-import matplotlib.pyplot as plt
 
 
 # Load the ARTS results.
