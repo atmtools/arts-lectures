@@ -1,3 +1,10 @@
+2016-11-03  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/01-rotational_spectra/exe1_description.docx,
+	exercises/01-rotational_spectra/exe1_description.pdf:
+
+	Added additional questions to first exercise.
+
 2016-10-21  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/01-rotational_spectra/plot_xsec.py:
