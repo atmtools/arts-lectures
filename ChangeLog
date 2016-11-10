@@ -1,3 +1,14 @@
+2016-11-10  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/02-vibrational_spectra: Moved from exercises/02-absorption.
+
+	* exercises/02-vibrational_spectra/exe2_description.docx,
+	exercises/02-vibrational_spectra/exe2_description.pdf:
+
+	Added exercise about vibrational spectra.
+
+	Included PDF version.
+
 2016-11-03  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/01-rotational_spectra/exe1_description.docx,
