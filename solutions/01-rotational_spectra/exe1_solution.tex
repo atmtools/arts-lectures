@@ -11,19 +11,105 @@
 \maketitle
 
 1. Calculate the absorption cross sections in the microwave spectral range for the
-following molecules:
+following molecules (Figure~\ref{fig:abs_molecules}):
 \begin{itemize}
-    \item $HCl$
-    \item $ClO$
-    \item $CO$
-    \item $N_2O$
-    \item $O_3$
+    \item $HCl$, $ClO$, $CO$, $N_2O$, $O_3$
 \end{itemize}
-Unless otherwise specified use the parameter setting as given in the example
-file \path{absorption.arts}.
+
+Questions and answers:
+\begin{itemize}
+    \item Estimate the rotational constant $B$ for $HCl$ and for $CO$.
+    \begin{itemize}
+        \item $B_{HCl} \approx 300$\,GHz
+        \item $B_{CO} \approx 60$\,GHz
+    \end{itemize}
+    \item Why is B larger for $HCl$ than for $CO$?
+    \begin{itemize}
+        \item The reduced mass $\mu$ is larger for $HCl$. This is caused by a
+            larger molecule in general and a larger mass difference of the
+            atoms inside the molecule.
+    \end{itemize}
+    \item Do you have any idea why $N_{2}O$ behaves like a diatomic molecule
+        --- and $O_{3}$ not?
+    \begin{itemize}
+        \item The angles between the atoms inside the molecule differ. $N_2O$
+            has flat angles and therefore momentums of inertia like a linear
+            molecule ($I_A = 0, I_B = I_C$). $O_3$ has a more complex structure
+            with differing momentums of inertia ($I_A \neq I_B \neq I_C$).
+    \end{itemize}
+    \item Calculate the reduced mass of the different molecules from the masses
+        of the individual atoms. (For the diatomic molecules this is trivial.
+        For $N_2O$, I think the appropriate mass can be found by careful
+        thinking. Ignore $O_3$.)
+        \begin{itemize}
+          \item The reduced mass $\mu$ for a diatomic molecule is given by
+            $\mu = \frac{m_1m_2}{m_1 + m_2}$. The atomic masses of the
+            relevant atoms are $H\,(1u)$, $Cl\,(35u)$, $C\,(12u)$, $O\,(16u)$
+            and $N\,(14u)$. For the regarded molecules the reduced masses are:
+              \begin{align*}
+                &\mu(HCl) = 0.972u \\
+                &\mu(ClO) = 10.98u \\
+                &\mu(CO) = 6.857u \\
+                &\mu(N_2O) \approx 7.5u
+              \end{align*}
+        \end{itemize}
+    \item Calculate the bond length of the various molecules (except $O_3$) from
+        the reduced mass and the rotational constant. Verify your result with
+        Google. Again $N_2O$ needs some extra thinking.
+        \begin{itemize}
+          \item For each molecule, the rotational constant $B$ can be found
+            using Figure~\ref{fig:abs_molecules}.  The rotational constant
+            (for frequencies) is defined as
+            \begin{equation*}
+              B = \frac{h}{8 \pi^2 I} \quad with \quad I = \mu r_0^2
+            \end{equation*}
+            The equations can be combined and solved for $r_0$ which is the
+            bond length of the regarded molecule.
+            \begin{align*}
+               &r_0(HCl) = 132\,pm \\
+               &r_0(ClO) = 158\,pm \\
+               &r_0(CO) = 111\,pm \\
+               &r_0(N_2O) \approx 233\,pm
+            \end{align*}
+        \end{itemize}
+    \item Play with different temperatures. How does the rotational spectrum
+        change? Can you explain the changes?
+        \begin{itemize}
+          \item Different temperatures lead to different distributions of
+            energy states. With higher temperatures the amount of molecules
+            in high energy states increases and absorption lines at higher
+            frequencies get stronger. When observing very cold temperatures
+            all molecules are in the lowest energy state ($i = 0$) and only
+            one absorption line at the lowest frequency is left.
+        \end{itemize}
+\end{itemize}
+
+2. Investigate other molecules!
+
+3. Show for a diatomic molecule that the moment of inertia is given by $I = \mu r_0^2$.
+\begin{equation*}
+  I = \sum_i m_i r_i^2 = m_1 r_1^2 + m_2 r_2^2
+\end{equation*}
+The center of gravity is defined as $m_1 r_1 = m_2 r_2$. Insert this and you get
+\begin{align}
+  I &= m_2 r_2 r_1 + m_1 r_1 r_2 \nonumber\\
+    &= r_1 r_2 (m_1 + m_2) \label{eq:a}
+\end{align}
+We can do more with the center of gravity equation:
+\begin{align}
+  m_1 r_1 &= m_2 r_2 = m_2 \overbrace{(r_0 - r_1)}^\text{from def.} = m_2 r_0 - m_2 r_1 \nonumber\\
+  (m_1 + m_2) r_1 &= m_2 r_0 \nonumber\\
+  r_1 &= \frac{m_2 r_0}{m_1 + m_2} \label{eq:b}\\
+  r_2 &= \frac{m_1 r_0}{m_1 + m_2} \label{eq:c}
+\end{align}
+Insert (\ref{eq:b}) and (\ref{eq:c}) into (\ref{eq:a}):
+\begin{align*}
+  I &= \frac{m_2r_0 \; m_1r_0 \; (m_1 + m_2)}{(m_1 + m_2)(m_1 + m_2)} \\
+    &= \frac{m_1m_2}{m_1 + m_2} r_0^2 = \mu r_0^2 \qquad\square
+\end{align*}
 
 % figures abs cross sections
-\begin{figure}[t!]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[width=\textwidth]{plots/plot_xsec_HCl_800hPa_300K.pdf}
@@ -47,54 +133,8 @@ file \path{absorption.arts}.
     \end{subfigure}
 
     \caption{Absorption cross sections of the molecules $HCl$, $ClO$, $CO$,
-    $N_2O$ and $O_3$.}
-    \label{fig:abs_molecules}
+    $N_2O$ and $O_3$.\label{fig:abs_molecules}}
 \end{figure}
 
-\begin{itemize}
-    \item Estimate the rotational constant $B$ for $HCl$ and for $CO$.
-    \begin{itemize}
-        \item $B_{HCl} \approx 300$\,GHz
-        \item $B_{CO} \approx 100$\,GHz
-    \end{itemize}
-    \item Why is B larger for $HCl$ than for $CO$?
-    \begin{itemize}
-        \item The reduced mass $\mu$ is larger for $HCl$. This is caused by a
-            larger molecule in general and a larger mass difference of the
-            atoms inside the molecule.
-    \end{itemize}
-    \item Do you have any idea why $N_{2}O$ behaves like a diatomic molecule -
-        and $O_{3}$ not?
-    \begin{itemize}
-        \item The angles between the atoms inside the molecule differ. $N_2O$
-            has flat angles and therefore momentums of inertia like a linear
-            molecule ($I_A = 0, I_B = I_C$). $O_3$ has a more complex structure
-            with differing momentums of inertia ($I_A \neq I_B \neq I_C$).
-    \end{itemize}
-\end{itemize}
 
-2. Investigate other molecules!
-
-\clearpage
-3. Show for a diatomic molecule that the moment of inertia is given by $I = \mu r_0^2$.
-\begin{equation*}
-  I = \sum_i m_i r_i^2 = m_1 r_1^2 + m_2 r_2^2
-\end{equation*}
-The center of gravity is defined as $m_1 r_1 = m_2 r_2$. Insert this and you get
-\begin{align}
-  I &= m_2 r_2 r_1 + m_1 r_1 r_2 \nonumber\\
-    &= r_1 r_2 (m_1 + m_2) \label{eq:a}
-\end{align}
-We can do more with the center of gravity equation:
-\begin{align}
-  m_1 r_1 &= m_2 r_2 = m_2 \overbrace{(r_0 - r_1)}^\text{from def.} = m_2 r_0 - m_2 r_1 \nonumber\\
-  (m_1 + m_2) r_1 &= m_2 r_0 \nonumber\\
-  r_1 &= \frac{m_2 r_0}{m_1 + m_2} \label{eq:b}\\
-  r_2 &= \frac{m_1 r_0}{m_1 + m_2} \label{eq:c}
-\end{align}
-Insert (\ref{eq:b}) and (\ref{eq:c}) into (\ref{eq:a}):
-\begin{align*}
-  I &= \frac{m_2r_0 \; m_1r_0 \; (m_1 + m_2)}{(m_1 + m_2)(m_1 + m_2)} \\
-    &= \frac{m_1m_2}{m_1 + m_2} r_0^2 = \mu r_0^2 \qquad\square
-\end{align*}
 \end{document}
