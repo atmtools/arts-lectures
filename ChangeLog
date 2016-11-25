@@ -1,5 +1,13 @@
 2016-11-25  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* solutions/02-absorption/exe2_solution.pdf,
+	solutions/02-absorption/exe2_solution.tex,
+	solutions/02-absorption/plots/plot_xsec_CO-26_800hPa_300K.pdf:
+
+	Fixed atomic weight of main CO isotopologue.
+
+2016-11-25  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* solutions/02-absorption/exe2_solution.pdf
 	solutions/02-absorption/exe2_solution.tex:
 
