@@ -1,3 +1,23 @@
+2016-11-25  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* solutions/02-absorption/exe2_solution.pdf
+	solutions/02-absorption/exe2_solution.tex:
+
+	Added sample solution for second exercise.
+
+	* solutions/02-absorption/plots/abs_xsec_overview.pdf,
+	solutions/02-absorption/plots/plot_xsec_CO-28_800hPa_300K.pdf,
+	solutions/02-absorption/plots/plot_xsec_CO_800hPa_300K.pdf:
+
+	Added new plots.
+
+	* solutions/02-absorption/plots/plot_xsec_O3_1000hPa_300K.pdf,
+	solutions/02-absorption/plots/plot_xsec_O3_100hPa_300K.pdf,
+	solutions/02-absorption/plots/plot_xsec_O3_10hPa_300K.pdf,
+	solutions/02-absorption/plots/plot_xsec_O3_800hPa_300K.pdf:
+
+	Removed unused plots.
+
 2016-11-16  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* solutions/01-rotational_spectra/exe1_solution.pdf,

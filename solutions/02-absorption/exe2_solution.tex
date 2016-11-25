@@ -1,0 +1,58 @@
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+\input{../common/header.tex}
+
+\title{Exercise 2: Vibrational spectra}
+\author{Sample Solution}
+\date{Effective: 25.11.2016}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\maketitle
+
+1. Find the fundamental band of $CO$ and plot its spectrum.
+\begin{itemize}
+  \item Determine the band center frequency $\tilde{\nu}$ from your plot.
+    Figure~\ref{fig:abs_xsec_CO} shows the absorption band of $CO$.
+    \begin{itemize}
+      \item The center frequency is around $\tilde{\nu} = 2143\,cm^{-1} = 64.2\,GHz$.
+    \end{itemize}
+
+  \item There is some “pollution” in the P-branch that comes from lines of $^{13}CO$.
+    Recalculate the spectrum for only the main isotopologue.
+    \begin{itemize}
+      \item The recalculated spectra for the main isotopologue is shown in
+        Figure~\ref{fig:abs_xsec_CO_main}.
+    \end{itemize}
+\end{itemize}
+
+2. Explore the spectrum of either $H_2O$ or $CO_2$. Can you find the different
+vibration bands?
+
+Figure~\ref{fig:abs_xsec_overview} shows the absorption bands of both, $CO_2$
+and $H_2O$. Those two gases are the main causer of the green house effect. It
+shows that both gases are absorbing in different spectral regions.
+
+\clearpage
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.8\textwidth]{plots/plot_xsec_CO_800hPa_300K.pdf}
+  \caption{Absorption cross section for $CO$ (all stable isotopologues).}
+  \label{fig:abs_xsec_CO}
+\end{figure}
+\vfill
+\begin{figure}[h!]
+  \centering  
+  \includegraphics[width=0.8\textwidth]{plots/plot_xsec_CO-28_800hPa_300K.pdf}
+  \caption{Absorption cross section for $CO$ (main isotopologue).}
+  \label{fig:abs_xsec_CO_main}
+\end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[angle=90, width=0.9\textwidth]{plots/abs_xsec_overview.pdf}
+  \caption{Absorption cross sections for $CO_2$ and $H_2O$.}
+  \label{fig:abs_xsec_overview}
+\end{figure}
+
+
+\end{document}
