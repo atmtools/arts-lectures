@@ -1,3 +1,20 @@
+2016-12-07  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/03-line_shape/exe3_description.docx,
+	exercises/03-line_shape/exe3_description.pdf:
+
+	* exercises/03-line_shape/line_shape.arts:
+
+	Controlfile to calculate absorption cross-sections for a given vector of
+	pressures. The results are calculated inside a For-Loop and written to
+	indexed XML files.
+
+	* exercises/03-line_shape/plots,
+	exercises/03-line_shape/plots/README: Directory to store ARTS results.
+
+	* exercises/03-line_shape/results,
+	exercises/03-line_shape/results/README: Directory to store result plots.
+
 2016-12-05  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/: Changed exercise structure.
