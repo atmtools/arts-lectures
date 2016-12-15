@@ -1,3 +1,20 @@
+2016-12-15  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* solutions: Updated numbering.
+
+	* solutions/03-line_shape
+	solutions/03-line_shape/Makefile,
+	solutions/03-line_shape/exe3_solution.pdf,
+	solutions/03-line_shape/exe3_solution.tex,
+	solutions/03-line_shape/plots,
+	solutions/03-line_shape/plots/ir_linewidth.pdf,
+	solutions/03-line_shape/plots/line_center.pdf,
+	solutions/03-line_shape/plots/line_center_crosssection.pdf,
+	solutions/03-line_shape/plots/linewidth.pdf,
+	solutions/03-line_shape/plots/mw_linewidth.pdf:
+
+	Added solutions for exercise 3.
+
 2016-12-15  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
 
 	* slides/05b-strahlungstransfergleichung.pdf: Added.
