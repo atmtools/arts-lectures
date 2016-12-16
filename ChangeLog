@@ -1,3 +1,19 @@
+2016-12-16  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/04-rtcalc/exe4_description.docx,
+	exercises/04-rtcalc/exe4_description.pdf:
+
+	Added exercise 4 about radiative transer.
+
+	* exercises/01-rotational_spectra/exe1_description.docx,
+	exercises/01-rotational_spectra/exe1_description.pdf,
+	exercises/02-vibrational_spectra/exe2_description.docx,
+	exercises/02-vibrational_spectra/exe2_description.pdf,
+	exercises/03-line_shape/exe3_description.docx,
+	exercises/03-line_shape/exe3_description.pdf:
+
+	Updated course title.
+
 2016-12-15  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* solutions: Updated numbering.
