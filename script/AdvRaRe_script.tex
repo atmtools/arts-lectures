@@ -62,6 +62,78 @@
 \newpage\pagestyle{fancy}
 
 \section{Rotational spectra}
+This section on absorption is based on a script for a radiation course, written
+by Björn Martin Sinnhubar.
+
+\subsection{Energy states and photons}
+Absorption and emission of a photon can happen if the internal energy of a
+molecule changes. The difference in two energiy states $E$ and the freqency of
+the photon $\nu$ are connected through the Planck constant $h$.
+\begin{equation}
+  E_f - E_i = \Delta E = h \nu
+\end{equation}
+The transition between different energy levels can be divided into three types,
+corresponding to different states of the molecule.  Each transition type is
+characteristic for a specific region of the electro-magnetic spectra.  One can
+distinguish changes in a molcules rotation (microwave), vibration (infrared)
+and electronic transitions (UV/visible).
+
+Molecules consist of different atoms. There are diatomic molecules with two
+atoms ($O_2$, $N_2$, $NO$, $HCl$, $CO$) and polyatomic molecules with
+three or more atoms ($O_3$, $NO_2$, $CO_2$). We will mainly discuss
+diatomic molecules, because they are easier to understand.
+
+One can distinguish between three types of interaction between a photon and a
+molecule: absorption, spontaneous emission and stimulated emission.  There are
+three condtions to be fulfilled for a molecule to absorb a photon:
+\begin{enumerate}
+\item The frequency of the photon has to match one the molecule's energy
+transitions.
+\begin{equation}
+  \Delta E = h \nu
+\end{equation}
+
+\item The net absorption has to be proportional to the difference of occupation
+probabilities of states $i$ and $f$: $p_i - p_f$. Where $p_i$ is given by the
+Boltzmann distribution (in local thermodynamic equilibrium).
+\begin{equation}
+  p_i = \frac{q_i e^{-E_i / (kT)}}
+        {\sum_{j=1}^\infty q_j e^{-E_j / (kT)}}
+\end{equation}
+The denominator is often referred to as $Q(T)$. It has various names like total
+internal partition sum, partition function, or Zustandssumme.
+
+\item Absorption is proportional to the electric dipole matrix element $\mu_{if}$
+between states $i$ and $f$.
+\begin{equation}
+  \mu_{if} = \mu \iiint \psi_f^*(x,y,z) \psi(x,y,z) \,dx\,dy\,dz
+\end{equation}
+Where $\mu$ is the magnitude of the dipole operator. $\mu_{if}$ is a constant
+for each transition.
+\end{enumerate}
+
+Combining all conditions, one can define the absorption coefficient $\alpha$.
+\begin{equation}
+  \alpha(\nu) = n \sum_{f,i} S_{fi}(T) \delta(\nu_{fi} - \nu)
+\end{equation}
+With number density $n$, line strength $S_{fi}$, difference of state energies
+$h\nu_{fi}$ and Dirac's delta function $\delta$ (physical not true, will be
+replaced later by a so called "line shape" function.
+
+The line strength is different for each transition and defined as follows.
+\begin{equation}
+    S_{fi} = \frac{8\pi^3\nu_{fi} \lvert\mu_{fi}\rvert^2 q_i}{3hcQ(T)}
+      \left( e^{E_i/(kT)} - e^{E_f/(kT)} \right)
+\end{equation}
+Although this equations looks complicated, there is only one true independent
+variable, the temperature $T$. All other variables are constants of the
+transition, or fundamental constants.
+
+Spectral line catalogues are collections of these transition parameters. There
+is one line in the catalogue for each spectral line (thousands for each
+molecule). The most well-known is the HITRAN catalogue.
+
+\subsection{Rotational transitions}
 
 \section{Vibrational spectra}
 

@@ -1,5 +1,15 @@
 2016-12-29  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* script/AdvRaRe_script.tex:
+
+	Added first content to the section on rotational spectra.
+
+	Currently containing the subsection about energy states and photons.
+
+	* script/AdvRaRe_script.pdf: Added PDF version.
+
+2016-12-29  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* script/, script/figures/: Added basic structure for a lecture script.
 
 	* script/AdvRaRe_script.tex: LaTeX file with basic settings.
