@@ -1,0 +1,74 @@
+\documentclass[a4paper,fleqn]{article}
+%% Seitenaufbau
+\usepackage[top=3cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+
+%% Schriftbild
+\usepackage{lmodern}  % Latin Modern Zeichensatz
+\usepackage[utf8]{inputenc}  % Unterstuetzung von Umlauten im Quelltext
+\usepackage[T1]{fontenc}  % Korrekte Umlaute im Output
+\renewcommand{\familydefault}{\sfdefault}  % Serifenlose Schrift
+\usepackage{setspace}\onehalfspacing  % 1.5-facher Zeilenabstand
+\renewcommand{\arraystretch}{1.5}  % 1.5-facher Zeilenabstand (Tabellen)
+\setlength{\parindent}{0pt}  % Keine Einrueckung am Beginng von Absaetzen
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\lhead{\rightmark}
+\chead{}
+\cfoot{\thepage}  % Richtige Schriftart fuer Seitenzahlen
+\sloppy  % Weniger strikte Silbentrennung
+
+%% Verlinkung von Inhaltsverzeichnis, Bildern und Formeln
+\usepackage[pagebackref]{hyperref}  % Verlinkung von URLs und Referenzen
+\usepackage{color}  % Definition von Linkfarben
+\definecolor{DarkRed}{rgb}{0.5,0,0}
+\hypersetup{
+  colorlinks,
+  citecolor=DarkRed,
+  linkcolor=DarkRed,
+  urlcolor=blue}
+
+%% Mathematikumgebung
+\usepackage{mathtools}
+\usepackage{amssymb}  % Erweiterte Bibliothek mathematischer Symbole
+\usepackage{euler}  % Serifenlose Schrift in Formelumgebungen
+\renewcommand{\epsilon}{\varepsilon}  % Nutze "richtiges" Epsilon
+
+%% Grafikumgebungen
+\usepackage{graphicx}  % Erweiterte Grafikumgebung
+\usepackage{float}  % Automatische Positionierung von Bildern
+\usepackage{floatflt}  % Grafiken im Text einbetten
+\usepackage{subcaption}  %  Bildunterschriften fuer subfigures
+
+%% Listenumgebung
+\usepackage{enumerate}
+\usepackage{textcomp}  % Korrekte serifenlose Aufzählungszeichen
+
+%% Farbige Umrahmungen
+\usepackage{framed}
+\definecolor{shadecolor}{rgb}{0.9,0.9,0.9}
+
+%% Inhalt der Titelseite
+\title{Advanced radiation and remote sensing}
+\author{Prof. Dr. Stefan Bühler}
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+\thispagestyle{empty}\pagestyle{empty}
+\tableofcontents
+\newpage\pagestyle{fancy}
+
+\section{Rotational spectra}
+
+\section{Vibrational spectra}
+
+\section{Line shape}
+
+\section{Thermal radiation}
+
+\section{Radiative transfer equation}
+
+\end{document}

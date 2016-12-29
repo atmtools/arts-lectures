@@ -1,3 +1,11 @@
+2016-12-29  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* script/, script/figures/: Added basic structure for a lecture script.
+
+	* script/AdvRaRe_script.tex: LaTeX file with basic settings.
+
+	* script/Makefile: Make file to build script.
+
 2016-12-16  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/04-rtcalc/exe4_description.docx,
