@@ -15,7 +15,7 @@ close all;  % close all figures
 clc;  % clear command window
 
 %% select frequency
-freq_ind = 10;
+freq_ind = -1;
 
 %% read in everything
 freq = xmlLoad('./results/f_grid.xml');

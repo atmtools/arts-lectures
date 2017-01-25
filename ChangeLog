@@ -1,3 +1,16 @@
+2017-01-25  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/05-jacobian/exe5_description.docx,
+	  exercises/05-jacobian/exe5_description.pdf:
+
+	Fixed the year in the date to 2017 as well as the course title.
+
+	Reduced the exercise to fit on one page.
+
+	* exercises/05-jacobian/plot_jacobian.m:
+
+	Set the variable `freq_ind` to `-1` as it is written in the exercise.
+
 2017-01-19  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/05-jacobian/exe5_description.docx,
