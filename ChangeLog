@@ -1,5 +1,23 @@
 2017-01-26  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* exercises/06-olr/exe6_description.docx,
+	  exercises/06-olr/exe6_description.pdf:
+
+	Fixed course title and date.
+
+	Fixed wrong atmosphere paths.
+
+	Added PDF version of exercise.
+
+	* exercises/06-olr/olr.arts: Changed the surface emissivity to 1.
+
+	* exercises/06-olr/plot_olr.py:
+
+	Python script to plot the simulated OLR alongside the Planck curves for
+	different temperatures.
+
+2017-01-26  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* solutions/04-rtcalc/exe4_solution.pdf,
 	solutions/04-rtcalc/exe4_solution.tex:
 

@@ -73,7 +73,7 @@ AtmRawRead( basename=scenedir )
 p_gridFromZRaw( p_grid, z_field_raw,0 )
 
 # Weakly reflecting surface
-VectorSetConstant( surface_scalar_reflectivity, 1, 0.6 )
+VectorSetConstant( surface_scalar_reflectivity, 1, 0. )
 Copy( surface_rtprop_agenda,
       surface_rtprop_agenda__Specular_NoPol_ReflFix_SurfTFromt_surface )
 
