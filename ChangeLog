@@ -1,5 +1,13 @@
 2017-01-26  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* exercises/06-olr/olr.arts:
+
+	Simplified the creation of the data path by using the WSM `StringJoin`.
+
+	Removed unused Vector `radiance`.
+
+2017-01-26  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* exercises/06-olr/exe6_description.docx,
 	  exercises/06-olr/exe6_description.pdf:
 

@@ -41,12 +41,12 @@ cloudboxOff
 # No jacobian calculation
 jacobianOff
 
-# Set atmospheric composition
+# Select the atmopsheric composition
 StringCreate( scene )
-StringSet( scene, "" )
-#StringSet( scene, "_+T" )
-#StringSet( scene, "_+CO2" )
-#StringSet( scene, "_+H2O" )
+# StringSet( scene, "" )
+# StringSet( scene, "_+T" )
+# StringSet( scene, "_+CO2" )
+StringSet( scene, "_+H2O" )
 
 # Definition of species
 abs_speciesSet( species=["H2O,H2O-SelfContCKDMT252, H2O-ForeignContCKDMT252",
@@ -63,11 +63,7 @@ abs_lineshapeDefine( shape="Voigt_Kuntz6", forefactor="VVH", cutoff=750e9 )
 
 # Atmospheric scenario for midlatitude summer
 StringCreate( scenedir )
-StringSet( scenedir, "./midlatitude-summer" )
-StringCreate( scenepostfix )
-StringSet( scenepostfix, "/midlatitude-summer" )
-Append( scenedir, scene )
-Append( scenedir, scenepostfix )
+StringJoin( scenedir, "./midlatitude-summer", scene , "/midlatitude-summer")
 AtmRawRead( basename=scenedir )
 
 p_gridFromZRaw( p_grid, z_field_raw,0 )
@@ -93,9 +89,6 @@ Extract( t_surface, t_field, 0 )
 
 # Output radiance not converted
 StringSet( iy_unit, "1" )
-
-# Create vector container for the radiance at each point along the path ("iy")
- VectorCreate( radiance )
 
 # Definition of sensor position and LOS
 MatrixSet( sensor_pos, [100e3] ) # sensor in z = 10 km
