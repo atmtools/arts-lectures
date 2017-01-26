@@ -43,10 +43,10 @@ jacobianOff
 
 # Select the atmopsheric composition
 StringCreate( scene )
-# StringSet( scene, "" )
+StringSet( scene, "" )
 # StringSet( scene, "_+T" )
 # StringSet( scene, "_+CO2" )
-StringSet( scene, "_+H2O" )
+# StringSet( scene, "_+H2O" )
 
 # Definition of species
 abs_speciesSet( species=["H2O,H2O-SelfContCKDMT252, H2O-ForeignContCKDMT252",
