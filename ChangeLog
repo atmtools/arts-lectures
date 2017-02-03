@@ -1,5 +1,23 @@
 2017-02-03  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* solutions/06-olr/exe6_solution.pdf, solutions/06-olr/exe6_solution.tex:
+
+	Retabbed the source file (replaced tabs by spaces).
+
+	Increased the size of included figures.
+
+	Updated the PDF version to include the recreated plots.
+
+	* solutions/06-olr/plots/olr.pdf,
+	  solutions/06-olr/plots/olr_+CO2.pdf,
+	  solutions/06-olr/plots/olr_+H2O.pdf,
+	  solutions/06-olr/plots/olr_+T.pdf:
+
+	Recreated solution plots with the corrected ARTS setup (emissivity is set
+	to 1, H2O increased by a factor of 2).
+
+2017-02-03  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* exercises/06-olr/midlatitude-summer_+H2O/midlatitude-summer.H2O.xml:
 
 	VMR values are now increased by a factor of `1.2` as stated in the exercise
