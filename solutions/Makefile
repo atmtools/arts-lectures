@@ -1,8 +1,9 @@
 SUBDIRS = 01-rotational_spectra \
           02-absorption \
-          03-rtcalc \
-          04-jacobian \
-          05-olr
+          03-line_shape \
+          04-rtcalc \
+          05-jacobian \
+          06-olr
 
 .PHONY: $(SUBDIRS)
 

@@ -1,3 +1,18 @@
+2017-02-03  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* solutions/Makefile:
+
+	Updated list of directories for automatic compilation of LaTeX sources.
+
+	* solutions/05-jacobian/exe5_solution.pdf,
+	  solutions/05-jacobian/exe5_solution.tex,
+	  solutions/06-olr/exe6_solution.pdf,
+	  solutions/06-olr/exe6_solution.tex:
+
+	Fixed exercise numbers in solutions.
+
+	Added PDF version of solutions 5 and 6.
+
 2017-01-26  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/06-olr/olr.arts:
