@@ -1,5 +1,16 @@
 2017-02-03  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* exercises/06-olr/midlatitude-summer_+H2O/midlatitude-summer.H2O.xml:
+
+	VMR values are now increased by a factor of `1.2` as stated in the exercise
+	description. They have been doubled before.
+
+	* exercises/06-olr/plot_olr.py:
+
+	Fixed yaxis limits (matplotlib 2.0 proof).
+
+2017-02-03  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* exercises/05-jacobian/plot_jacobian.py:
 
 	Added author to file header.
