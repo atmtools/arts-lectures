@@ -1,5 +1,11 @@
 2017-02-03  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* exercises/05-jacobian/plot_jacobian.py:
+
+	Added Python plotting script written by Felix Erdmann.
+
+2017-02-03  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* solutions/Makefile:
 
 	Updated list of directories for automatic compilation of LaTeX sources.
