@@ -92,7 +92,7 @@ StringSet( iy_unit, "1" )
 
 # Definition of sensor position and LOS
 MatrixSet( sensor_pos, [100e3] ) # sensor in z = 10 km
-MatrixSet( sensor_los, [ 180] ) # zenith angle: 0 looking down, 180 looking up
+MatrixSet( sensor_los, [ 180] ) # zenith angle: 0 looking up, 180 looking down
 
 # Perform RT calculations
 abs_xsec_agenda_checkedCalc
