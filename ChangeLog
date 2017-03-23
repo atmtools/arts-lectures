@@ -1,3 +1,10 @@
+2017-03-23  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/:
+
+	Set the `global-ignores` property to exclude all XML and PDF
+	files from version control.
+
 2017-03-03  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/06-olr/olr.arts:
