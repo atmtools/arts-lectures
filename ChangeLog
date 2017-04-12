@@ -1,5 +1,10 @@
 2017-04-12  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
 
+	* script/AdvRaRe_script.pdf: Removed this file from version
+	control. Better ignore it, otherwise there will be many conflicts.
+
+2017-04-12  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
+
 	* script/AdvRaRe_script.tex: Some fine tuning.
 
 2017-03-23  Lukas Kluft  <lukas.kluft@gmail.com>
