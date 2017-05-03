@@ -49,9 +49,12 @@
 \usepackage{framed}
 \definecolor{shadecolor}{rgb}{0.9,0.9,0.9}
 
+%% Chemische Formeln
+\usepackage{chemfig}
+
 %% Inhalt der Titelseite
 \title{Advanced radiation and remote sensing}
-\author{Stefan A Buehler, Lukas Kluft, FIXME all that worked on
+\author{Stefan A Buehler, Lukas Kluft, Christoph Sauter, FIXME all that worked on
 the script}
 \date{\today}
 
@@ -62,15 +65,17 @@ the script}
 \tableofcontents
 \newpage\pagestyle{fancy}
 
+% CHAPTER 1 - INTRODUCTION
 \section{Introduction}
 
 FIXME
 
+% CHAPTER 2 ROTATIONAL SPECTRA
 \section{Rotational spectra}
 
 \subsection{Energy states and photons}
 Absorption and emission of a photon can happen if the internal energy of a
-molecule changes. The difference in two energiy states $E$ and the freqency of
+molecule changes. The difference in two energy states $E$ and the frequency of
 the photon $\nu$ are connected through the Planck constant $h$.
 \begin{equation}
   E_f - E_i = \Delta E = h \nu
@@ -78,7 +83,7 @@ the photon $\nu$ are connected through the Planck constant $h$.
 The transition between different energy levels can be divided into three types,
 corresponding to different states of the molecule.  Each transition type is
 characteristic for a specific region of the electro-magnetic spectra.  One can
-distinguish changes in a molcules rotation (microwave), vibration (infrared)
+distinguish changes in a molecules rotation (microwave), vibration (infrared)
 and electronic transitions (UV/visible).
 
 Molecules consist of different atoms. There are diatomic molecules with two
@@ -88,7 +93,7 @@ diatomic molecules, because they are easier to understand.
 
 One can distinguish between three types of interaction between a photon and a
 molecule: absorption, spontaneous emission and stimulated emission.  There are
-three condtions to be fulfilled for a molecule to absorb a photon:
+three conditions to be fulfilled for a molecule to absorb a photon:
 \begin{enumerate}
 \item The frequency of the photon has to match one the molecule's energy
 transitions.
@@ -136,22 +141,111 @@ Spectral line catalogues are collections of these transition parameters. There
 is one line in the catalogue for each spectral line (thousands for each
 molecule). The most well-known is the HITRAN catalogue.
 
-\subsection{Rotational transitions}
 
+\subsection{Rotational transitions}
+Every free molecule has 3 \textbf{Moments of inertia} $I_A$, $I_B$, $I_C$ (\textit{Trägheitsmomente}), since there are 3 principal axes of rotation in the x-y-z-plane. We can use the Moments of inertia to classify the molecules and devide them into groups:
+
+
+\begin{center}
+\begin{tabular}{| c | c | c | c |}
+  \hline
+  Linear & Spherical top & Symmetric top & Asymmetric top \\
+  \hline
+  & & &  \\
+\chemfig{H-[,0.8]Cl} &
+\chemfig{C(-[:330]H)(-[:90,0.8]H)(-[:210]H)(-[:270,0.8]H)} &
+\chemfig{C(-[:0,0.8]F)(-[:140]H)(-[:180,0.8]H)(-[:220]H)} &
+\chemfig{H-[:30,0.8]O-[:-30,0.8]H} \\
+ & & & \\
+  %\hline
+  $I_A \approx 0$,   $I_B = I_C$ &
+  $I_A = I_B = I_C$ &
+  $I_A \neq 0$,   $I_B = I_C \neq I_A$ & 
+  $I_A \neq I_B \neq I_C$ \\
+  \hline
+\end{tabular}
+\end{center}
+
+From classical mechanics, we can define the Rotational energy
+\begin{equation}
+E_r = \frac{1}{2} I \omega^2 = \frac{J^2}{2I},
+\end{equation}
+where $\omega$ is the angular frequency (\textit{Kreisfrequenz}), $I$ the moment if inertia and $J = I\cdot\omega$ the angular momentum (\textit{Drehmoment}).\\
+In case of a diatomic molecule, we can use the \textbf{reduced mass $\mu$} to express some properties of the molecule more easily. The relative motion of such a diatomic molecule is the same as that of a simple particle with the reduced mass $\mu$. It can be calculated by taking into account the two individual masses $m_1, m_2$ of the individual atoms.
+\begin{equation}
+\mu = \frac{m_1 m_2}{m_1+m_2} \qquad or \qquad \frac{1}{\mu} = \frac{1}{m_1} + \frac{1}{m_2}
+\end{equation}
+If we devide the distance between the mass centers of the atoms $r_0$ into their individual distances to the axis of rotation $r_1, r_2$, so that $r_0 = r_1 + r_2$, we can define the center of gravity:
+\begin{equation*}
+m_1 r_1 = m_2 r_2
+\end{equation*}
+The general formula for the moment of inertia 
+\begin{equation*}
+I = \sum_i m_i r_i^2 
+\end{equation*}
+can therefore be expressed as 
+\begin{equation}
+I = \mu r_0^2.
+\end{equation}
+Now we look at two extreme cases for the reduced mass:
+\begin{enumerate}
+\item The masses of both atoms are equal ($m_1 = m_2$) \\
+  $\Rightarrow \mu = \frac{m_1^2}{2m_1} = \frac{1}{2}m_1 = \frac{1}{2}m_2$
+\item One mass is much larger than the other ($m_1 >> m_2$) \\
+  $\Rightarrow \mu = \frac{m_2}{\frac{m_1 + m_2}{m_1}} \approx m_2$ 
+\end{enumerate}
+In Quantum mechanics, you can express energy levels by using the Hamiltonian function (total energy)
+\begin{equation}
+\mathcal{H}=\frac{J^2}{2I},
+\end{equation}
+which leads to a discrete number of allowed energy solutions:
+\begin{equation}
+E_\mathcal{J} = \frac{\hbar^2}{2I} \mathcal{J}(\mathcal{J}+1), \qquad \text{with} \quad \mathcal{J} = 0, 1, 2, ...
+\end{equation}
+$\hbar$ = $h/2\pi$ is the Planck constant and $\mathcal{J}$ the rotational quantum number. \\
+Energy(diferences) can be conveniently expressed in \textbf{wavenumbers} (Kaisers)
+\begin{equation}
+\tilde{\nu} = \frac{\Delta E}{hc} \qquad \left[\frac{1}{cm}\right]
+\end{equation}
+or in frequency (Hz)
+\begin{equation}
+\nu = \frac{\Delta E}{h} \qquad \left[Hz\right],
+\end{equation}
+so they translate directly to the observed spectrum.\\
+The energy levels can be expressed in wavenumbers by
+\begin{equation}
+\epsilon_\mathcal{J} = \frac{E_\mathcal{J}}{hc} = \frac{h}{\delta \pi^2 I c} \mathcal{J}(\mathcal{J}+1).
+\end{equation}
+$\delta$ is Dirac's delta function and c the speed of light in vacuum. The fracture on the right side of the equation is referred to as the rotational constant B. It is inversely proportional to the moment of inertia $I$. From Quantum mechanics it turns out, that the only transitions that are allowed are those where $\Delta \mathcal{J} = \pm1$. Therefore we can only get energy levels $\epsilon_J$ that are 0, 2B, 6B, 12B, 20B, ..., all other transitions are forbidden, which results in equidistant spectral lines. \\
+This is an example of the selection rule. So the full spectrum of a diatomic molecule is given by
+\begin{equation}
+\tilde{\nu}_{\mathcal{J}\rightarrow \mathcal{J}+1} = 2B(\mathcal{J}+1), \qquad \mathcal{J} = 0, 1, 2, ...\,.
+\end{equation}
+
+
+
+
+
+
+% CHAPTER 3 - VIBRATIONAL SPECTRA
 \section{Vibrational spectra}
 
+% CHAPTER 4 - LINE SHAPE
 \section{Line shape}
 
+% CHAPTER 5 - THERMAL RADIATION
 \section{Thermal radiation}
 
 FIXME: Mostly covered by script from Bachelor lecture, but at least
 state the Planck law here.
 
+% CHAPTER 6 - RADIATIVE TRANSFER EQUATION
 \section{Radiative transfer equation}
 
 FIXME: Mostly covered by script from Bachelor lecture, but at least
 state the RTE here.
 
+% CHAPTER 7 - JACOBIANS
 \section{Jacobians}
  
 \end{document}
