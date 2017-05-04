@@ -229,6 +229,137 @@ This is an example of the selection rule. So the full spectrum of a diatomic mol
 
 % CHAPTER 3 - VIBRATIONAL SPECTRA
 \section{Vibrational spectra}
+Now we will turn to vibration, another mode of molecular internal energy. Just like rotational energy, vibrational energy is quantified, hence can lead to spectroscopic transitions (= absorption lines). \\
+We start off by looking at a harmonic oscillator in regular mechanics. Assume there is a restoring force,
+\begin{equation}
+f = -k (r-r_{eq}) \qquad (\text{Hooke's law})
+\end{equation}
+at the point $r$ from the equilibrium point $r_{eq}$ with a constant $k$, then the associated energy is
+\begin{equation}
+E = \frac{1}{2}k (r-r_{eq})^2 .
+\end{equation}
+In Quantum Mechanics energy levels turn out to be 
+\begin{equation}
+E_\nu = (\nu+\frac{1}{2})\hbar\tilde{\omega} \qquad (\nu = 0, 1, 2, ...).
+\end{equation}
+Transformed into spectroscopic units of Kaiser we get
+\begin{equation}
+\epsilon_\nu = \frac{E_\nu}{hc} = (\nu + \frac{1}{2})\tilde{\nu}.
+\end{equation}
+So what is $\omega$? If $f$ is really proportional to $\Delta r$, then it is a constant:
+\begin{equation}
+\tilde{\omega} = \sqrt{\frac{k}{\mu}}
+\end{equation}
+FIXME: What are the names of $k$ and $\mu$?\par
+The lowest vibrational level is at
+\begin{equation}
+E_0 = \frac{1}{2} \hbar \tilde{\omega}.
+\end{equation}
+Therefore a molecule can never have \textbf{zero} vibrational energy! This is different from rotation, where the lowest state had zero energy. \par
+FIXME: include slide 5 with mostly graphics. \par
+
+The frequency of the observed line corresponds to the energy difference $\tilde{\nu}$ between adjacent levels (which corresponds to the classical frequency at which the molecule would vibrate. If molecules rotate, the Energy separation is 1 - 10\,cm$^{-1}$ whereas if they vibrate, the Energy separation is 100 - 10\,000\,cm$^{-1}$. This is a large difference in characteristic energy. We can therefore assume that the two motions occur independently.
+ (This is a case of the Born- Oppenheimer approximation, which strictly also includes vibration. We write
+ \begin{gather}
+E_{total} = E_{rot} + E_{vib} \qquad \left[J\right]  \\
+\epsilon_{total} = \epsilon_{rot} + \epsilon_{vib} \qquad \left[cm^{-1}\right].
+ \end{gather}
+Combining the discrete energy levels results in
+\begin{equation}
+\epsilon_{\mathcal{J},\nu} = \epsilon_{\mathcal{J}} + \epsilon_{\nu} = B \mathcal{J} (\mathcal{J} + 1) + (\nu + \frac{1}{2})\tilde{\nu}.
+\end{equation}
+Note: There are higher order therms in both rotation (zentrifugal stretching) and vibration (non-constant restoring force) that I am ignoring here. \par
+ FIXME: insert figure from slide 9. \par
+ The selection rule states, that
+ \begin{equation}
+\Delta \nu = \pm 1 \text \quad {and} \quad \Delta \mathcal{J} = \pm 1.
+\end{equation}
+This means, we normally cannot observe the vibrational fundamental directly. Rotational levels will be filled to varying degrees in a population of molecules. This results in different line intensities. \\
+The transition frequencies are divided into two branches:
+\begin{gather*}
+\Delta \mathcal{J} = +1 \quad (\text{R-Branch}) \\
+\qquad \Delta \epsilon_{\mathcal{J},\nu} = \tilde{\nu} + 2 B ( \mathcal{J''} + 1), 
+	\qquad \mathcal{J''} = 0, 1, 2  \\
+\Delta \mathcal{J} = -1 \quad (\text{P-Branch}) \\
+\qquad \Delta \epsilon_{\mathcal{J},\nu} = \tilde{\nu} - 2 B ( \mathcal{J'} + 1) , 
+	\qquad \mathcal{J'} = 0, 1, 2  \\ 
+\end{gather*}
+ They can be combined into: 
+ \begin{equation}
+\Delta \epsilon_{\mathcal{J},\nu} = \tilde{\nu} + 2 B m , 
+	\qquad m = \pm1, \pm2, \pm3, ...
+\end{equation}
+These are the frequencies of the observed lines. \\
+So why are the branches called 'P' and 'R'? For more complicated molecules, $\Delta \mathcal{J} = 0 \text{ and } \pm 2$ may also be allowed. All possible branches are:
+
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|} \hline
+$\Delta\mathcal{J}$ = & -2 & -1 & 0 & +1 & +2 \\
+\hline
+Name & O & P & Q & R & S \\
+\hline
+\end{tabular}
+\end{center}
+
+H$_2$O and CO$_2$ have three fundamental vibrations. These are:
+
+\begin{center}
+\begin{tabular}{| c | c | c | }
+  \hline
+  Symmetric stretch & Symmetric bend & Antisymmetric stretch  \\
+  \hline
+  % H2O
+\schemestart
+\chemfig{@{a1}H-[:30,0.8]@{a2}O-[:-30,0.8]@{a3}H}
+\arrow(@a1.south west--.south west){->}[210,0.6,line width=.4pt,blue]
+\arrow(@a2.north--.north){->}[90,0.6,line width=.4pt,blue]
+\arrow(@a3.south east--.north east){->}[-30,0.6,line width=.4pt,blue]
+\schemestop &
+\schemestart
+\chemfig{@{a1}H-[:30,0.8]@{a2}O-[:-30,0.8]@{a3}H}
+\arrow(@a1.north--.north){->}[90,0.6,line width=.4pt,blue]
+\arrow(@a2.south--.south){->}[-90,0.6,line width=.4pt,blue]
+\arrow(@a3.north--.north){->}[90,0.6,line width=.4pt,blue]
+\schemestop &
+\schemestart
+\chemfig{@{a1}H-[:30,0.8]@{a2}O-[:-30,0.8]@{a3}H}
+\arrow(@a1.south west--.south west){->}[210,0.6,line width=.4pt,blue]
+\arrow(@a2.north east--.east){->}[0,0.6,line width=.4pt,blue]
+\arrow(@a3.north east--.north west){->}[145,0.6,line width=.4pt,blue]
+\schemestop  \\
+  $\tilde{\nu}_1 = 3651.7 \text{\,cm}^{-1}$ &
+  $\tilde{\nu}_2 = 1595.0 \text{\,cm}^{-1}$ &
+  $\tilde{\nu}_3 = 3755.8 \text{\,cm}^{-1}$ \\
+  \hline
+  %CO2
+\schemestart
+\chemfig{@{a1}O-[,0.8]@{a2}C-[,0.8]@{a3}O}
+\arrow(@a1.west--.west){->}[180,0.6,line width=.4pt,blue]
+\arrow(@a3.east--.east){->}[0,0.6,line width=.4pt,blue]
+\schemestop &
+\schemestart
+\chemfig{@{a1}O-[,0.8]@{a2}C-[,0.8]@{a3}O}
+\arrow(@a1.north--.north){->}[90,0.6,line width=.4pt,blue]
+\arrow(@a2.south--.south){->}[270,0.6,line width=.4pt,blue]
+\arrow(@a3.north--.south){->}[90,0.6,line width=.4pt,blue]
+\schemestop &
+\schemestart
+\chemfig{@{a1}O-[,0.8]@{a2}C-[,0.8]@{a3}O}
+\arrow(@a1.north west--.north){->}[0,0.6,line width=.4pt,blue]
+\arrow(@a2.south east--.south){->}[180,0.6,line width=.4pt,blue]
+\arrow(@a3.east--.east){->}[0,0.6,line width=.4pt,blue]
+\schemestop \\
+  $\tilde{\nu}_1 = 1330.0 \text{\,cm}^{-1}$ &
+  $\tilde{\nu}_2 = 667.3 \text{\,cm}^{-1}$ &
+  $\tilde{\nu}_3 = 2349.3 \text{\,cm}^{-1}$ \\
+\hline
+  
+\end{tabular}
+\end{center}
+
+
+
 
 % CHAPTER 4 - LINE SHAPE
 \section{Line shape}
