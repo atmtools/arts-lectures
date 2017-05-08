@@ -54,7 +54,7 @@
 
 %% Inhalt der Titelseite
 \title{Advanced radiation and remote sensing}
-\author{Stefan A Buehler, Lukas Kluft, Christoph Sauter, FIXME all that worked on
+\author{Stefan A Buehler, Lukas Kluft, Christoph Sauter, Jakob Doerr, FIXME all that worked on
 the script}
 \date{\today}
 
@@ -277,10 +277,10 @@ Note: There are higher order therms in both rotation (zentrifugal stretching) an
 This means, we normally cannot observe the vibrational fundamental directly. Rotational levels will be filled to varying degrees in a population of molecules. This results in different line intensities. \\
 The transition frequencies are divided into two branches:
 \begin{gather*}
-\Delta \mathcal{J} = +1 \quad (\text{R-Branch}) \\
+\Delta \mathcal{J} = +1 \quad (\text{R-Branch}) \\
 \qquad \Delta \epsilon_{\mathcal{J},\nu} = \tilde{\nu} + 2 B ( \mathcal{J''} + 1), 
 	\qquad \mathcal{J''} = 0, 1, 2  \\
-\Delta \mathcal{J} = -1 \quad (\text{P-Branch}) \\
+\Delta \mathcal{J} = -1 \quad (\text{P-Branch}) \\
 \qquad \Delta \epsilon_{\mathcal{J},\nu} = \tilde{\nu} - 2 B ( \mathcal{J'} + 1) , 
 	\qquad \mathcal{J'} = 0, 1, 2  \\ 
 \end{gather*}
@@ -372,9 +372,91 @@ state the Planck law here.
 
 % CHAPTER 6 - RADIATIVE TRANSFER EQUATION
 \section{Radiative transfer equation}
-
-FIXME: Mostly covered by script from Bachelor lecture, but at least
-state the RTE here.
+The radiative transfer equation (RTE) describes the change of radiation along a path,
+for example from the ground to a sensor above the surface. The RTE is expressed in 
+terms of the monochromatic Intensity $I$. It can be written as
+\begin{equation}
+	\frac{dI}{ds} = - (\alpha + \sigma)I + \alpha B(T) + \sigma \int_\Omega PI 
+	\frac{d\Omega}{4\pi}
+\end{equation}
+where $ds$ is a path element. The first term on the right hand side is 
+the radiation loss due to extinction by absorption (absorption coefficient $\alpha$) 
+and scattering (scattering coefficient $\sigma$). The second term is a source term
+due to thermal emission $B(T)$. The third term is a source term due radiation that
+is scattered into the path. It is calculated using the phase matrix $P$ of the 
+scattering particles. The calculation involves an integration of the intensity over the 
+whole solid angle $\Omega$. Note that normally, every variable depends on the frequency
+and the viewing direction. \\
+We see that if we include scattering in the RTE, it is very difficult to solve, because 
+in order to compute the intensity in one direction, we need to know the intensity in 
+every other direction.\\
+One of the most used simplifications of the RTE is to neglect scattering. If we look at
+thermal radiation, this is mostly true for a clear sky atmosphere. If we neglect 
+scattering, the last term as well as the $\sigma$ in the first term vanish and the 
+(clear sky) RTE looks like this:
+\begin{equation}
+	\frac{dI}{ds} = -\alpha I + \alpha B(T) = \alpha ( B(T) - I )
+\end{equation}
+This equation is also known as Schwarzschild's equation because if was formulated by 
+K. Schwarzschild in 1906.\\
+Using this equations, let's look at what happens in a homogeneous medium ($\alpha$ and $T$
+constant). If the radiation passes through the medium long enough ($s \rightarrow \infty$)
+the difference between $B$ and $I$ has to get smaller and smaller. This means that eventually,
+$I$ will converge to $B$. This makes sense because if we look through a thick enough medium, 
+we hardly see which radiation came into the medium, we only see the emission of the medium.\\
+Schwarzschild's equation can be integrated along a path through a layer
+(a complete derivation can be found in Petty, Eq. 8.5 - 8.13):
+\begin{equation}
+	I(s) = I(0) e^{-\tau (0,s)} + \int_{0}^{s} \alpha (s') B(s') 
+	e^{-\tau (0,s')} ds' 
+\end{equation}
+where $\tau(0,s)$ is the opacity between the points. It is defined as:
+\begin{equation}
+	\tau (0,s) = \int_{0}^{s} \alpha(s') ds'.
+\end{equation}
+We see that the layer emits radiation, while the incoming radiation $I(0)$ is 
+attenuated exponentially. \\
+In radiative transfer models such as ARTS, the atmosphere is usually divided 
+into homogeneous layers and the RTE is calculated through these layers. So to understand
+the calculations in the model, it is useful to look at the solution of Schwarzschild's
+equation in a homogeneous layer. The only difference is the opacity, which in a homogeneous
+layer, we can write as
+\begin{equation}
+	\tau(0,s) = \int_{0}^{s} \alpha(s') ds' = \alpha s.
+\end{equation}
+To get the solution, we just plugin a homogeneous layer from 0 to $s$ into the integral 
+form of the equation:
+\begin{equation}
+	I(s) = I(0) e^{-\alpha s} + \alpha B(T)\int_{0}^{s} e^{-\alpha (s-s')} ds' 
+\end{equation}
+which, after some algebra, gives this:
+\begin{equation}
+	I(s) = I(0) e^{-\alpha s} + B(T) \left( 1-e^{-\alpha s} \right).
+\end{equation}
+With the definition of the transmission $t = e^{-\alpha s}$, we can rewrite the solution as
+\begin{equation}
+	I(s) = t I(0)  + \left( 1-t \right) B(T).
+\end{equation}
+Let's look at a few extreme cases of the solution.\\
+\underline{Optically thin:}\\
+What happens if the opacity of the layer is very high, so $ t\rightarrow0$ ? 
+Then we just see the Planck emission of the layer. the incoming radiation does not reach us.\\
+\underline{Optically thin:}\\
+What happens if the opacity of the layer is 0, to $ t \rightarrow \infty$ ? Then we just see
+the incoming radiation $I(0)$. the layer doesn't do anything.\\
+An interesting special case is when the opacity is small, but not zero. For small opacities, 
+we can use a linear approximation of the transmission, which comes from the Taylor expansion
+of the exponential function:
+\begin{equation}
+	t = e^{-\tau} \approx 1 - \tau.
+\end{equation}
+If we plug this into the solution of a homogeneous layer, we get
+\begin{equation}
+	I(s) = t I(0)  + \left( 1-t \right) B(T) \approx I(0) + \tau \left( B - I(0)\right)
+\end{equation}
+which has exactly the same form as Schwarzschild's equation itself.
+%FIXME: Mostly covered by script from Bachelor lecture, but at least
+%state the RTE here.
 
 % CHAPTER 7 - JACOBIANS
 \section{Jacobians}
