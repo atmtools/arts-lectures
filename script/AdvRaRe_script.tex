@@ -143,6 +143,14 @@ molecule). The most well-known is the HITRAN catalogue.
 
 
 \subsection{Rotational transitions}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{figures/Fig_moments_inertia}
+%\caption{default}
+\label{default}
+\end{center}
+\end{figure}
+
 Every free molecule has 3 \textbf{Moments of inertia} $I_A$, $I_B$, $I_C$ (\textit{Trägheitsmomente}), since there are 3 principal axes of rotation in the x-y-z-plane. We can use the Moments of inertia to classify the molecules and devide them into groups:
 
 
@@ -171,6 +179,15 @@ From classical mechanics, we can define the Rotational energy
 E_r = \frac{1}{2} I \omega^2 = \frac{J^2}{2I},
 \end{equation}
 where $\omega$ is the angular frequency (\textit{Kreisfrequenz}), $I$ the moment if inertia and $J = I\cdot\omega$ the angular momentum (\textit{Drehmoment}).\\
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=1\textwidth]{figures/Reduced_mass}
+%\caption{default}
+\label{default}
+\end{center}
+\end{figure}
+
 In case of a diatomic molecule, we can use the \textbf{reduced mass $\mu$} to express some properties of the molecule more easily. The relative motion of such a diatomic molecule is the same as that of a simple particle with the reduced mass $\mu$. It can be calculated by taking into account the two individual masses $m_1, m_2$ of the individual atoms.
 \begin{equation}
 \mu = \frac{m_1 m_2}{m_1+m_2} \qquad or \qquad \frac{1}{\mu} = \frac{1}{m_1} + \frac{1}{m_2}
@@ -217,6 +234,15 @@ The energy levels can be expressed in wavenumbers by
 \epsilon_\mathcal{J} = \frac{E_\mathcal{J}}{hc} = \frac{h}{\delta \pi^2 I c} \mathcal{J}(\mathcal{J}+1).
 \end{equation}
 $\delta$ is Dirac's delta function and c the speed of light in vacuum. The fracture on the right side of the equation is referred to as the rotational constant B. It is inversely proportional to the moment of inertia $I$. From Quantum mechanics it turns out, that the only transitions that are allowed are those where $\Delta \mathcal{J} = \pm1$. Therefore we can only get energy levels $\epsilon_J$ that are 0, 2B, 6B, 12B, 20B, ..., all other transitions are forbidden, which results in equidistant spectral lines. \\
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/Energy_levels}
+\caption*{Values for $\mathcal{J}$ given on the left and the energy levels $\epsilon_{\mathcal{J}}$ in wavenumbers on the right.}
+\label{default}
+\end{center}
+\end{figure}
+
 This is an example of the selection rule. So the full spectrum of a diatomic molecule is given by
 \begin{equation}
 \tilde{\nu}_{\mathcal{J}\rightarrow \mathcal{J}+1} = 2B(\mathcal{J}+1), \qquad \mathcal{J} = 0, 1, 2, ...\,.
