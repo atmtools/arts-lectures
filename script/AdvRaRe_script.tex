@@ -536,7 +536,28 @@ In the exercise you will find out which effect of broadening dominates when.
 \section{Thermal radiation}
 
 FIXME: Mostly covered by script from Bachelor lecture, but at least
-state the Planck law here.
+state the Planck law here.\par
+
+
+We now want to look at the balance between Radiation and Temperature. If an object receives more radiation, its temperature rises. And a higher temperature results in a higher emission of radiation. We first look at a black body that absorbs all incoming radiation without any reflection. This is the case e.g. in a hollow space. If the Temperature is kept constant, there will be a radiative equilibrium between the walls and the radiation on the inside of the hollow space. This radiative equilibrium is \textit{only} dependent on the temperature, every other dependancy would be contradicting the laws of Thermodynamics.
+
+The relationship between temperature and radiation is described in what now is known as \textit{Planck's law}:
+\begin{equation}
+I_{\nu} = B_{\nu}(T) = \frac{2h\nu^3}{c^2(e^{\frac{h\nu}{kT}}-1)}, 
+               \hspace{3cm} B_{\nu}(T) = \frac{2hc^2}{\lambda^5(e^{\frac{hc}{\lambda kT}}-1)}
+\end{equation}
+$I_\nu$ is the spectral radiance [W\,m$^{-2}$\,sr$^{-1}$\,Hz$^{-1}$], B the Planck function, T the temperature, h the  Plack constant, $\nu$ the frequency, c the speed of light, k the Boltzmann constant and $\lambda$ the wave length.\\
+There are different approximations for the equation. The Rayleigh-Jeans Approximation describes shows a similar behaviour for the spectral radiance for low frequencies:
+\begin{equation}
+I_{\nu} = B_{\nu, RJ}(T) = \frac{2kT}{c^2}\nu^2
+\end{equation}
+Wien's displacement law states that the black body radiation curve for different temperatures peaks at a frequency proportional to the temperature.
+\begin{equation}
+\nu_{max} \propto T
+\end{equation}
+
+
+
 
 % CHAPTER 6 - RADIATIVE TRANSFER EQUATION
 \section{Radiative transfer equation}
