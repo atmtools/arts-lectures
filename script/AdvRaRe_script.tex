@@ -315,7 +315,7 @@ Note: There are higher order therms in both rotation (zentrifugal stretching) an
  \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1\textwidth]{figures/Transitions_vib_rot}
-\caption{Transitons between vibrational - transitonal energy levels. After Banwell and McCash.}
+\caption{Transitons between vibrational - rotational energy levels. After Banwell and McCash.}
 \label{default}
 \end{center}
 \end{figure}
@@ -536,7 +536,7 @@ In the exercise you will find out which effect of broadening dominates when.
 \section{Thermal radiation}
 
 FIXME: Mostly covered by script from Bachelor lecture, but at least
-state the Planck law here.\par
+state the Planck law here.\vspace{1cm}
 
 
 We now want to look at the balance between Radiation and Temperature. If an object receives more radiation, its temperature rises. And a higher temperature results in a higher emission of radiation. We first look at a black body that absorbs all incoming radiation without any reflection. This is the case e.g. in a hollow space. If the Temperature is kept constant, there will be a radiative equilibrium between the walls and the radiation on the inside of the hollow space. This radiative equilibrium is \textit{only} dependent on the temperature, every other dependancy would be contradicting the laws of Thermodynamics.
@@ -555,8 +555,31 @@ Wien's displacement law states that the black body radiation curve for different
 \begin{equation}
 \nu_{max} \propto T
 \end{equation}
+When radiation meets a surface, it is either absorbed or reflected. The absorption coefficient $\alpha$ therefore has values between 0 and 1. A body that emits thermal radiation has an emissivity coefficient $\epsilon$ between 0 and 1. An emissivity coefficient $\epsilon$ = 0 means no radiation is emitted, a body with $\epsilon$ = 1 emits the same amount of radiation a blackbody of same temperature would:
+\begin{equation}
+I_\nu = \epsilon(\nu)B_\nu(T)
+\end{equation}
+Absorption and Emissivity have to balanced, otherwise this would be contradicting to the second law of Thermodynamics. \textit{Kirchhoff's law of thermal radiation} states that for all frequencies and angles 
+\begin{equation}
+\epsilon(\vartheta,\varphi,\nu) = \alpha(\vartheta,\varphi,\nu).
+\end{equation}
 
+FIXME: Should 'Exkurs' (p25-36 script) also be covered? \vspace{1cm}
 
+We now apply these rules to our climate system. The earth itself emits radiation at the temperature of its surface. Due to the natural greenhouse effect, the temperature at earth's surface is increased by 34\,K.
+ \begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=1\textwidth]{figures/Buehler_et_al_OLR_spectra}
+\caption{Clear-sky OLR spectra of the earth as seen from space. The area between the top curve and the blue curve is caused by the natural greenhouse effect. From Buehler et al., 2006.}
+\label{default}
+\end{center}
+\end{figure}
+Comparing the radiational intensities to the Planck curves shows at which temperature the radiation was emitted. 
+\begin{equation}
+T_b = B^{-1}_{\nu}(T)
+\end{equation}
+$T_b$ is called the brightnesstemperature. Using the brightnesstemperature in remote sensing is very common since it is an intuitive unit for the intensity. E.g. one would interpret $T_b = 300$\,K as a high value since there are not much higher temperatures in the atmosphere. $T_b = 200$\,K on the other hand, would not be very much.
+ 
 
 
 % CHAPTER 6 - RADIATIVE TRANSFER EQUATION
