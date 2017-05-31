@@ -54,7 +54,7 @@
 
 %% Inhalt der Titelseite
 \title{Advanced radiation and remote sensing}
-\author{Stefan A Buehler, Lukas Kluft, Christoph Sauter, Jakob Doerr, FIXME all that worked on
+\author{Stefan A Buehler, Lukas Kluft, Christoph Sauter, Jakob Doerr, \colorbox{red}{FIXME} all that worked on
 the script}
 \date{\today}
 
@@ -68,7 +68,8 @@ the script}
 % CHAPTER 1 - INTRODUCTION
 \section{Introduction}
 
-FIXME
+This course is an continuation of the course \textit{radiation and remote sensing} given during the bachelor. Its goal is to recapitulate on the most important material of the previous course and to give an extended knowledge on the physical processes involved like spectroscopy, thermal radiation etc., in order to be able to work with our radiative transfer model ARTS. After the course, you should be able to use ARTS and the tools around it for your own projects.
+
 
 % CHAPTER 2 ROTATIONAL SPECTRA
 \section{Rotational spectra}
@@ -146,12 +147,12 @@ molecule). The most well-known is the HITRAN catalogue.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.4\textwidth]{figures/Fig_moments_inertia}
-\caption{FIXME}
-\label{default}
+\caption{Object with three moments of inertia}
+\label{Fig_moments_inertia}
 \end{center}
 \end{figure}
 
-Every free molecule has 3 \textbf{Moments of inertia} $I_A$, $I_B$, $I_C$ (\textit{Trägheitsmomente}), since there are 3 principal axes of rotation in the x-y-z-plane. We can use the Moments of inertia to classify the molecules and devide them into groups:
+Every free molecule has 3 \textbf{Moments of inertia} $I_A$, $I_B$, $I_C$ (\textit{Trägheitsmomente}), since there are 3 principal axes of rotation in the x-y-z-plane (Fig. \ref{Fig_moments_inertia}). We can use the Moments of inertia to classify the molecules and devide them into groups:
 
 
 \begin{center}
@@ -183,8 +184,8 @@ where $\omega$ is the angular frequency (\textit{Kreisfrequenz}), $I$ the moment
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1\textwidth]{figures/Reduced_mass}
-\caption{FIXME}
-\label{default}
+\caption{Sketch of a diatomic and asymmetric molecule of atomic masses $m_1$ and $m_2$ at a distance of $r_0$.}
+\label{Reduced_mass}
 \end{center}
 \end{figure}
 
@@ -192,7 +193,7 @@ In case of a diatomic molecule, we can use the \textbf{reduced mass $\mu$} to ex
 \begin{equation}
 \mu = \frac{m_1 m_2}{m_1+m_2} \qquad or \qquad \frac{1}{\mu} = \frac{1}{m_1} + \frac{1}{m_2}
 \end{equation}
-If we devide the distance between the mass centers of the atoms $r_0$ into their individual distances to the axis of rotation $r_1, r_2$, so that $r_0 = r_1 + r_2$, we can define the center of gravity:
+If we devide the distance between the mass centers of the atoms $r_0$ into their individual distances to the axis of rotation $r_1, r_2$, so that $r_0 = r_1 + r_2$ (see fig. \ref{Reduced_mass}), we can define the center of gravity:
 \begin{equation*}
 m_1 r_1 = m_2 r_2
 \end{equation*}
@@ -233,13 +234,13 @@ The energy levels can be expressed in wavenumbers by
 \begin{equation}
 \epsilon_\mathcal{J} = \frac{E_\mathcal{J}}{hc} = \frac{h}{\delta \pi^2 I c} \mathcal{J}(\mathcal{J}+1).
 \end{equation}
-$\delta$ is Dirac's delta function and c the speed of light in vacuum. The fracture on the right side of the equation is referred to as the rotational constant B. It is inversely proportional to the moment of inertia $I$. From Quantum mechanics it turns out, that the only transitions that are allowed are those where $\Delta \mathcal{J} = \pm1$. Therefore we can only get energy levels $\epsilon_J$ that are 0, 2B, 6B, 12B, 20B, ..., all other transitions are forbidden, which results in equidistant spectral lines. \\
+$\delta$ is Dirac's delta function and c the speed of light in vacuum. The fracture on the right side of the equation is referred to as the rotational constant B. It is inversely proportional to the moment of inertia $I$. From Quantum mechanics it turns out, that the only transitions that are allowed are those where $\Delta \mathcal{J} = \pm1$. Therefore we can only get energy levels $\epsilon_J$ that are 0, 2B, 6B, 12B, 20B, ..., all other transitions are forbidden, which results in equidistant spectral lines (see fig. \ref{Energy_levels}.) \\
 
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.5\textwidth]{figures/Energy_levels}
 \caption{Values for $\mathcal{J}$ given on the left and the energy levels $\epsilon_{\mathcal{J}}$ in wavenumbers on the right.}
-\label{default}
+\label{Energy_levels}
 \end{center}
 \end{figure}
 
@@ -256,7 +257,7 @@ This is an example of the selection rule. So the full spectrum of a diatomic mol
 % CHAPTER 3 - VIBRATIONAL SPECTRA
 \section{Vibrational spectra}
 Now we will turn to vibration, another mode of molecular internal energy. Just like rotational energy, vibrational energy is quantified, hence can lead to spectroscopic transitions (= absorption lines). \\
-We start off by looking at a harmonic oscillator in regular mechanics. Assume there is a restoring force,
+We start off by looking at a harmonic oscillator in regular mechanics (see fig. \ref{Vibration_parabol}). Assume there is a restoring force,
 \begin{equation}
 f = -k (r-r_{eq}) \qquad (\text{Hooke's law})
 \end{equation}
@@ -269,7 +270,7 @@ E = \frac{1}{2}k (r-r_{eq})^2 .
 \begin{center}
 \includegraphics[width=1\textwidth]{figures/Vibration_parabol}
 \caption{Energy curve for HCl molecules for extension or compression. After Banwell and McCash.}
-\label{default}
+\label{Vibration_parabol}
 \end{center}
 \end{figure}
 
@@ -285,18 +286,18 @@ So what is $\omega$? If $f$ is really proportional to $\Delta r$, then it is a c
 \begin{equation}
 \tilde{\omega} = \sqrt{\frac{k}{\mu}}
 \end{equation}
-FIXME: What are the names of $k$ and $\mu$?\par
+\colorbox{red}{FIXME: What are the names of $k$ and $\mu$?}\\
 The lowest vibrational level is at
 \begin{equation}
 E_0 = \frac{1}{2} \hbar \tilde{\omega}.
 \end{equation}
-Therefore a molecule can never have \textbf{zero} vibrational energy! This is different from rotation, where the lowest state had zero energy. \par
+Therefore a molecule can never have \textbf{zero} vibrational energy! This is different from rotation, where the lowest state had zero energy (fig. \ref{Vibration_parabol_2}). \par
 
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.8\textwidth]{figures/Vibration_parabol_2}
 \caption{Allowed vibrational energy levels and transitions between them. After Banwell and McCash.}
-\label{default}
+\label{Vibration_parabol_2}
 \end{center}
 \end{figure}
 
@@ -316,13 +317,13 @@ Note: There are higher order therms in both rotation (zentrifugal stretching) an
 \begin{center}
 \includegraphics[width=1\textwidth]{figures/Transitions_vib_rot}
 \caption{Transitons between vibrational - rotational energy levels. After Banwell and McCash.}
-\label{default}
+\label{Transitions_vib_rot}
 \end{center}
 \end{figure}
  
  The selection rule states, that
  \begin{equation}
-\Delta \nu = \pm 1 \text \quad {and} \quad \Delta \mathcal{J} = \pm 1.
+\Delta \nu = \pm 1 \text \quad {and} \quad \Delta \mathcal{J} = \pm 1 \quad \text{(see fig. \ref{Transitions_vib_rot})}.
 \end{equation}
 This means, we normally cannot observe the vibrational fundamental directly. Rotational levels will be filled to varying degrees in a population of molecules. This results in different line intensities. \\
 The transition frequencies are divided into two branches:
@@ -535,10 +536,6 @@ In the exercise you will find out which effect of broadening dominates when.
 % CHAPTER 5 - THERMAL RADIATION
 \section{Thermal radiation}
 
-FIXME: Mostly covered by script from Bachelor lecture, but at least
-state the Planck law here.\vspace{1cm}
-
-
 We now want to look at the balance between Radiation and Temperature. If an object receives more radiation, its temperature rises. And a higher temperature results in a higher emission of radiation. We first look at a black body that absorbs all incoming radiation without any reflection. This is the case e.g. in a hollow space. If the Temperature is kept constant, there will be a radiative equilibrium between the walls and the radiation on the inside of the hollow space. This radiative equilibrium is \textit{only} dependent on the temperature, every other dependancy would be contradicting the laws of Thermodynamics.
 
 The relationship between temperature and radiation is described in what now is known as \textit{Planck's law}:
@@ -564,16 +561,18 @@ Absorption and Emissivity have to balanced, otherwise this would be contradictin
 \epsilon(\vartheta,\varphi,\nu) = \alpha(\vartheta,\varphi,\nu).
 \end{equation}
 
-FIXME: Should 'Exkurs' (p25-36 script) also be covered? \vspace{1cm}
+\colorbox{red}{FIXME: Should 'Exkurs' (p25-36 script) also be covered?} \vspace{1cm}
 
-We now apply these rules to our climate system. The earth itself emits radiation at the temperature of its surface. Due to the natural greenhouse effect, the temperature at earth's surface is increased by 34\,K.
- \begin{figure}[htbp]
+We now apply these rules to our climate system. The earth itself emits radiation at the temperature of its surface. Due to the natural greenhouse effect, the temperature at earth's surface is increased by 34\,K. This can be seen in fig. \ref{Buehler_et_al_OLR_spectra} shows the spectra of longwave radiation of the earth as seen from space.
+
+ \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=1\textwidth]{figures/Buehler_et_al_OLR_spectra}
 \caption{Clear-sky OLR spectra of the earth as seen from space. The area between the top curve and the blue curve is caused by the natural greenhouse effect. From Buehler et al., 2006.}
-\label{default}
+\label{Buehler_et_al_OLR_spectra}
 \end{center}
 \end{figure}
+
 Comparing the radiational intensities to the Planck curves shows at which temperature the radiation was emitted. 
 \begin{equation}
 T_b = B^{-1}_{\nu}(T)
