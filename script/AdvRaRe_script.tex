@@ -68,7 +68,7 @@ the script}
 % CHAPTER 1 - INTRODUCTION
 \section{Introduction}
 
-This course is an continuation of the course \textit{radiation and remote sensing} given during the bachelor. Its goal is to recapitulate on the most important material of the previous course and to give an extended knowledge on the physical processes involved like spectroscopy, thermal radiation etc., in order to be able to work with our radiative transfer model ARTS. After the course, you should be able to use ARTS and the tools around it for your own projects.
+This course is a continuation of the course \textit{radiation and remote sensing} given during the bachelor. Its goal is to recapitulate the most important material of the previous course and to give an extended knowledge on the physical processes involved like spectroscopy, thermal radiation etc., in order to be able to work with our radiative transfer model ARTS. After the course, you should be able to use ARTS and the tools around it for your own projects.
 
 
 % CHAPTER 2 ROTATIONAL SPECTRA
@@ -81,9 +81,9 @@ the photon $\nu$ are connected through the Planck constant $h$.
 \begin{equation}
   E_f - E_i = \Delta E = h \nu
 \end{equation}
-The transition between different energy levels can be divided into three types,
+The transitions between different energy levels can be divided into three types,
 corresponding to different states of the molecule.  Each transition type is
-characteristic for a specific region of the electro-magnetic spectra.  One can
+characteristic for a specific region of the electro-magnetic spectrum.  One can
 distinguish changes in a molecules rotation (microwave), vibration (infrared)
 and electronic transitions (UV/visible).
 
@@ -96,7 +96,7 @@ One can distinguish between three types of interaction between a photon and a
 molecule: absorption, spontaneous emission and stimulated emission.  There are
 three conditions to be fulfilled for a molecule to absorb a photon:
 \begin{enumerate}
-\item The frequency of the photon has to match one the molecule's energy
+\item The frequency of the photon has to match one of the molecule's energy
 transitions.
 \begin{equation}
   \Delta E = h \nu
@@ -117,8 +117,8 @@ between states $i$ and $f$.
 \begin{equation}
   \mu_{if} = \mu \iiint \psi_f^*(x,y,z) \psi(x,y,z) \,dx\,dy\,dz
 \end{equation}
-Where $\mu$ is the magnitude of the dipole operator. $\mu_{if}$ is a constant
-for each transition.
+Where $\mu$ is the magnitude of the dipole operator, $\mu_{if}$ is a constant
+for each transition and $\psi$ is the wave function from quantum mechanics.
 \end{enumerate}
 
 Combining all conditions, one can define the absorption coefficient $\alpha$.
@@ -126,7 +126,7 @@ Combining all conditions, one can define the absorption coefficient $\alpha$.
   \alpha(\nu) = n \sum_{f,i} S_{fi}(T) \delta(\nu_{fi} - \nu)
 \end{equation}
 With number density $n$, line strength $S_{fi}$, difference of state energies
-$h\nu_{fi}$ and Dirac's delta function $\delta$ (physical not true, will be
+$h\nu_{fi}$ and Dirac's delta function $\delta$ (physically not true, will be
 replaced later by a so called "line shape" function.
 
 The line strength is different for each transition and defined as follows.
@@ -134,7 +134,7 @@ The line strength is different for each transition and defined as follows.
     S_{fi} = \frac{8\pi^3\nu_{fi} \lvert\mu_{fi}\rvert^2 q_i}{3hcQ(T)}
       \left( e^{E_i/(kT)} - e^{E_f/(kT)} \right)
 \end{equation}
-Although this equations looks complicated, there is only one true independent
+Although this equation looks complicated, there is only one truly independent
 variable, the temperature $T$. All other variables are constants of the
 transition, or fundamental constants.
 
@@ -152,7 +152,7 @@ molecule). The most well-known is the HITRAN catalogue.
 \end{center}
 \end{figure}
 
-Every free molecule has 3 \textbf{Moments of inertia} $I_A$, $I_B$, $I_C$ (\textit{Trägheitsmomente}), since there are 3 principal axes of rotation in the x-y-z-plane (Fig. \ref{Fig_moments_inertia}). We can use the Moments of inertia to classify the molecules and devide them into groups:
+Every free molecule has 3 \textbf{Moments of inertia} $I_A$, $I_B$, $I_C$ (\textit{Trägheitsmomente}), since there are 3 principal axes of rotation in the x-y-z-plane (Fig. \ref{Fig_moments_inertia}). We can use the Moments of inertia to classify the molecules and divide them into groups:
 
 
 \begin{center}
@@ -175,7 +175,7 @@ Every free molecule has 3 \textbf{Moments of inertia} $I_A$, $I_B$, $I_C$ (\text
 \end{tabular}
 \end{center}
 
-From classical mechanics, we can define the Rotational energy
+From classical mechanics, we can define the rotational energy
 \begin{equation}
 E_r = \frac{1}{2} I \omega^2 = \frac{J^2}{2I},
 \end{equation}
@@ -232,9 +232,9 @@ or in frequency (Hz)
 so they translate directly to the observed spectrum.\\
 The energy levels can be expressed in wavenumbers by
 \begin{equation}
-\epsilon_\mathcal{J} = \frac{E_\mathcal{J}}{hc} = \frac{h}{\delta \pi^2 I c} \mathcal{J}(\mathcal{J}+1).
+\epsilon_\mathcal{J} = \frac{E_\mathcal{J}}{hc} = \frac{h}{8 \pi^2 I c} \mathcal{J}(\mathcal{J}+1).
 \end{equation}
-$\delta$ is Dirac's delta function and c the speed of light in vacuum. The fracture on the right side of the equation is referred to as the rotational constant B. It is inversely proportional to the moment of inertia $I$. From Quantum mechanics it turns out, that the only transitions that are allowed are those where $\Delta \mathcal{J} = \pm1$. Therefore we can only get energy levels $\epsilon_J$ that are 0, 2B, 6B, 12B, 20B, ..., all other transitions are forbidden, which results in equidistant spectral lines (see fig. \ref{Energy_levels}.) \\
+c is the speed of light in vacuum. The fraction on the right side of the equation is referred to as the rotational constant B. It is inversely proportional to the moment of inertia $I$. From Quantum mechanics it turns out, that the only transitions that are allowed are those where $\Delta \mathcal{J} = \pm1$. Therefore we can only get energy levels $\epsilon_J$ that are 0, 2B, 6B, 12B, 20B, ..., all other transitions are forbidden, which results in equidistant spectral lines (see fig. \ref{Energy_levels}.) \\
 
 \begin{figure}[htbp]
 \begin{center}
@@ -261,7 +261,7 @@ We start off by looking at a harmonic oscillator in regular mechanics (see fig. 
 \begin{equation}
 f = -k (r-r_{eq}) \qquad (\text{Hooke's law})
 \end{equation}
-at the point $r$ from the equilibrium point $r_{eq}$ with a constant $k$, then the associated energy is
+at the point $r$ from the equilibrium point $r_{eq}$ with a spring constant $k$, then the associated energy is
 \begin{equation}
 E = \frac{1}{2}k (r-r_{eq})^2 .
 \end{equation}
@@ -286,7 +286,8 @@ So what is $\omega$? If $f$ is really proportional to $\Delta r$, then it is a c
 \begin{equation}
 \tilde{\omega} = \sqrt{\frac{k}{\mu}}
 \end{equation}
-\colorbox{red}{FIXME: What are the names of $k$ and $\mu$?}\\
+$k$ is the spring constant and $mu$ is the (reduced) mass.
+%\colorbox{red}{FIXME: What are the names of $k$ and $\mu$?}\\  FIXED!
 The lowest vibrational level is at
 \begin{equation}
 E_0 = \frac{1}{2} \hbar \tilde{\omega}.
@@ -302,7 +303,7 @@ Therefore a molecule can never have \textbf{zero} vibrational energy! This is di
 \end{figure}
 
 The frequency of the observed line corresponds to the energy difference $\tilde{\nu}$ between adjacent levels (which corresponds to the classical frequency at which the molecule would vibrate. If molecules rotate, the Energy separation is 1 - 10\,cm$^{-1}$ whereas if they vibrate, the Energy separation is 100 - 10\,000\,cm$^{-1}$. This is a large difference in characteristic energy. We can therefore assume that the two motions occur independently.
- (This is a case of the Born- Oppenheimer approximation, which strictly also includes vibration. We write
+ (This is a case of the Born- Oppenheimer approximation, which strictly also includes optical transitions). We write
  \begin{gather}
 E_{total} = E_{rot} + E_{vib} \qquad \left[J\right]  \\
 \epsilon_{total} = \epsilon_{rot} + \epsilon_{vib} \qquad \left[cm^{-1}\right].
@@ -424,7 +425,7 @@ There are three mechanisms that lead to a broadening of absorption lines:
 
 \subsection{Natural line width}
 
-So far we know that the difference between two energy states $E_{f}$ and $E_{i}$ equanls the frequency $\nu$ times the Planck constant $h$:
+So far we know that the difference between two energy states $E_{f}$ and $E_{i}$ equals the frequency $\nu$ times the Planck constant $h$:
 \begin{equation}
 h \nu = E_f - E_i
 \end{equation}
@@ -563,7 +564,7 @@ Absorption and Emissivity have to balanced, otherwise this would be contradictin
 
 \colorbox{red}{FIXME: Should 'Exkurs' (p25-36 script) also be covered?} \vspace{1cm}
 
-We now apply these rules to our climate system. The earth itself emits radiation at the temperature of its surface. Due to the natural greenhouse effect, the temperature at earth's surface is increased by 34\,K. This can be seen in fig. \ref{Buehler_et_al_OLR_spectra} shows the spectra of longwave radiation of the earth as seen from space.
+We now apply these rules to our climate system. The earth itself emits radiation at the temperature of its surface. Due to the natural greenhouse effect, the temperature at earth's surface is increased by 34\,K. This can be seen in fig. \ref{Buehler_et_al_OLR_spectra} which shows the spectra of longwave radiation of the earth as seen from space.
 
  \begin{figure}[h!]
 \begin{center}
@@ -575,9 +576,9 @@ We now apply these rules to our climate system. The earth itself emits radiation
 
 Comparing the radiational intensities to the Planck curves shows at which temperature the radiation was emitted. 
 \begin{equation}
-T_b = B^{-1}_{\nu}(T)
+T_b = B^{-1}_{\nu}(I_{\nu})
 \end{equation}
-$T_b$ is called the brightnesstemperature. Using the brightnesstemperature in remote sensing is very common since it is an intuitive unit for the intensity. E.g. one would interpret $T_b = 300$\,K as a high value since there are not much higher temperatures in the atmosphere. $T_b = 200$\,K on the other hand, would not be very much.
+$T_b$ is called the brightness temperature. Using the brightness temperature in remote sensing is very common since it is an intuitive unit for the intensity. E.g. one would interpret $T_b = 300$\,K as a high value since there are not much higher temperatures in the atmosphere. $T_b = 200$\,K on the other hand, would not be very much.
  
 
 
@@ -593,10 +594,10 @@ terms of the monochromatic Intensity $I$. It can be written as
 where $ds$ is a path element. The first term on the right hand side is 
 the radiation loss due to extinction by absorption (absorption coefficient $\alpha$) 
 and scattering (scattering coefficient $\sigma$). The second term is a source term
-due to thermal emission $B(T)$. The third term is a source term due radiation that
+due to thermal emission $B(T)$. The third term is a source term due to radiation that
 is scattered into the path. It is calculated using the phase matrix $P$ of the 
 scattering particles. The calculation involves an integration of the intensity over the 
-whole solid angle $\Omega$. Note that normally, every variable depends on the frequency
+whole solid angle $\Omega$. Note, that normally every variable depends on the frequency
 and the viewing direction. \\
 We see that if we include scattering in the RTE, it is very difficult to solve, because 
 in order to compute the intensity in one direction, we need to know the intensity in 
@@ -610,7 +611,7 @@ scattering, the last term as well as the $\sigma$ in the first term vanish and t
 \end{equation}
 This equation is also known as Schwarzschild's equation because if was formulated by 
 K. Schwarzschild in 1906.\\
-Using this equations, let's look at what happens in a homogeneous medium ($\alpha$ and $T$
+Using this equation, let's look at what happens in a homogeneous medium ($\alpha$ and $T$
 constant). If the radiation passes through the medium long enough ($s \rightarrow \infty$)
 the difference between $B$ and $I$ has to get smaller and smaller. This means that eventually,
 $I$ will converge to $B$. This makes sense because if we look through a thick enough medium, 
@@ -619,7 +620,7 @@ Schwarzschild's equation can be integrated along a path through a layer
 (a complete derivation can be found in Petty, Eq. 8.5 - 8.13):
 \begin{equation}
 	I(s) = I(0) e^{-\tau (0,s)} + \int_{0}^{s} \alpha (s') B(s') 
-	e^{-\tau (0,s')} ds' 
+	e^{-\tau (s',s)} ds' 
 \end{equation}
 where $\tau(0,s)$ is the opacity between the points. It is defined as:
 \begin{equation}
@@ -649,7 +650,7 @@ With the definition of the transmission $t = e^{-\alpha s}$, we can rewrite the 
 	I(s) = t I(0)  + \left( 1-t \right) B(T).
 \end{equation}
 Let's look at a few extreme cases of the solution.\\
-\underline{Optically thin:}\\
+\underline{Optically thick:}\\
 What happens if the opacity of the layer is very high, so $ t\rightarrow0$ ? 
 Then we just see the Planck emission of the layer. the incoming radiation does not reach us.\\
 \underline{Optically thin:}\\
