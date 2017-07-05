@@ -1,3 +1,8 @@
+2017-07-03 Laura Dietrich <lau_die@gmx.de>
+	* script/AdvRaRe_script.tex: Added the Jacobian-chapter
+	* figures/plotType_jacobians.png: Added figure
+	* figures/perturbedLayer_EmissionTransmission: Added figure
+
 2017-06-07 Jakob Doerr <jakobdoerr@googlemail.com>
 
 	* script/AdvRaRe_script.tex: Fixed Stefan's revisions.

@@ -54,7 +54,7 @@
 
 %% Inhalt der Titelseite
 \title{Advanced radiation and remote sensing}
-\author{Stefan A Buehler, Lukas Kluft, Christoph Sauter, Jakob Doerr, \colorbox{red}{FIXME} all that worked on
+\author{Stefan A Buehler, Lukas Kluft, Christoph Sauter, Jakob Doerr, Laura Dietrich  \colorbox{red}{FIXME} all that worked on
 the script}
 \date{\today}
 
@@ -674,5 +674,142 @@ which has exactly the same form as Schwarzschild's equation itself.
 
 % CHAPTER 7 - JACOBIANS
 \section{Jacobians}
- 
+ nverse modeling is needed for estimating an atmospheric state variable
+$\vec{x}$ by measuring an affected variable $\vec{y}$
+\begin{equation*}
+\vec{y}=F(\vec{x}) \rightarrow \vec{x}=?
+\end{equation*}
+The physical relationship between $\vec{x}$ and $\vec{y}$ is described by F, the
+so called forward model:
+
+\begin{equation*}
+\vec{y}=F(\vec{x})+\vec{\epsilon},
+\end{equation*}
+where $\vec{y}$ is the variable which should be measured,$F$ is the forward
+model dependent on the variable of the atmospheric state $\vec{x}$ (e.g.
+temperature profile, altitude)  and $\vec{\epsilon}$ is the noise.\\
+
+\subsection*{Definition}
+\textbf{Jacobian}:
+The Jacobian is defined as the partial derivative of the forward model at the
+$i^{th}$ element of the vector $\vec{y}$ (e.g. $i^{th}$ frequency) to a
+variation of the $j^{th}$ element of the atmospheric state vector (e.g.
+altitude).
+\begin{equation*}
+J_{i,j}=\frac{\partial F_i}{\partial x_j}
+\end{equation*}
+
+For example if the temperature is retrieved, then the Jacobian describes how
+the brightness temperature ($\vec{y}$) at a certain frequency changes when the
+temperature ($\vec{x}$) at the $j^{th}$ level changes.
+Hence a Jacobian could be understood as the sensibility of $\vec{y}$ at the
+$i^{th}$ element if the $j^{th}$ element of $\vec{x}$ varies.\
+There are two possible methods of calculating a Jacobian.
+
+\subsection*{Pertubation Method}
+This method is a 'naive' but always working method because it is the most
+straightforward method. The Jacobian is calculated by perturbing the state
+variable $\vec{x}$ by a small disturbance $\vec{\Delta x}$. The Jacobian
+corresponding to the state variable $\vec{x}$ can thus be calculated as
+\begin{equation}
+J(i,j)=\frac{\partial y_i}{\partial x_j} \approx \frac{\Delta y_i}{\Delta x_j} =
+\frac{F(\vec{x}+\vec{\Delta x_j})-F(\vec{x})}{\Delta x},
+\end{equation}
+where $\Delta x$ is the $j^{th}$ element of $\vec{\Delta x} $ and F is the
+forward model.
+{\setstretch{0.7}
+	\begin{equation*}
+	\vec{\Delta x}_j=\left[\begin{array}{c} 0 \\ \vdots \\0\\ \Delta x \\ 0\\ \vdots
+	\\0\end{array}\right] \qquad
+	\end{equation*}
+}
+
+This method is relatively inefficient because one has to run the full forward
+model F for every element of $\vec{x}$, only perturbing them once at a time.
+
+\subsection*{Analytical Method}
+For the analytical method, we use the integral form of the clear-sky radiative
+transfer equation (RTE) for one certain frequency
+\begin{equation*}
+y=I=I_0 \cdot e^{-\int_0^\infty \alpha(s') ds'}+ \int_0^\infty \alpha(s)B(T(s)))
+\cdot e^{-\int_0^s \alpha(s')ds'} ds,
+\end{equation*}
+
+where $\alpha$ is the absorption coefficient and B is the thermal emission. Or
+in a discrete form
+\begin{equation*}
+I=I_0 \cdot \underbrace{\vphantom{\frac{a}{b}}e^{-\sum_{j=0}^N \alpha_j \Delta
+		s_j'}}_{\substack{Transmission}}+ \sum_{i=0}^N
+\underbrace{\vphantom{\frac{a}{b}}\alpha_i \Delta s_i
+	B(T_i)}_{\substack{Emission}} \cdot
+\underbrace{\vphantom{\frac{a}{b}}e^{\overbrace{-\sum_{j=0}^i \alpha_j \Delta
+			s_j}^{Opacity}}}_{\substack{Transmission}},
+\end{equation*}
+with the layerthickness $\Delta s$ and the incoming Radiation $I_0$.\\
+
+As is shown in figure \ref{fig:perturbedLayer}, if the atmosphere is perturbed
+at one layer, this will affect the emission at this layer and the transmission
+of everything behind.
+\begin{figure}[h!]
+	\centering
+	
+	\includegraphics[width=0.6\textwidth]{./figures/perturbedLayer_EmissionTransmission}
+	\caption{}
+	\label{fig:perturbedLayer}
+\end{figure}
+\\
+\textbf{Emission:}\\
+\begin{equation*}
+\frac{\partial}{\partial x_k}(\alpha_k \Delta s_k B(T_k)) = \Delta s_k B(T_k)
+\frac{\partial \alpha_k}{\partial x_k}
+\end{equation*}
+If x is the number density of some gas(n):
+\begin{equation}
+\alpha=n \cdot \sigma \rightarrow \frac{\partial \alpha}{\partial n}=\sigma,
+\end{equation}
+where n is the density and $\sigma$ is the absorption cross-section.
+
+\textbf{Transmission:}
+\begin{equation}
+\tau=\sum_{i=0}^N \alpha_i \Delta s_i = \alpha_1 \Delta s_1 + \alpha_2 \Delta
+s_2 + \cdots + \alpha_N \Delta s_N,
+\end{equation}
+The change of the transmission can be written as
+\begin{equation*}
+\frac{\partial \tau}{\partial x_k}=\Delta s_k \frac{\partial \alpha_k}{\partial
+	x_k}.
+\end{equation*}
+
+\subsection*{Pro and Cons of the different calculations of Jacobians}
+\textbf{Numerical Perturbation Method}
+This method is very easy to implement and it works for any parameter in a
+"black-box" kind of way which makes the method very "foolproof". Therefore it
+takes a lot of time to calculate the Jacobian.
+\\\\
+\textbf{Analytical Method}
+This method needs a lot of "housekeeping" and is not always feasible. But it is
+also more accurate and faster than the Numerical Perturbation Method.
+
+\subsection*{Displaying Jacobians}
+Since the Jacobian is a matrix, there are three basic ways to display it:\\
+1. \textbf{Contour plot:} Frequency dependence for all altitudes, figure
+\ref{fig:plotTypes}a)\\
+2. \textbf{Row plot:} Altitude dependence for selected frequencies, figure
+\ref{fig:plotTypes}b)\\
+3. \textbf{Column plot:} Frequency dependence for selected altitudes, figure
+\ref{fig:plotTypes}c)
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{./figures/plotTypes_Jacobian}
+	\caption{}
+	\label{fig:plotTypes}
+\end{figure}
+
+\subsection*{Opacity rule}
+Jacobians tell us where the information comes from or rather where changes in
+the atmosphere affect the radiation most.\\
+The opacity rule tells us something about the origin of the radiation. The
+origin of the thermal radiation is the distance where the opacity, as calculated
+from the observer, reaches 1.
 \end{document}
