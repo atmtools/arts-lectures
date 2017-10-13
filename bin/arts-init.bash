@@ -17,7 +17,7 @@ ARTS_INCLUDE_PATH="/data/share/lehre/unix/rtcourse/arts/controlfiles:$ARTS_INCLU
 export PATH ARTS_DATA_PATH ARTS_INCLUDE_PATH MATLABPATH
 
 # Limit ARTS CPU usage to four cores.
-export OMP_NUM_THREADS=4
+export OMP_NUM_THREADS=2
 
 # Load latest MATLAB version.
 module unload matlab && module load matlab/2016a

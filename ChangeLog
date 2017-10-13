@@ -1,3 +1,9 @@
+2017-10-13  Oliver Lemke  <olemke@core-dump.info>
+
+	* bin/arts-init.bash: Reduce OpenMP to 2 threads.
+
+	* bin/arts-init.tcsh: Removed.
+
 2017-10-10  Oliver Lemke  <olemke@core-dump.info>
 
 	* bin/arts_init.bash: Adapted for new computer pool.
