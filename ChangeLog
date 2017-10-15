@@ -1,5 +1,13 @@
 2017-10-15  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* README.md: Narrow the information content down.
+
+	The whole readme file is condensed on a more general level.
+	Explicit information for UHH students are replaced by a
+	hyperlink to the lecture material.
+
+2017-10-15  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* exercises/01-rotational_spectra/plot_xsec.py,
 	  exercises/04-rtcalc/plot_bt.py,
 	  exercises/05-jacobian/plot_jacobian.py,
