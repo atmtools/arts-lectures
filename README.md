@@ -31,7 +31,7 @@ atmlab_init
 ### typhon
 Typhon includes unittests which can be run to test the installation:
 ```python
-pytest --pyarts typhon
+pytest --pyargs typhon
 ```
 
 [ARTS]: http://radiativetransfer.org/
