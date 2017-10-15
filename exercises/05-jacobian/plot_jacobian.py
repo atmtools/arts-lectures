@@ -6,11 +6,8 @@
 the atmosphere, zenith opacity, the water vapour jacobian and the
 opacity between altitude z and the top of the atmosphere. Different
 frequencies can be selected by changing the variable `freq_ind` into
-a number between 1 and 110."""
-
-
-import matplotlib
-matplotlib.use('Agg')  # Use Agg-backend to produce plots without X-Server
+a number between 1 and 110.
+"""
 import matplotlib.pyplot as plt
 from typhon.arts import xml
 import numpy as np
@@ -109,7 +106,7 @@ if freq_ind > 0:
     plt.ylabel('Altitude [ km ]')
     plt.title('Opacity from a layer to space')
     try:
-        plt.text( 0.01, 60, str(z_fine[np.where(opac_layer_space[:, 0] >= 1)[0][0], 0, 0].round(1)/1000)+'km')
+        plt.text(0.01, 60, str(z_fine[np.where(opac_layer_space[:, 0] >= 1)[0][0], 0, 0].round(1)/1000)+'km')
     except Exception:
         print('no opacity greater than 1')
 

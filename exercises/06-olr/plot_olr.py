@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
-#
-# Copyright © 2016 Lukas Kluft <lukas.kluft@gmail.com>
-#
-# Distributed under terms of the MIT license.
-
 """Plot simulated outgoing longwave radiation (OLR) and
 Planck curves for different temperatures.
 """
-import matplotlib
-matplotlib.use('Agg')  # Use Agg-backend to produce plots without X-Server
 import matplotlib.pyplot as plt
 import numpy as np
 import typhon
 from typhon.arts import xml
-from typhon.plots import styles
+
 
 # Read ARTS results
 olr = xml.load('./results/olr.xml')

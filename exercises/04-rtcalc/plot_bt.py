@@ -1,13 +1,6 @@
 # -*- coding: utf-8 -*-
-#
-# Copyright © 2017 Lukas Kluft <lukas.kluft@gmail.com>
-#
-# Distributed under terms of the MIT license.
-
 """Load and plot zenith opacity and brightness temperatures.
 """
-import matplotlib
-matplotlib.use('Agg')  # Use Agg-backend to produce plots without X-Server
 import matplotlib.pyplot as plt
 from typhon.arts import xml
 from typhon.plots import styles

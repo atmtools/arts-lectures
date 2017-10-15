@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
-#
-# Copyright © 2016 Lukas Kluft <lukas.kluft@gmail.com>
-#
-# Distributed under terms of the MIT license.
-
 """Load and plot absorption cross sections corresponding
 to arts output from "absorption.arts".
 """
-import matplotlib
-matplotlib.use('Agg')  # Use Agg-backend to produce plots without X-Server
 import matplotlib.pyplot as plt
 from typhon.arts import xml
 from typhon.plots import styles
