@@ -1,3 +1,14 @@
+2017-10-15  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/04-rtcalc/plot_bt.py:
+
+	Add basic python script to plot brightness temperatures
+	and zenith opacity.
+
+	* exercises/01-rotational_spectra/plot_xsec.py:
+
+	Set ylim to avoid white space around data.
+
 2017-10-13  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/04-rtcalc/rtcalc.arts,
