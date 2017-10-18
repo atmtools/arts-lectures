@@ -1,3 +1,7 @@
+2017-10-18  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
+
+	* script/AdvRaRe_script.tex: Small details.
+
 2017-10-18  Oliver Lemke  <olemke@core-dump.info>
 
 	* script/Makefile: Adapt for new split screen+print files.
