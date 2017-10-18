@@ -1,0 +1,33 @@
+\documentclass[a5paper,landscape,fleqn,12pt]{article}
+%% Seitenaufbau
+\usepackage[top=2cm, bottom=1.5cm, left=2.5cm, right=2.5cm]{geometry}
+
+%% Schriftbild
+\usepackage{lmodern}  % Latin Modern Zeichensatz
+\usepackage[utf8]{inputenc}  % Unterstuetzung von Umlauten im Quelltext
+\usepackage[T1]{fontenc}  % Korrekte Umlaute im Output
+\renewcommand{\familydefault}{\sfdefault}  % Serifenlose Schrift
+\usepackage{setspace}\onehalfspacing  % 1.5-facher Zeilenabstand
+\renewcommand{\arraystretch}{1.5}  % 1.5-facher Zeilenabstand (Tabellen)
+\setlength{\parindent}{0pt}  % Keine Einrueckung am Beginng von Absaetzen
+\setlength{\parskip}{1ex}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\lhead{\rightmark}
+\chead{}
+\cfoot{\thepage}  % Richtige Schriftart fuer Seitenzahlen
+\sloppy  % Weniger strikte Silbentrennung
+
+%% Verlinkung von Inhaltsverzeichnis, Bildern und Formeln
+\usepackage[pagebackref]{hyperref}  % Verlinkung von URLs und Referenzen
+\usepackage{color}  % Definition von Linkfarben
+\definecolor{DarkRed}{rgb}{0.5,0,0}
+\hypersetup{
+  colorlinks,
+  citecolor=DarkRed,
+  linkcolor=DarkRed,
+  urlcolor=blue}
+
+\input{AdvRaRe_script}

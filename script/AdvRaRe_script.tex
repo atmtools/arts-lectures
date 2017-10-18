@@ -1,33 +1,3 @@
-\documentclass[a4paper,fleqn]{article}
-%% Seitenaufbau
-\usepackage[top=3cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
-
-%% Schriftbild
-\usepackage{lmodern}  % Latin Modern Zeichensatz
-\usepackage[utf8]{inputenc}  % Unterstuetzung von Umlauten im Quelltext
-\usepackage[T1]{fontenc}  % Korrekte Umlaute im Output
-\renewcommand{\familydefault}{\sfdefault}  % Serifenlose Schrift
-\usepackage{setspace}\onehalfspacing  % 1.5-facher Zeilenabstand
-\renewcommand{\arraystretch}{1.5}  % 1.5-facher Zeilenabstand (Tabellen)
-\setlength{\parindent}{0pt}  % Keine Einrueckung am Beginng von Absaetzen
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\renewcommand{\headrulewidth}{0.5pt}
-\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
-\lhead{\rightmark}
-\chead{}
-\cfoot{\thepage}  % Richtige Schriftart fuer Seitenzahlen
-\sloppy  % Weniger strikte Silbentrennung
-
-%% Verlinkung von Inhaltsverzeichnis, Bildern und Formeln
-\usepackage[pagebackref]{hyperref}  % Verlinkung von URLs und Referenzen
-\usepackage{color}  % Definition von Linkfarben
-\definecolor{DarkRed}{rgb}{0.5,0,0}
-\hypersetup{
-  colorlinks,
-  citecolor=DarkRed,
-  linkcolor=DarkRed,
-  urlcolor=blue}
 
 %% Mathematikumgebung
 \usepackage{mathtools}
@@ -62,39 +32,116 @@ the script}
 \begin{document}
 \maketitle
 \thispagestyle{empty}\pagestyle{empty}
+\newpage
 \tableofcontents
 \newpage\pagestyle{fancy}
+
+
 
 % CHAPTER 1 - INTRODUCTION
 \section{Introduction}
 
-This course is a continuation of the course \textit{radiation and remote sensing} given during the bachelor. Its goal is to recapitulate the most important material of the previous course and to give an extended knowledge on the physical processes involved like spectroscopy, thermal radiation etc., in order to be able to work with our radiative transfer model ARTS. After the course, you should be able to use ARTS and the tools around it for your own projects.
+This course is a continuation of the course \textit{radiation and
+  remote sensing} given during the bachelor. Its goal is to
+recapitulate the most important material of the previous course and to
+give an extended knowledge on the physical processes involved like
+spectroscopy, thermal radiation etc., in order to be able to work with
+our radiative transfer model ARTS. After the course, you should have a
+deeper understanding of radiation and remote sensing, and you should be
+able to use ARTS and the tools around it for your own projects.
 
+\subsection*{Contact}
+
+\includegraphics[width=4cm]{figures/buehler_portrait_sketch}
+~
+\begin{minipage}{0.5\linewidth}
+  \vspace*{-1.6cm}
+  Stefan A. Buehler\\
+  Room 1534 (Geomatikum)\\
+  Phone: +49 40 42838 8124\\
+  Email: stefan.buehler(at)uni-hamburg.de\\
+\end{minipage}
+
+\subsection*{Modus operandi}
+
+The course consists of a mixture of short lecture and a lot of
+practical exercises, all in the same place and time slot. It is
+experimental and meant to be rugged. Don’t expect any polish. Don’t
+even expect everything to work properly.
+
+\subsection*{Examination}
+
+As an exam, you are expected to investigate a small remote sensing or
+radiation problem of your own choice. (Hopefully, you will find some
+inspiration for a project during the course.)
+
+What you have to deliver is a Pdf file with approximately one to at
+maximum two pages of text, plus one or two figures. The deadline is
+February 1, 2018. The grade will be based on five criteria: ambition
+level, originality, figure quality, text quality, and commitment.
+
+\subsection*{Script author contributions}
+
+The script is based on my handwritten notes from the first pass of the
+course.  Lukas Kluft created the basic LaTeX structure and the initial
+draft of Section \ref{sec:energy-states}.
 
 % CHAPTER 2 ROTATIONAL SPECTRA
 \section{Rotational spectra}
 
+Recommended reading: Fundamentals of molecular spectroscopy by C.\ N.\
+Banwell and E.\ M.\ McCash (Mc Graw Hill Verlag).
+
 \subsection{Energy states and photons}
+\label{sec:energy-states}
 Absorption and emission of a photon can happen if the internal energy of a
 molecule changes. The difference in two energy states $E$ and the frequency of
 the photon $\nu$ are connected through the Planck constant $h$.
 \begin{equation}
   E_f - E_i = \Delta E = h \nu
 \end{equation}
-The transitions between different energy levels can be divided into three types,
-corresponding to different states of the molecule.  Each transition type is
-characteristic for a specific region of the electro-magnetic spectrum.  One can
-distinguish changes in a molecules rotation (microwave), vibration (infrared)
-and electronic transitions (UV/visible).
+Figure \ref{fig:schematic_energies} is a graphical illustration of the
+above equation.
+
+The transitions between different energy levels can be divided into
+three types, corresponding to different states of the molecule, as
+show in Figure \ref{fig:transition_types}.  Each transition type is
+characteristic for a specific region of the electro-magnetic spectrum.
+One can distinguish changes in a molecules rotation (microwave),
+vibration (infrared) and electronic transitions (UV/visible).
+
+\begin{figure}
+  \centering
+  \includegraphics[width=5cm]{figures/schematic_energy_states}
+  \caption{Schematic drawing of a molecular energy transition.}
+  \label{fig:schematic_energies}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\hsize]{figures/transition_types}
+  \caption{Types of molecular energy transitions.}
+  \label{fig:transition_types}
+\end{figure}
 
 Molecules consist of different atoms. There are diatomic molecules with two
 atoms ($O_2$, $N_2$, $NO$, $HCl$, $CO$) and polyatomic molecules with
 three or more atoms ($O_3$, $NO_2$, $CO_2$). We will mainly discuss
 diatomic molecules, because they are easier to understand.
 
-One can distinguish between three types of interaction between a photon and a
-molecule: absorption, spontaneous emission and stimulated emission.  There are
-three conditions to be fulfilled for a molecule to absorb a photon:
+As shown in Figure \ref{fig:interaction_types}, one can distinguish
+between three types of interaction between a photon and a molecule:
+absorption, spontaneous emission and stimulated emission.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\hsize]{figures/interaction_types}
+  \caption{Ways for a molecule to interact with radiation.}
+  \label{fig:interaction_types}
+\end{figure}
+
+There are three conditions to be fulfilled for a molecule to absorb a
+photon:
 \begin{enumerate}
 \item The frequency of the photon has to match one of the molecule's energy
 transitions.
@@ -150,11 +197,15 @@ molecule). The most well-known is the HITRAN catalogue.
 \begin{center}
 \includegraphics[width=0.4\textwidth]{figures/Fig_moments_inertia}
 \caption{Object with three moments of inertia}
-\label{Fig_moments_inertia}
+\label{fig:moments_inertia}
 \end{center}
 \end{figure}
 
-Every free molecule has 3 \textbf{Moments of inertia} $I_A$, $I_B$, $I_C$ (\textit{Trägheitsmomente}), since there are 3 principal axes of rotation in the x-y-z-plane (Fig. \ref{Fig_moments_inertia}). We can use the Moments of inertia to classify the molecules and divide them into groups:
+Every free molecule has 3 \textbf{Moments of inertia} $I_A$, $I_B$,
+$I_C$ (\textit{Trägheitsmomente}), since there are 3 principal axes of
+rotation in the x-y-z-plane (Figure \ref{fig:moments_inertia}). We can
+use the Moments of inertia to classify the molecules and divide them
+into groups:
 
 
 \begin{center}
@@ -183,19 +234,28 @@ E_r = \frac{1}{2} I \omega^2 = \frac{J^2}{2I},
 \end{equation}
 where $\omega$ is the angular frequency (\textit{Kreisfrequenz}), $I$ the moment if inertia and $J = I\cdot\omega$ the angular momentum (\textit{Drehmoment}).\\
 
+In case of a diatomic molecule, we can use the \textbf{reduced mass
+  $\mu$} to express some properties of the molecule more easily. The
+idea is illustrated by Figure \ref{fig:reduced_mass}. The relative motion
+of such a diatomic molecule is the same as that of a simple particle
+with the reduced mass $\mu$. It can be calculated by taking into
+account the two individual masses $m_1, m_2$ of the individual atoms.
+\begin{equation}
+\mu = \frac{m_1 m_2}{m_1+m_2} \qquad or \qquad \frac{1}{\mu} = \frac{1}{m_1} + \frac{1}{m_2}
+\end{equation}
+
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1\textwidth]{figures/Reduced_mass}
 \caption{Sketch of a diatomic and asymmetric molecule of atomic masses $m_1$ and $m_2$ at a distance of $r_0$.}
-\label{Reduced_mass}
+\label{fig:reduced_mass}
 \end{center}
 \end{figure}
 
-In case of a diatomic molecule, we can use the \textbf{reduced mass $\mu$} to express some properties of the molecule more easily. The relative motion of such a diatomic molecule is the same as that of a simple particle with the reduced mass $\mu$. It can be calculated by taking into account the two individual masses $m_1, m_2$ of the individual atoms.
-\begin{equation}
-\mu = \frac{m_1 m_2}{m_1+m_2} \qquad or \qquad \frac{1}{\mu} = \frac{1}{m_1} + \frac{1}{m_2}
-\end{equation}
-If we devide the distance between the mass centers of the atoms $r_0$ into their individual distances to the axis of rotation $r_1, r_2$, so that $r_0 = r_1 + r_2$ (see fig. \ref{Reduced_mass}), we can define the center of gravity:
+If we devide the distance between the mass centers of the atoms $r_0$
+into their individual distances to the axis of rotation $r_1, r_2$, so
+that $r_0 = r_1 + r_2$ (see Figure \ref{fig:reduced_mass}), we can
+define the center of gravity:
 \begin{equation*}
 m_1 r_1 = m_2 r_2
 \end{equation*}
@@ -214,6 +274,7 @@ Now we look at two extreme cases for the reduced mass:
 \item One mass is much larger than the other ($m_1 >> m_2$) \\
   $\Rightarrow \mu = \frac{m_2}{\frac{m_1 + m_2}{m_1}} \approx m_2$ 
 \end{enumerate}
+
 In Quantum mechanics, you can express energy levels by using the Hamiltonian function (total energy)
 \begin{equation}
 \mathcal{H}=\frac{J^2}{2I},
@@ -222,8 +283,45 @@ which leads to a discrete number of allowed energy solutions:
 \begin{equation}
 E_\mathcal{J} = \frac{\hbar^2}{2I} \mathcal{J}(\mathcal{J}+1), \qquad \text{with} \quad \mathcal{J} = 0, 1, 2, ...
 \end{equation}
-$\hbar$ = $h/2\pi$ is the Planck constant and $\mathcal{J}$ the rotational quantum number. \\
-Energy(diferences) can be conveniently expressed in \textbf{wavenumbers} (Kaisers)
+$\hbar$ = $h/2\pi$ is the Planck constant and $\mathcal{J}$ the
+rotational quantum number. The fraction in the above equation is
+called the \textbf{rotational constant} 
+\begin{equation}
+  B = \frac{\hbar^2}{2I}  ,
+\end{equation}
+so that
+\begin{equation}
+E_\mathcal{J} = B \mathcal{J}(\mathcal{J}+1), \qquad \text{with} \quad \mathcal{J} = 0, 1, 2, ...
+\end{equation}
+Note that $B$ is inversely proportional to the moment of inertia $I$.
+
+The connection beween rotational quantum number $\mathcal{J}$ and
+energy (expressed in units of $B$) is shown in Figure
+\ref{fig:energy_levels}. Red arrows in the figure indicate energy
+transitions.  From Quantum mechanics, it turns out that the only
+transitions that are allowed are those where
+$\Delta \mathcal{J} = \pm1$. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/Energy_levels}
+\caption{Molecular energy levels. Values for $\mathcal{J}$ are given on the left and corresponding energy
+  levels (in units of the rotational constant $B$) are given on the right.}
+\label{fig:energy_levels}
+\end{center}
+\end{figure}
+
+This is an example of a \textbf{selection rule}. A closer look at the
+red arrows in Figure \ref{fig:energy_levels} reveals that the allowed
+transition energy differences are equidistant. They can be described
+by the simple formula
+\begin{equation}
+\Delta E_\mathcal{J} = 2B(\mathcal{J}+1), \qquad \mathcal{J} = 0, 1, 2, ...\,.
+\end{equation}
+
+Besides their native unit of Joule,
+energy(diferences) can be conveniently expressed in
+\textbf{wavenumbers} (Kaisers)
 \begin{equation}
 \tilde{\nu} = \frac{\Delta E}{hc} \qquad \left[\frac{1}{cm}\right]
 \end{equation}
@@ -231,35 +329,24 @@ or in frequency (Hz)
 \begin{equation}
 \nu = \frac{\Delta E}{h} \qquad \left[Hz\right],
 \end{equation}
-so they translate directly to the observed spectrum.\\
-The energy levels can be expressed in wavenumbers by
-\begin{equation}
-\epsilon_\mathcal{J} = \frac{E_\mathcal{J}}{hc} = \frac{h}{8 \pi^2 I c} \mathcal{J}(\mathcal{J}+1).
-\end{equation}
-c is the speed of light in vacuum. The fraction on the right side of the equation is referred to as the rotational constant B. It is inversely proportional to the moment of inertia $I$. From Quantum mechanics it turns out, that the only transitions that are allowed are those where $\Delta \mathcal{J} = \pm1$. Therefore we can only get energy levels $\epsilon_J$ that are 0, 2B, 6B, 12B, 20B, ..., all other transitions are forbidden, which results in equidistant spectral lines (see fig. \ref{Energy_levels}.) \\
+so energy differences translate directly to the observed spectrum.
 
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[width=0.5\textwidth]{figures/Energy_levels}
-\caption{Values for $\mathcal{J}$ given on the left and the energy levels $\epsilon_{\mathcal{J}}$ in wavenumbers on the right.}
-\label{Energy_levels}
-\end{center}
-\end{figure}
+In the literature, molecular energy differences and the rotational
+constant $B$ are most often given in
+units of Kaisers.
 
-This is an example of the selection rule. So the full spectrum of a diatomic molecule is given by
-\begin{equation}
-\tilde{\nu}_{\mathcal{J}\rightarrow \mathcal{J}+1} = 2B(\mathcal{J}+1), \qquad \mathcal{J} = 0, 1, 2, ...\,.
-\end{equation}
+Note that we have assumed in all the above that there is only one
+axis around which the molecule can rotate. If there are more axis of
+rotation, the spectrum will be more complex.
+
+In the exercise, we will look at some of these rotational spectra.
 
 
-
-
-
-
+\clearpage
 % CHAPTER 3 - VIBRATIONAL SPECTRA
 \section{Vibrational spectra}
 Now we will turn to vibration, another mode of molecular internal energy. Just like rotational energy, vibrational energy is quantified, hence can lead to spectroscopic transitions (= absorption lines). \\
-We start off by looking at a harmonic oscillator in regular mechanics (see fig. \ref{Vibration_parabol}). Assume there is a restoring force,
+We start off by looking at a harmonic oscillator in regular mechanics (see Figure \ref{Vibration_parabol}). Assume there is a restoring force,
 \begin{equation}
 f = -k (r-r_{eq}) \qquad (\text{Hooke's law})
 \end{equation}
@@ -294,7 +381,7 @@ The lowest vibrational level is at
 \begin{equation}
 E_0 = \frac{1}{2} \hbar \tilde{\omega}.
 \end{equation}
-Therefore a molecule can never have \textbf{zero} vibrational energy! This is different from rotation, where the lowest state had zero energy (fig. \ref{Vibration_parabol_2}). \par
+Therefore a molecule can never have \textbf{zero} vibrational energy! This is different from rotation, where the lowest state had zero energy (Figure \ref{Vibration_parabol_2}). \par
 
 \begin{figure}[htbp]
 \begin{center}
@@ -304,8 +391,16 @@ Therefore a molecule can never have \textbf{zero} vibrational energy! This is di
 \end{center}
 \end{figure}
 
-The frequency of the observed line corresponds to the energy difference $\tilde{\nu}$ between adjacent levels (which corresponds to the classical frequency at which the molecule would vibrate. If molecules rotate, the Energy separation is 1 - 10\,cm$^{-1}$ whereas if they vibrate, the Energy separation is 100 - 10\,000\,cm$^{-1}$. This is a large difference in characteristic energy. We can therefore assume that the two motions occur independently.
- (This is a case of the Born- Oppenheimer approximation, which strictly also includes optical transitions). We write
+The frequency of the observed line corresponds to the energy
+difference $\tilde{\nu}$ between adjacent levels (which corresponds to
+the classical frequency at which the molecule would vibrate. If
+molecules rotate, the Energy separation is 1 - 10\,cm$^{-1}$ whereas
+if they vibrate, the Energy separation is 100 -
+10\,000\,cm$^{-1}$. This is a large difference in characteristic
+energy. We can therefore assume that the two motions occur
+independently.  (This is a case of the Born- Oppenheimer
+approximation, which strictly also includes optical transitions). We
+write
  \begin{gather}
 E_{total} = E_{rot} + E_{vib} \qquad \left[J\right]  \\
 \epsilon_{total} = \epsilon_{rot} + \epsilon_{vib} \qquad \left[cm^{-1}\right].
@@ -326,7 +421,7 @@ Note: There are higher order therms in both rotation (zentrifugal stretching) an
  
  The selection rule states, that
  \begin{equation}
-\Delta \nu = \pm 1 \text \quad {and} \quad \Delta \mathcal{J} = \pm 1 \quad \text{(see fig. \ref{Transitions_vib_rot})}.
+\Delta \nu = \pm 1 \text \quad {and} \quad \Delta \mathcal{J} = \pm 1 \quad \text{(see Figure \ref{Transitions_vib_rot})}.
 \end{equation}
 This means, we normally cannot observe the vibrational fundamental directly. Rotational levels will be filled to varying degrees in a population of molecules. This results in different line intensities. \\
 The transition frequencies are divided into two branches:
@@ -566,7 +661,7 @@ Absorption and Emissivity have to balanced, otherwise this would be contradictin
 
 \colorbox{red}{FIXME: Should 'Exkurs' (p25-36 script) also be covered?} \vspace{1cm}
 
-We now apply these rules to our climate system. The earth itself emits radiation at the temperature of its surface. Due to the natural greenhouse effect, the temperature at earth's surface is increased by 34\,K. This can be seen in fig. \ref{Buehler_et_al_OLR_spectra} which shows the spectra of longwave radiation of the earth as seen from space.
+We now apply these rules to our climate system. The earth itself emits radiation at the temperature of its surface. Due to the natural greenhouse effect, the temperature at earth's surface is increased by 34\,K. This can be seen in Figure \ref{Buehler_et_al_OLR_spectra} which shows the spectra of longwave radiation of the earth as seen from space.
 
  \begin{figure}[h!]
 \begin{center}
@@ -813,3 +908,8 @@ The opacity rule tells us something about the origin of the radiation. The
 origin of the thermal radiation is the distance where the opacity, as calculated
 from the observer, reaches 1.
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "AdvRaRe_script_print"
+%%% End:

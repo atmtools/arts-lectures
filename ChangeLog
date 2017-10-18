@@ -1,3 +1,14 @@
+2017-10-18  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
+
+	* AdvRaRe_script_print.tex: LaTeX this for print version.
+
+	* AdvRaRe_script_screen.tex: LaTeX this for screen version.
+
+	* script/AdvRaRe_script.tex: Worked on intro and rotational
+	spectra. This should no longer be LaTeXed directly.
+
+	* exercises/01-rotational_spectra/exe1_description.docx: Minor edits.
+
 2017-10-15  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* README.md: Narrow the information content down.
