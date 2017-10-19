@@ -9,6 +9,7 @@
 # Set environment variables where to find ...
 # ... the arts binary,
 PATH="/data/share/lehre/unix/rtcourse/arts/build/src:$PATH"
+PATH="$PATH:/data/share/lehre/unix/rtcourse/bin"
 # ... ARTS auxiliary data,
 ARTS_DATA_PATH="/data/share/lehre/unix/rtcourse/arts-xml-data:$ARTS_DATA_PATH"
 ARTS_DATA_PATH="/data/share/lehre/unix/rtcourse/catalogue:$ARTS_DATA_PATH"

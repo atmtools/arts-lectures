@@ -1,3 +1,7 @@
+2017-10-19  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* bin/arts-init.bash: Add ``rtcourse/bin`` to ``PATH``.
+
 2017-10-19  Oliver Lemke  <olemke@core-dump.info>
 
 	* script/AdvRaRe_script.tex:
