@@ -1,5 +1,13 @@
 2017-10-19  Oliver Lemke  <olemke@core-dump.info>
 
+	* script/AdvRaRe_script.tex:
+
+	Scale down some figures (Vibration_parabol, Vibration_parabol_2,
+	Transitions_vib_rot, Buehler_et_al_OLR_spectra) to make them fit on the
+	slide.
+
+2017-10-19  Oliver Lemke  <olemke@core-dump.info>
+
 	* script/figures/interaction_types.png,
 	script/figures/schematic_energy_states.png,
 	script/figures/transition_types.png:
