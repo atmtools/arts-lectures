@@ -101,6 +101,97 @@ Fundamentals of molecular spectroscopy by C.\ N.\
 Banwell and E.\ M.\ McCash (Mc Graw Hill Verlag).
 
 
+\section{Practical information}
+
+This section can be also be found online on our webpage at
+\url{https://www.mi.uni-hamburg.de/en/arbeitsgruppen/strahlung-und-fernerkundung/intern/howtos/arts-lecture.html}.
+
+\subsection*{Getting started}
+
+The material needed for the course is distributed via a subversion repository.
+Subversion is a version control system and can be used via the command line
+client \verb|svn|.
+
+These steps have to be done only once:
+
+\begin{verbatim}
+cd ~
+svn co https://arts.mi.uni-hamburg.de/svn/rt/arts-lectures/trunk arts-lectures
+\end{verbatim}
+
+\subsection*{Setting up the environment
+(do this once in every new terminal)}
+\label{sec:setup-env}
+
+
+Every time you open a new terminal, you need to source the course environment.
+If you know that your default shell (\verb|echo $SHELL|) is bash and not tcsh,
+you can skip the first command:
+
+\begin{verbatim}
+bash --login
+source ~/arts-lectures/bin/arts-init.bash
+\end{verbatim}
+
+You can check if the ARTS model is found by running:
+
+\begin{verbatim}
+arts --version
+Updating the lecture package
+\end{verbatim}
+
+Use the \verb|svn update| command to ensure that you have the latest version
+of the lecture files:
+
+\begin{verbatim}
+cd ~/arts-lectures
+svn update
+\end{verbatim}
+
+\subsection*{Getting the lecture notes}
+
+Change to the directory \texttt{script/} and run make:
+
+\begin{verbatim}
+cd ~/arts-lectures/script
+make
+\end{verbatim}
+
+This will generate two PDF files, one optimised for viewing on the screen, one
+optimised for printing.
+
+\subsection*{Running the exercises}
+
+Don't forget to run the \verb|source| command from the subsection
+\hyperref[sec:setup-env]{`Setting up the environment'} above. You need to do
+this every time you open a new terminal.
+
+Change to the directory of the exercise and run arts for the exercise
+controlfile. This example runs the first exercise:
+
+\begin{verbatim}
+cd ~/arts-lectures/exercises/01-rotational_spectra
+arts absorption.arts
+\end{verbatim}
+
+This will run the ARTS program on the exercise controlfile. ARTS writes
+several output files that can be found in the \texttt{results/} directory.
+
+To plot the results you can use the Python script in the exercise directory,
+which you can run by typing:
+
+\begin{verbatim}
+python plot_xsec.py
+\end{verbatim}
+
+This script will write the plots as PDF files in the \texttt{plots/}
+subdirectory. You can use Evince to display the plots:
+
+\begin{verbatim}
+evince plots/plot_xsec_N2O_800hPa_300K.pdf
+\end{verbatim}
+
+
 \section{Energy states and photons}
 \label{sec:energy-states}
 Absorption and emission of a photon can happen if the internal energy of a
