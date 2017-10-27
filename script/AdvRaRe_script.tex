@@ -95,14 +95,13 @@ initial draft of Section \ref{sec:line_shape}.
 
 FIXME: More...
 
-% CHAPTER 2 ROTATIONAL SPECTRA
-\section{Rotational spectra}
-\label{sec:rotational_spectra}
+\subsection*{Recommended reading}
 
-Recommended reading: Fundamentals of molecular spectroscopy by C.\ N.\
+Fundamentals of molecular spectroscopy by C.\ N.\
 Banwell and E.\ M.\ McCash (Mc Graw Hill Verlag).
 
-\subsection{Energy states and photons}
+
+\section{Energy states and photons}
 \label{sec:energy-states}
 Absorption and emission of a photon can happen if the internal energy of a
 molecule changes. The difference in two energy states $E$ and the frequency of
@@ -202,59 +201,134 @@ is one line in the catalogue for each spectral line (thousands for each
 molecule). The most well-known is the HITRAN catalogue.
 
 
-\subsection{Rotational transitions}
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[width=0.4\textwidth]{figures/Fig_moments_inertia}
-\caption{Object with three moments of inertia}
-\label{fig:moments_inertia}
-\end{center}
+\section{Rotational spectra}
+\label{sec:rotational_spectra}
+
+\subsection{Moment of inertia and classical rotational energy}
+
+The kinetic energy $E$ of a mass $m$ moving linearly at a speed $v$ is
+\begin{equation}
+  E = \frac{1}{2} m v^2 \quad .
+\end{equation}
+Using the definition of the momentum $p$ (\emph{German: Impuls})
+\begin{equation}
+  p = m v \quad ,
+\end{equation}
+this can also be written as
+\begin{equation}
+  E = \frac{p^2}{2m} \quad .
+\end{equation}
+
+Now imagine a mass that is not moving linearly, but \textbf{rotating},
+as sketched in Figure \ref{fig:rotating_mass}. The formula for the
+kinetic energy of a rotation looks very similar to the linear case:
+\begin{equation}
+  \label{eq:rotational_energy}
+  E_r = \frac{1}{2} I \omega^2 = \frac{J^2}{2I} \quad ,  
+\end{equation}
+only velocity $v$ is replaced by the \textbf{angular velocity}
+$\omega$ (\emph{German: Winkelgeschwindigkeit}), the mass $m$ is
+replace by the \textbf{moment of inertia} $I$ (\emph{German:
+  Trägheitsmoment}), and the momentum $p$ is replace by the
+\textbf{angular momentum} $J$ (German: Drehimpuls).
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.4\textwidth]{figures/rotating_mass}
+  \caption{Sketch of a rotating mass.}
+  \label{fig:rotating_mass}
 \end{figure}
 
-Every free molecule has 3 \textbf{Moments of inertia} $I_A$, $I_B$,
-$I_C$ (\textit{Trägheitsmomente}), since there are 3 principal axes of
-rotation in the x-y-z-plane (Figure \ref{fig:moments_inertia}). We can
-use the Moments of inertia to classify the molecules and divide them
-into groups:
-
-
-\begin{center}
-\begin{tabular}{| c | c | c | c |}
-  \hline
-  Linear & Spherical top & Symmetric top & Asymmetric top \\
-  \hline
-  & & &  \\
-\chemfig{H-[,0.8]Cl} &
-\chemfig{C(-[:330]H)(-[:90,0.8]H)(-[:210]H)(-[:270,0.8]H)} &
-\chemfig{C(-[:0,0.8]F)(-[:140]H)(-[:180,0.8]H)(-[:220]H)} &
-\chemfig{H-[:30,0.8]O-[:-30,0.8]H} \\
- & & & \\
-  %\hline
-  $I_A \approx 0$,   $I_B = I_C$ &
-  $I_A = I_B = I_C$ &
-  $I_A \neq 0$,   $I_B = I_C \neq I_A$ & 
-  $I_A \neq I_B \neq I_C$ \\
-  \hline
-\end{tabular}
-\end{center}
-
-From classical mechanics, we can define the rotational energy
+These are defined as:
 \begin{equation}
-E_r = \frac{1}{2} I \omega^2 = \frac{J^2}{2I},
+%  \label{eq:5}
+  \omega = \frac{d\phi}{dt} \quad ,
+\end{equation} 
+where $\phi$ is the angle of rotation,
+\begin{equation}
+  \label{eq:def_I}
+  I = m r^2 \quad ,
 \end{equation}
-where $\omega$ is the angular frequency (\textit{Kreisfrequenz}), $I$ the moment if inertia and $J = I\cdot\omega$ the angular momentum (\textit{Drehmoment}).\\
-
-In case of a diatomic molecule, we can use the \textbf{reduced mass
-  $\mu$} to express some properties of the molecule more easily. The
-idea is illustrated by Figure \ref{fig:reduced_mass}. The relative motion
-of such a diatomic molecule is the same as that of a simple particle
-with the reduced mass $\mu$. It can be calculated by taking into
-account the two individual masses $m_1, m_2$ of the individual atoms.
+where $r$ is the distance from the axis of rotation, and
 \begin{equation}
-\mu = \frac{m_1 m_2}{m_1+m_2} \qquad or \qquad \frac{1}{\mu} = \frac{1}{m_1} + \frac{1}{m_2}
+  \label{eq:6}
+  J = I \omega \quad .
 \end{equation}
 
-\begin{figure}[htbp]
+The moment of inertia $I$ is a measure of how `massive' an object
+appears with respect to rotation.
+
+\subsection{Using moments of inertia to classify molecules}
+
+Any real object can not only rotate around a single axis, but could
+rotate around any axis, and the moment of inertia $I$ depends on the
+axis of rotation. We can describe any object by its three main axes of
+rotation (the symmetry axes) and the associated three moments of
+inertia $I_A$, $I_B$, $I_C$. (More exactly speaking, the inertia in
+the general case is a 3x3 tensor, which becomes diagonal if the
+coordinate system is aligned properly; the moments of inertia are the
+eigenvalues of this tensor.)
+
+We can use the moments of inertia to classify the molecules and divide
+them into groups, as shown in Figure \ref{fig:molecule_types}.
+
+\begin{figure}
+  \centering
+    \begin{tabular}{| c | c | c | c |}
+      \hline
+      Linear & Spherical top & Symmetric top & Asymmetric top \\
+      \hline
+             & & &  \\
+      \chemfig{H-[,0.8]Cl} &
+      \chemfig{C(-[:330]H)(-[:90,0.8]H)(-[:210]H)(-[:270,0.8]H)} &
+      \chemfig{C(-[:0,0.8]F)(-[:140]H)(-[:180,0.8]H)(-[:220]H)} &
+                                                                                                                                                      \chemfig{H-[:30,0.8]O-[:-30,0.8]H} \\
+             & & & \\
+             % \hline
+      $I_A \approx 0$,   $I_B = I_C$ &
+      $I_A = I_B = I_C$ &
+      $I_A \neq 0$,   $I_B = I_C \neq I_A$ & 
+      $I_A \neq I_B \neq I_C$ \\
+      \hline
+    \end{tabular}
+  \caption{Using moments of inertia to classify molecules with
+    different symmetry.}
+  \label{fig:molecule_types}
+\end{figure}
+
+\subsection{Rotational energy for the special case of a diatomic molecule}
+
+It is a good idea to first focus on the simplest type of molecule,
+consisting of only two atoms. It can rotate around two axes, but has
+the same moment of inertia for both.
+
+Generalising Equation \ref{eq:def_I}, the total moment of inertia for
+a collection of masses can be calculated as the sum of the moment of
+inertia for each individual mass:
+\begin{equation}
+  I = \sum_i m_i r_i^2 \quad .
+\end{equation}
+We have to know the axis of rotation, so that we can calculate all the
+$r_i$.
+
+Per definition, the molecule will rotate around its \textbf{center of
+  gravity}. (If the center of gravity would move, there would be a
+translational motion of the entire molecule, but here we want to focus
+on rotation as a internal degree of freedom of the molecule.) The
+center of gravity has the property that
+\begin{equation}
+m_1 r_1 = m_2 r_2
+\end{equation}
+
+The geometry is as shown in Figure \ref{fig:reduced_mass}. It can
+be shown, that this two-body problem can be reduced to an equivalent
+one-body problem, the rotation of a single mass $\mu$ around an axis
+at a distance $r_0$, which simply is given by
+\begin{equation}
+  r_0 = r_1 + r_2 \quad .
+\end{equation}
+
+\begin{figure}
 \begin{center}
 \includegraphics[width=1\textwidth]{figures/Reduced_mass}
 \caption{Sketch of a diatomic and asymmetric molecule of atomic masses $m_1$ and $m_2$ at a distance of $r_0$.}
@@ -262,28 +336,31 @@ account the two individual masses $m_1, m_2$ of the individual atoms.
 \end{center}
 \end{figure}
 
-If we devide the distance between the mass centers of the atoms $r_0$
-into their individual distances to the axis of rotation $r_1, r_2$, so
-that $r_0 = r_1 + r_2$ (see Figure \ref{fig:reduced_mass}), we can
-define the center of gravity:
-\begin{equation*}
-m_1 r_1 = m_2 r_2
-\end{equation*}
-The general formula for the moment of inertia 
-\begin{equation*}
-I = \sum_i m_i r_i^2 
-\end{equation*}
-can therefore be expressed as 
+The \textbf{reduced mass} $\mu$ is given by
 \begin{equation}
-I = \mu r_0^2.
+\mu = \frac{m_1 m_2}{m_1+m_2} \quad ,
 \end{equation}
-Now we look at two extreme cases for the reduced mass:
-\begin{enumerate}
-\item The masses of both atoms are equal ($m_1 = m_2$) \\
-  $\Rightarrow \mu = \frac{m_1^2}{2m_1} = \frac{1}{2}m_1 = \frac{1}{2}m_2$
-\item One mass is much larger than the other ($m_1 >> m_2$) \\
-  $\Rightarrow \mu = \frac{m_2}{\frac{m_1 + m_2}{m_1}} \approx m_2$ 
-\end{enumerate}
+or equivalently
+\begin{equation}
+\frac{1}{\mu} = \frac{1}{m_1} + \frac{1}{m_2} \quad .
+\end{equation}
+
+The reduced mass is very useful, because the moment of inertia follows
+directly from it and the interatomic distance $r_0$:
+\begin{equation}
+I = \mu r_0^2 \quad ,
+\end{equation}
+and then the rotational energy can be calculated from Equation \ref{eq:rotational_energy}. 
+
+It is instructional to look at two extreme cases for the reduced
+mass:
+\begin{align}
+(m_1 >> m_2) \quad &\Rightarrow \quad \mu = \frac{m_2}{(m_1 + m_2)/m_1} \approx  m_2 \\
+(m_1 = m_2)  \quad &\Rightarrow \quad \mu = \frac{m_1^2}{2m_1} = \frac{1}{2}m_1 = \frac{1}{2}m_2
+\end{align}
+
+
+\subsection{Quantum mechanics: discrete energy levels}
 
 In Quantum mechanics, you can express energy levels by using the Hamiltonian function (total energy)
 \begin{equation}
@@ -365,7 +442,7 @@ at the point $r$ from the equilibrium point $r_{eq}$ with a spring constant $k$,
 E = \frac{1}{2}k (r-r_{eq})^2 .
 \end{equation}
 
-\begin{figure}[htbp]
+\begin{figure}
 \begin{center}
 \includegraphics[width=0.9\textwidth]{figures/Vibration_parabol}
 \caption{Energy curve for HCl molecules for extension or compression. After Banwell and McCash.}
@@ -393,7 +470,7 @@ E_0 = \frac{1}{2} \hbar \tilde{\omega}.
 \end{equation}
 Therefore a molecule can never have \textbf{zero} vibrational energy! This is different from rotation, where the lowest state had zero energy (Figure \ref{Vibration_parabol_2}). \par
 
-\begin{figure}[htbp]
+\begin{figure}
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/Vibration_parabol_2}
 \caption{Allowed vibrational energy levels and transitions between them. After Banwell and McCash.}
@@ -421,7 +498,7 @@ Combining the discrete energy levels results in
 \end{equation}
 Note: There are higher order therms in both rotation (zentrifugal stretching) and vibration (non-constant restoring force) that I am ignoring here. \par
  
- \begin{figure}[htbp]
+ \begin{figure}
 \begin{center}
 \includegraphics[width=0.75\textwidth]{figures/Transitions_vib_rot}
 \caption{Transitons between vibrational - rotational energy levels. After Banwell and McCash.}
@@ -674,7 +751,7 @@ Absorption and Emissivity have to balanced, otherwise this would be contradictin
 
 We now apply these rules to our climate system. The earth itself emits radiation at the temperature of its surface. Due to the natural greenhouse effect, the temperature at earth's surface is increased by 34\,K. This can be seen in Figure \ref{Buehler_et_al_OLR_spectra} which shows the spectra of longwave radiation of the earth as seen from space.
 
- \begin{figure}[h!]
+ \begin{figure}
 \begin{center}
 \includegraphics[width=0.85\textwidth]{figures/Buehler_et_al_OLR_spectra}
 \caption{Clear-sky OLR spectra of the earth as seen from space. The area between the top curve and the blue curve is caused by the natural greenhouse effect. From Buehler et al., 2006.}
@@ -856,7 +933,7 @@ with the layerthickness $\Delta s$ and the incoming Radiation $I_0$.\\
 As is shown in figure \ref{fig:perturbedLayer}, if the atmosphere is perturbed
 at one layer, this will affect the emission at this layer and the transmission
 of everything behind.
-\begin{figure}[h!]
+\begin{figure}
 	\centering
 	
 	\includegraphics[width=0.6\textwidth]{./figures/perturbedLayer_EmissionTransmission}
@@ -905,7 +982,7 @@ Since the Jacobian is a matrix, there are three basic ways to display it:\\
 3. \textbf{Column plot:} Frequency dependence for selected altitudes, figure
 \ref{fig:plotTypes}c)
 
-\begin{figure}[h!]
+\begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{./figures/plotTypes_Jacobian}
 	\caption{}
