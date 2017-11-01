@@ -6,6 +6,9 @@
 # Distributed under terms of the MIT license.
 #
 
+# Unload CEN-IT python modules because they break the PYTHONPATH
+module unload python3 python
+
 # Set environment variables where to find ...
 # ... the arts binary,
 PATH="/data/share/lehre/unix/rtcourse/arts/build/src:$PATH"
@@ -27,3 +30,4 @@ MATLABPATH="/data/share/lehre/unix/rtcourse/atmlab/atmlab:$MATLABPATH"
 # Setup Python 3 environent (using Anaconda).
 module unload python
 export PATH="/data/share/lehre/unix/rtcourse/anaconda3/bin:$PATH"
+
