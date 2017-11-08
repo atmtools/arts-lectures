@@ -2,7 +2,6 @@
 %% Mathematikumgebung
 \usepackage{mathtools}
 \usepackage{amssymb}  % Erweiterte Bibliothek mathematischer Symbole
-\usepackage{euler}  % Serifenlose Schrift in Formelumgebungen
 \renewcommand{\epsilon}{\varepsilon}  % Nutze "richtiges" Epsilon
 
 %% Grafikumgebungen
@@ -429,6 +428,7 @@ at a distance $r_0$, which simply is given by
 
 The \textbf{reduced mass} $\mu$ is given by
 \begin{equation}
+\label{eq:def_mu}
 \mu = \frac{m_1 m_2}{m_1+m_2} \quad ,
 \end{equation}
 or equivalently
@@ -455,7 +455,7 @@ mass:
 
 In Quantum mechanics, you can express energy levels by using the Hamiltonian function (total energy)
 \begin{equation}
-\mathcal{H}=\frac{J^2}{2I},
+\mathcal{H}=\frac{J^2}{2I} \quad ,
 \end{equation}
 which leads to a discrete number of allowed energy solutions:
 \begin{equation}
@@ -465,7 +465,7 @@ $\hbar$ = $h/2\pi$ is the Planck constant and $\mathcal{J}$ the
 rotational quantum number. The fraction in the above equation is
 called the \textbf{rotational constant} 
 \begin{equation}
-  B = \frac{\hbar^2}{2I}  ,
+  B = \frac{\hbar^2}{2I} \quad  ,
 \end{equation}
 so that
 \begin{equation}
@@ -483,7 +483,7 @@ $\Delta \mathcal{J} = \pm1$.
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.5\textwidth]{figures/Energy_levels}
-\caption{Molecular energy levels. Values for $\mathcal{J}$ are given on the left and corresponding energy
+\caption{Rotational energy levels. Values for $\mathcal{J}$ are given on the left and corresponding energy
   levels (in units of the rotational constant $B$) are given on the right.}
 \label{fig:energy_levels}
 \end{center}
@@ -505,7 +505,7 @@ energy(diferences) can be conveniently expressed in
 \end{equation}
 or in frequency (Hz)
 \begin{equation}
-\nu = \frac{\Delta E}{h} \qquad \left[Hz\right],
+\nu = \frac{\Delta E}{h} \qquad \left[Hz\right] \quad ,
 \end{equation}
 so energy differences translate directly to the observed spectrum.
 
@@ -523,15 +523,23 @@ In the exercise, we will look at some of these rotational spectra.
 \clearpage
 % CHAPTER 3 - VIBRATIONAL SPECTRA
 \section{Vibrational spectra}
-Now we will turn to vibration, another mode of molecular internal energy. Just like rotational energy, vibrational energy is quantified, hence can lead to spectroscopic transitions (= absorption lines). \\
-We start off by looking at a harmonic oscillator in regular mechanics (see Figure \ref{Vibration_parabol}). Assume there is a restoring force,
+Now we will turn to vibration, another mode of molecular internal
+energy. Just like rotational energy, vibrational energy is quantified,
+hence can lead to spectroscopic transitions (= absorption lines). I
+will use the terms \emph{vibration} and \emph{oscillation} as synonyms here.
+
+\subsection{Classical harmonic oscillator}
+We start off by looking at a harmonic oscillator in classical
+mechanics (see Figure \ref{Vibration_parabol}). We can picture a
+diatomic molecule as two atoms (point masses), connected by a
+spring. The simplest possible assumption on the restoring force $f$, if
+the molecule is stretched or compressed, is 
 \begin{equation}
+\label{eq:hooke}
 f = -k (r-r_{eq}) \qquad (\text{Hooke's law})
 \end{equation}
-at the point $r$ from the equilibrium point $r_{eq}$ with a spring constant $k$, then the associated energy is
-\begin{equation}
-E = \frac{1}{2}k (r-r_{eq})^2 .
-\end{equation}
+at the point $r$ from the equilibrium point $r_{eq}$ with a spring
+constant $k$. 
 
 \begin{figure}
 \begin{center}
@@ -541,25 +549,62 @@ E = \frac{1}{2}k (r-r_{eq})^2 .
 \end{center}
 \end{figure}
 
-In Quantum Mechanics energy levels turn out to be 
+Classically, if the molecule is stretched or squeezed a bit, it will
+start to oscillate, due to the restoring force. The motion with this
+particular restoring force is called \emph{harmonic oscillation} an is
+described by sinusoidal functions. The angular frequency $\tilde{\omega}$ of the
+oscillation is given by
 \begin{equation}
-E_\nu = (\nu+\frac{1}{2})\hbar\tilde{\omega} \qquad (\nu = 0, 1, 2, ...).
+\tilde{\omega} = \sqrt{\frac{k}{\mu}} \quad ,
 \end{equation}
+where $k$ is the spring constant from Equation \ref{eq:hooke} and
+$\mu$ is the reduced mass, as defined in Equation
+\ref{eq:def_mu}. (For a single `mass on a spring' pendulum, $\mu$
+would simply be the mass, but for the system of two oscillating masses
+we have to use the reduced mass.)
+
+The essence of the equation above is that a stiffer spring leads to a
+faster oscillation, whereas a larger (reduced) mass leads to a slower
+oscillation. Both agrees well with intuition.
+
+The energy that is contained in the vibration will depend on the
+oscillation amplitude $\Delta r_{\mathrm{max}} = \max(r-r_{eq})$. At
+the turning points (most stretched or compressed positions), there is
+only potential (=spring) energy, and no kinetic energy. Because of
+energy conservation, the total energy of the vibration stays on this
+same value, only for example then the oscillation goes through
+$r=r_{eq}$, all is in the form of kinetic energy. So, we can calculate
+the energy contained in the vibration as
+\begin{equation}
+E = \frac{1}{2}k (r-r_{eq})^2 = \frac{1}{2} k {\Delta r}^2 \quad .
+\end{equation}
+
+
+\subsection{Quantum mechanical harmonic oscillator} 
+For a real molecule, vibrational energy is quantised, so only certain
+vibrational energy levels are allowed. The quantum mechanically possible energy levels turn out to be 
+\begin{equation}
+E_\nu = (\nu+\frac{1}{2})\hbar\tilde{\omega} \qquad (\nu = 0, 1, 2, ...) \quad ,
+\end{equation}
+where $\tilde{\omega} = 2 \pi \tilde{\nu}$ is the angular frequency of
+vibration ($\tilde{\nu}$ being the plain frequency), and $\hbar =
+h/(2\pi)$ is the reduced Planck constant (also called Dirac constant).
+
 Transformed into spectroscopic units of Kaiser we get
 \begin{equation}
-\epsilon_\nu = \frac{E_\nu}{hc} = (\nu + \frac{1}{2})\tilde{\nu}.
+\epsilon_\nu = \frac{E_\nu}{hc} = (\nu + \frac{1}{2})\tilde{\nu} \qquad (\nu = 0, 1, 2, ...) \quad .
 \end{equation}
-So what is $\omega$? If $f$ is really proportional to $\Delta r$, then it is a constant:
-\begin{equation}
-\tilde{\omega} = \sqrt{\frac{k}{\mu}}
-\end{equation}
-$k$ is the spring constant and $mu$ is the (reduced) mass.
-%\colorbox{red}{FIXME: What are the names of $k$ and $\mu$?}\\  FIXED!
+
 The lowest vibrational level is at
 \begin{equation}
-E_0 = \frac{1}{2} \hbar \tilde{\omega}.
+E_0 = \frac{1}{2} \hbar \tilde{\omega} \quad .
 \end{equation}
-Therefore a molecule can never have \textbf{zero} vibrational energy! This is different from rotation, where the lowest state had zero energy (Figure \ref{Vibration_parabol_2}). \par
+Therefore a molecule can never have \textbf{zero} vibrational energy!
+This is different from rotation, where the lowest state had zero
+energy. Figure \ref{Vibration_parabol_2} illustrates the vibrational
+energy levels. Compare it to Figure \ref{fig:energy_levels} of the
+rotational energy levels to see the fundamental difference: The
+vibrational levels are equidistant.
 
 \begin{figure}
 \begin{center}
@@ -569,11 +614,15 @@ Therefore a molecule can never have \textbf{zero} vibrational energy! This is di
 \end{center}
 \end{figure}
 
-The frequency of the observed line corresponds to the energy
-difference $\tilde{\nu}$ between adjacent levels (which corresponds to
-the classical frequency at which the molecule would vibrate. If
-molecules rotate, the Energy separation is 1 - 10\,cm$^{-1}$ whereas
-if they vibrate, the Energy separation is 100 -
+The frequency of the observed spectral line corresponds to the energy
+difference $\tilde{\nu}$ between adjacent levels. Since all the levels
+are equidistant, all the possible `pure' vibrational transitions would
+map to a single spectral line at frequency $\tilde{\nu}$. Put
+typically such `pure' transitions are not allowed, only transitions
+that also involve changes in the rotational state.
+
+If molecules rotate, the energy separation is 1 - 10\,cm$^{-1}$
+whereas if they vibrate, the energy separation is 100 -
 10\,000\,cm$^{-1}$. This is a large difference in characteristic
 energy. We can therefore assume that the two motions occur
 independently.  (This is a case of the Born- Oppenheimer
@@ -585,7 +634,8 @@ E_{total} = E_{rot} + E_{vib} \qquad \left[J\right]  \\
  \end{gather}
 Combining the discrete energy levels results in
 \begin{equation}
-\epsilon_{\mathcal{J},\nu} = \epsilon_{\mathcal{J}} + \epsilon_{\nu} = B \mathcal{J} (\mathcal{J} + 1) + (\nu + \frac{1}{2})\tilde{\nu}.
+\epsilon_{\mathcal{J},\nu} = \epsilon_{\mathcal{J}} + \epsilon_{\nu} =
+B \mathcal{J} (\mathcal{J} + 1) + (\nu + \frac{1}{2})\tilde{\nu} \quad .
 \end{equation}
 Note: There are higher order therms in both rotation (zentrifugal stretching) and vibration (non-constant restoring force) that I am ignoring here. \par
  
@@ -599,7 +649,8 @@ Note: There are higher order therms in both rotation (zentrifugal stretching) an
  
  The selection rule states, that
  \begin{equation}
-\Delta \nu = \pm 1 \text \quad {and} \quad \Delta \mathcal{J} = \pm 1 \quad \text{(see Figure \ref{Transitions_vib_rot})}.
+\Delta \nu = 0,\pm 1 \quad \mathrm{and} \quad \Delta \mathcal{J} = \pm 1
+\quad \text{(see Figure \ref{Transitions_vib_rot})} \quad .
 \end{equation}
 This means, we normally cannot observe the vibrational fundamental directly. Rotational levels will be filled to varying degrees in a population of molecules. This results in different line intensities. \\
 The transition frequencies are divided into two branches:
@@ -835,7 +886,7 @@ I_\nu = \epsilon(\nu)B_\nu(T)
 \end{equation}
 Absorption and Emissivity have to balanced, otherwise this would be contradicting to the second law of Thermodynamics. \textit{Kirchhoff's law of thermal radiation} states that for all frequencies and angles 
 \begin{equation}
-\epsilon(\vartheta,\varphi,\nu) = \alpha(\vartheta,\varphi,\nu).
+\epsilon(\vartheta,\varphi,\nu) = \alpha(\vartheta,\varphi,\nu) \quad .
 \end{equation}
 
 \colorbox{red}{FIXME: Should 'Exkurs' (p25-36 script) also be covered?} \vspace{1cm}
@@ -900,7 +951,7 @@ Schwarzschild's equation can be integrated along a path through a layer
 \end{equation}
 where $\tau(0,s)$ is the opacity between the points. It is defined as:
 \begin{equation}
-	\tau (0,s) = \int_{0}^{s} \alpha(s') ds'.
+	\tau (0,s) = \int_{0}^{s} \alpha(s') ds' \quad .
 \end{equation}
 We see that the layer emits radiation, while the incoming radiation $I(0)$ is 
 attenuated exponentially. \\
@@ -910,7 +961,7 @@ the calculations in the model, it is useful to look at the solution of Schwarzsc
 equation in a homogeneous layer. The only difference is the opacity, which in a homogeneous
 layer, we can write as
 \begin{equation}
-	\tau(0,s) = \int_{0}^{s} \alpha(s') ds' = \alpha s.
+	\tau(0,s) = \int_{0}^{s} \alpha(s') ds' = \alpha s \quad .
 \end{equation}
 To get the solution, we just plugin a homogeneous layer from 0 to $s$ into the integral 
 form of the equation:
@@ -919,11 +970,12 @@ form of the equation:
 \end{equation}
 which, after some algebra, gives this:
 \begin{equation}
-	I(s) = I(0) e^{-\alpha s} + B(T) \left( 1-e^{-\alpha s} \right).
+	I(s) = I(0) e^{-\alpha s} + B(T) \left( 1-e^{-\alpha s}
+        \right) \quad .
 \end{equation}
 With the definition of the transmission $t = e^{-\alpha s}$, we can rewrite the solution as
 \begin{equation}
-	I(s) = t I(0)  + \left( 1-t \right) B(T).
+	I(s) = t I(0)  + \left( 1-t \right) B(T) \quad .
 \end{equation}
 Let's look at a few extreme cases of the solution.\\
 \underline{Optically thick:}\\
@@ -936,7 +988,7 @@ An interesting special case is when the opacity is small, but not zero. For smal
 we can use a linear approximation of the transmission, which comes from the Taylor expansion
 of the exponential function:
 \begin{equation}
-	t = e^{-\tau} \approx 1 - \tau.
+	t = e^{-\tau} \approx 1 - \tau \quad .
 \end{equation}
 If we plug this into the solution of a homogeneous layer, we get
 \begin{equation}
@@ -957,7 +1009,7 @@ The physical relationship between $\vec{x}$ and $\vec{y}$ is described by F, the
 so called forward model:
 
 \begin{equation*}
-\vec{y}=F(\vec{x})+\vec{\epsilon},
+\vec{y}=F(\vec{x})+\vec{\epsilon} \quad ,
 \end{equation*}
 where $\vec{y}$ is the variable which should be measured,$F$ is the forward
 model dependent on the variable of the atmospheric state $\vec{x}$ (e.g.
@@ -987,7 +1039,7 @@ variable $\vec{x}$ by a small disturbance $\vec{\Delta x}$. The Jacobian
 corresponding to the state variable $\vec{x}$ can thus be calculated as
 \begin{equation}
 J(i,j)=\frac{\partial y_i}{\partial x_j} \approx \frac{\Delta y_i}{\Delta x_j} =
-\frac{F(\vec{x}+\vec{\Delta x_j})-F(\vec{x})}{\Delta x},
+\frac{F(\vec{x}+\vec{\Delta x_j})-F(\vec{x})}{\Delta x} \quad ,
 \end{equation}
 where $\Delta x$ is the $j^{th}$ element of $\vec{\Delta x} $ and F is the
 forward model.
@@ -1006,7 +1058,7 @@ For the analytical method, we use the integral form of the clear-sky radiative
 transfer equation (RTE) for one certain frequency
 \begin{equation*}
 y=I=I_0 \cdot e^{-\int_0^\infty \alpha(s') ds'}+ \int_0^\infty \alpha(s)B(T(s)))
-\cdot e^{-\int_0^s \alpha(s')ds'} ds,
+\cdot e^{-\int_0^s \alpha(s')ds'} ds \quad ,
 \end{equation*}
 
 where $\alpha$ is the absorption coefficient and B is the thermal emission. Or
@@ -1017,7 +1069,7 @@ I=I_0 \cdot \underbrace{\vphantom{\frac{a}{b}}e^{-\sum_{j=0}^N \alpha_j \Delta
 \underbrace{\vphantom{\frac{a}{b}}\alpha_i \Delta s_i
 	B(T_i)}_{\substack{Emission}} \cdot
 \underbrace{\vphantom{\frac{a}{b}}e^{\overbrace{-\sum_{j=0}^i \alpha_j \Delta
-			s_j}^{Opacity}}}_{\substack{Transmission}},
+			s_j}^{Opacity}}}_{\substack{Transmission}} \quad ,
 \end{equation*}
 with the layerthickness $\Delta s$ and the incoming Radiation $I_0$.\\
 
@@ -1039,19 +1091,20 @@ of everything behind.
 \end{equation*}
 If x is the number density of some gas(n):
 \begin{equation}
-\alpha=n \cdot \sigma \rightarrow \frac{\partial \alpha}{\partial n}=\sigma,
+\alpha=n \cdot \sigma \rightarrow \frac{\partial \alpha}{\partial
+  n}=\sigma \quad ,
 \end{equation}
 where n is the density and $\sigma$ is the absorption cross-section.
 
 \textbf{Transmission:}
 \begin{equation}
 \tau=\sum_{i=0}^N \alpha_i \Delta s_i = \alpha_1 \Delta s_1 + \alpha_2 \Delta
-s_2 + \cdots + \alpha_N \Delta s_N,
+s_2 + \cdots + \alpha_N \Delta s_N \quad ,
 \end{equation}
 The change of the transmission can be written as
 \begin{equation*}
 \frac{\partial \tau}{\partial x_k}=\Delta s_k \frac{\partial \alpha_k}{\partial
-	x_k}.
+	x_k} \quad .
 \end{equation*}
 
 \subsection*{Pro and Cons of the different calculations of Jacobians}
