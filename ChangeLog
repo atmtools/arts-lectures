@@ -1,3 +1,10 @@
+2017-11-13  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/02-vibrational_spectra/exe2_description.docx,
+	  exercises/02-vibrational_spectra/exe2_description.pdf:
+
+	Add information on how to get started with the second exercise.
+
 2017-11-08  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
 
 	* script/AdvRaRe_script.tex (Vibrational spectra): Makeover of
