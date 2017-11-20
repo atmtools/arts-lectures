@@ -647,12 +647,15 @@ Note: There are higher order therms in both rotation (zentrifugal stretching) an
 \end{center}
 \end{figure}
  
- The selection rule states, that
- \begin{equation}
+The selection rule states, that
+\begin{equation}
 \Delta \nu = 0,\pm 1 \quad \mathrm{and} \quad \Delta \mathcal{J} = \pm 1
 \quad \text{(see Figure \ref{Transitions_vib_rot})} \quad .
 \end{equation}
-This means, we normally cannot observe the vibrational fundamental directly. Rotational levels will be filled to varying degrees in a population of molecules. This results in different line intensities. \\
+This means, we normally cannot observe the vibrational fundamental
+directly. Rotational levels will be filled to varying degrees in a
+population of molecules. This results in different line intensities. 
+
 The transition frequencies are divided into two branches:
 \begin{gather*}
 \Delta \mathcal{J} = +1 \quad (\text{R-Branch}) \\
@@ -667,7 +670,8 @@ The transition frequencies are divided into two branches:
 \Delta \epsilon_{\mathcal{J},\nu} = \tilde{\nu} + 2 B m , 
 	\qquad m = \pm1, \pm2, \pm3, ...
 \end{equation}
-These are the frequencies of the observed lines. \\
+These are the frequencies of the observed lines. 
+
 So why are the branches called 'P' and 'R'? For more complicated molecules, $\Delta \mathcal{J} = 0 \text{ and } \pm 2$ may also be allowed. All possible branches are:
 
 
@@ -680,12 +684,37 @@ Name & O & P & Q & R & S \\
 \end{tabular}
 \end{center}
 
-H$_2$O and CO$_2$ have three fundamental vibrations. These are:
+The number of vibrational modes (different types of vibrations) in a
+molecule is 3N-5 for linear molecules and 3N-6 for nonlinear
+molecules, where N is the number of atoms (see for example
+\url{http://www.wag.caltech.edu/home/jang/genchem/infrared.htm}). So,
+for a diatomic molecule, there is only one possible mode of vibration,
+just like there is only one mode of rotation.
 
+More interesting are molecules with three or more atoms. The most
+important molecules for Earth's greenhouse effect, 
+H$_2$O and CO$_2$, are tri-atomic. There vibrational modes are
+summarised in Figure \ref{fig:vib_modes}. H$_2$O is nonlinear, therefore it has
+\begin{equation}
+  n_\mathrm{vib,H2O} = 3*3-6 = 9-6 = 3
+\end{equation}
+vibrational modes. CO$_2$ is linear, therefore it has
+\begin{equation}
+  n_\mathrm{vib,CO2} = 3*3-5 = 9-5 = 4
+\end{equation}
+vibrational modes. However, two of these 4 modes (symmetric bending)
+have the same fundamental frequency. One corresponds to motion in the
+paper plain, as shown in Figure \ref{fig:vib_modes}, the other to
+motion perpendicular to the paper plain. Furthermore, the symmetric
+stretch mode of CO$_2$ at 1330 cm$^{-1}$ is not associated with a
+change in the dipole moment, and therefore is not infrared active, so
+that CO$_2$ has only two active infrared vibration modes.
+
+\begin{figure}
 \begin{center}
 \begin{tabular}{| c | c | c | }
   \hline
-  Symmetric stretch & Symmetric bend & Antisymmetric stretch  \\
+  Symmetric stretch & Symmetric bend & Asymmetric stretch  \\
   \hline
   % H2O
 \schemestart
@@ -731,11 +760,12 @@ H$_2$O and CO$_2$ have three fundamental vibrations. These are:
   $\tilde{\nu}_1 = 1330.0 \text{\,cm}^{-1}$ &
   $\tilde{\nu}_2 = 667.3 \text{\,cm}^{-1}$ &
   $\tilde{\nu}_3 = 2349.3 \text{\,cm}^{-1}$ \\
-\hline
-  
+\hline  
 \end{tabular}
 \end{center}
-
+\caption{Vibrational modes of H$_2$O and CO$_2$.}
+\label{fig:vib_modes}
+\end{figure}
 
 
 
