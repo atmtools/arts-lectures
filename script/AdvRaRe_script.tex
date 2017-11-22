@@ -774,122 +774,145 @@ that CO$_2$ has only two active infrared vibration modes.
 \label{sec:line_shape}
 
 There are three mechanisms that lead to a broadening of absorption lines:
-\begin{description}
-\item[•] Natural line width
-\item[•] Pressure broadening
-\item[•] Doppler broadening 
-\end{description}
+\begin{itemize}
+\item Natural line width
+\item Pressure broadening
+\item Doppler broadening 
+\end{itemize}
 
 \subsection{Natural line width}
 
-So far we know that the difference between two energy states $E_{f}$ and $E_{i}$ equals the frequency $\nu$ times the Planck constant $h$:
+So far we know that the difference between two energy states $E_{f}$
+and $E_{i}$ equals the frequency $\nu$ times the Planck constant $h$:
 \begin{equation}
-h \nu = E_f - E_i
+h \nu = E_f - E_i \quad .
 \end{equation}
 
-So absorption (and emission) would happen at exactly one frequency and the line shape would be a delta-function. There is a fundamental quantum mechanical principle that prevents this from being true. Heisenbergs's uncertainty principle sais that one cannot know position and momentum of a particle simultaneously: 
-
+So absorption (and emission) would happen at exactly one frequency and
+the line shape would be a delta-function. There is a fundamental
+quantum mechanical principle that prevents this from being true:
+Heisenbergs's uncertainty principle sais that one cannot know position
+and momentum of a particle simultaneously:
 \begin{equation}
-\Delta x \Delta p \approx \hbar
+\Delta x \Delta p \approx \hbar \quad ,
 \end{equation}
-
 where $\hbar$ is the reduced Planck constant. Another manifestation of this principle is:
-
 \begin{equation}
-\Delta E \Delta t \approx \hbar = 10^{-34}~J/s
+\Delta E \Delta t \approx \hbar = 10^{-34}~J/s \quad .
 \end{equation}
 
 Thus, the shorter the lifetime of a state, the more uncertain is its energy. 
 The groundstate has an infinite lifetime, so its energy is exactly known:
-
 \begin{equation}
-\Delta t = \infty \rightarrow \Delta E = 0
+\Delta t = \infty \rightarrow \Delta E = 0 \quad .
 \end{equation}
 
-The first excited electronic state has a finite lifetime:
-
+The first excited electronic state, however, has a finite lifetime
 \begin{equation}
-\Delta t = 10^{-8}~s \rightarrow \Delta E = \frac{\hbar}{\Delta t} = \frac{10^{-34}}{10^{-8}} = 10^{-26}~J
+\Delta t = 10^{-8}~s \rightarrow \Delta E = \frac{\hbar}{\Delta t} =
+\frac{10^{-34}}{10^{-8}} = 10^{-26}~J \quad ,
+\end{equation}
+and the associated frequency uncertainty is
+\begin{equation}
+\Delta \nu = \frac{\Delta E}{h} = \frac{10^{-26}~J}{10^{-34}~Js} =
+10^{8}~Hz \quad .
 \end{equation}
 
-and the frequency is
-
-\begin{equation}
-\Delta \nu = \frac{\Delta E}{h} = \frac{10^{-26}~J}{10^{-34}~Js} = 10^{8}~Hz
-\end{equation}
-
-This seems a large number at first sight, but electronic transitions typically have frequencies of $10^{14}$-$10^{16}$~Hz (visible spectral range). 
-Therefore natural line width can be considered as small. However, the actual shape of the line is important.  \\
+This seems a large number at first sight, but electronic transitions
+typically have frequencies of $10^{14}$-$10^{16}$~Hz (visible spectral
+range). Therefore natural line width can be considered as
+small. However, the actual shape of the line is important.
 
 The finite lifetime of the upper state means that it decays with time:
- 
 \begin{equation}
-\frac{dn(t)}{dt} = -A n(t)
+\frac{dn(t)}{dt} = -A n(t) \quad ,
+\end{equation}
+where $n$ is the number of molecules in the excited state and A is the
+Einstein A coefficient for spontaneous emission. The solution of this
+equation is
+\begin{equation}
+n(t) = n(0) e^{-At} = n(0) e^{\frac{t}{\tau}} \quad ,
+\end{equation}
+where $\tau$ is the lifetime. 
+
+The derivative $\frac{dn(t)}{dt}$ is the rate at which
+the excited state decays, but at the same time it is also the rate of
+spontaneously emitted photons (whenever a state decays, a photon is
+emitted). Thus, for the radiation flux L we can write:
+\begin{equation}
+\label{eq:decay}
+L(t) = L(0) e^{-At} \quad .
 \end{equation}
 
-where $n$ is the number of molecules in the excited state and A is the Einstein A coefficient for spontaneous emission. The solution of this equation is:
-\begin{equation}
-n(t) = n(0) e^{-At} = n(0) e^{\frac{t}{\tau}}
-\end{equation}
-
-where $\tau$ is the lifetime. $\frac{dn(t)}{dt}$ is the rate at which the excited state decays, but at the same time it is also the rate of spontaneously emitted photons (whenever a state decays, a photon is emitted). Thus, for the radiation flux L we can write: 
+So L also decays exponentially in time. If a signal amplitude is not
+constant in time, it cannot be monochromatic. The frequency spectrum
+is given by the Fourier transform of Equation \ref{eq:decay}:
 
 \begin{equation}
-L(t) = L(0) e^{-At} 
+F_{L}(\nu) = \frac{1}{\pi} \frac{A/4\pi}{(\nu - \nu_{0})^{2} +
+  (A/4\pi)^{2}} = \frac{1}{\pi} \frac{\gamma_{N}}{(\nu - \nu_{0})^{2}
+  + \gamma_{N}^{2}} \quad .
 \end{equation}
 
-So L also decays exponentially in time. If a signal amplitude is not constant in time, it cannot be monochromatic. The frequency spectrum is given by the Fourier transform: 
-
-\begin{equation}
-F_{L}(\nu) = \frac{1}{\pi} \frac{A/4\pi}{(\nu - \nu_{0})^{2} + (A/4\pi)^{2}} = \frac{1}{\pi} \frac{\gamma_{N}}{(\nu - \nu_{0})^{2} + \gamma_{N}^{2}} 
-\end{equation}
-
-$F_{L}$ is called a Lorentz-Function (also Cauchy distribution or Breit Wigner distribution). $\gamma_{N}$ is the natural line width parameter. 
+$F_{L}$ is called a Lorentz-Function (also Cauchy distribution or
+Breit Wigner distribution), and $\gamma_{N}$ is the natural line width parameter. 
 
 \subsection{Doppler Broadening}
 
-Doppler Broadening is conceptually simpler than natural broadening. It is due to the thermal motion of the molecules, which Doppler-shifts the frequency (at any point in time one part of the molecules is moving towards me and one part is moving away). The Maxwell-distribution for velocity (valid for LTE) is:
+Doppler Broadening is conceptually simpler than natural broadening. It
+is due to the thermal motion of the molecules, which Doppler-shifts
+the frequency (at any point in time one part of the molecules is
+moving towards me and one part is moving away). The
+Maxwell-distribution for velocity (valid for LTE) is:
 
 \begin{equation}
-p(n) = \sqrt{\frac{m}{2\pi kT}} \,\, exp(\frac{-mn^{2}}{2kT})  
+p(n) = \sqrt{\frac{m}{2\pi kT}} \,\, \exp \left(\frac{-mu^{2}}{2kT}
+\right)  \quad ,
 \end{equation}
-
-where n is the velocity and m is the mass of the molecule. 
-Non-relativistic Doppler-shift is given by:
-
+where $u$ is the velocity and $m$ is the mass of the molecule. 
+Non-relativistic Doppler-shift is given by
 \begin{equation}
-\nu - \nu_{0} = \frac{\nu_{0}u}{c}
+\nu - \nu_{0} = \frac{\nu_{0}u}{c} \quad .
 \end{equation}
 
-The faster the molecule, the larger the Doppler-shift. Combining this with the Maxwell velocity distribution gives
-
+The faster the molecule, the larger the Doppler-shift. Combining this
+with the Maxwell velocity distribution gives
 \begin{equation}
-F_{D}(\nu) = \frac{1}{\gamma_{D}\sqrt{\pi} \,\, exp(-(\frac{\nu - \nu_{0}}{\gamma_{D}})^{2})}
+F_{D}(\nu) = \frac{1}{\gamma_{D}\sqrt{\pi}} \,\, exp \left[- \left( \frac{\nu
+    - \nu_{0}}{\gamma_{D}} \right )^{2} \right] \quad ,
 \end{equation}
-
-Note that $F_{D}$ is a Gaussian. $\gamma_{D} = \frac{\nu}{c} \sqrt{\frac{2kT}{m}}$ is called "Doppler Width". 
+with the `Doppler width'
+\begin{equation}
+  \gamma_{D} = \frac{\nu}{c} \sqrt{\frac{2kT}{m}} \quad .
+\end{equation}
+Note that $F_{D}$ is a Gaussian.  
 
 \subsection{Pressure Broadening}
 
-Collisions between molecules also limit the lifetime of energy states ("collisional broadening"). If one assumes that collisions themselves take no time, that there is no interaction between collisions and that collisions completely "reset" the state, then the resulting shape is again Lorentzian:
-
+Collisions between molecules also limit the lifetime of energy states
+("collisional broadening"). If one assumes that collisions themselves
+take no time, that there is no interaction between collisions and that
+collisions completely "reset" the state, then the resulting shape is
+again Lorentzian:
 \begin{equation}
-F_{D}(\nu) = \frac{1}{\pi} \frac{\gamma_{C}}{(\nu - \nu_{0})^{2} + \gamma_{C}^{2}} 
+F_{D}(\nu) = \frac{1}{\pi} \frac{\gamma_{C}}{(\nu - \nu_{0})^{2} +
+  \gamma_{C}^{2}} \quad .
 \end{equation}
 
-The rate of collision is proportional to pressure. \\
-
-Empirically $\gamma_{C}$ is calculated as follows:
-
+The rate of collision is proportional to pressure. Empirically $\gamma_{C}$ is calculated as follows:
 \begin{equation}
-\gamma_{C} = p \cdot AGAM (\frac{T_{ref}}{T})^{NAIR}
+\gamma_{C} = p \cdot \mathrm{AGAM} \left( \frac{T_{ref}}{T} \right)^{\mathrm{NAIR}} \quad ,
 \end{equation}
+where AGAM and NAIR are in the spectral line catalogue. (In reality there are some more parameters.) 
 
-where AGAM and NAIR are in the spectral line catalogue. (In reality there are some more parameters.) \\
-
-So which of the broadening mechanisms do we use in reality? We neglect natural broadening, but have to use thermal and collisional broadening ($\gamma_{D}$ and $\gamma_{C}$). The shape then is a convolution of Lorentz and Gauss shape, called "Voigt-Function". There is no analytical form of this function, only numerical approximations. \\
+So which of the broadening mechanisms do we use in reality? We neglect
+natural broadening, but have to use thermal and collisional broadening
+($\gamma_{D}$ and $\gamma_{C}$). The shape then is a convolution of
+Lorentz and Gauss shape, called "Voigt-Function". There is no
+analytical form of this function, only numerical approximations.
 
 In the exercise you will find out which effect of broadening dominates when. 
+
 
 % CHAPTER 5 - THERMAL RADIATION
 \section{Thermal radiation}
