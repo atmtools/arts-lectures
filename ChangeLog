@@ -1,3 +1,15 @@
+2017-11-22  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/03-line_shape/exe3_description.docx,
+	  exercises/03-line_shape/exe3_description.pdf:
+
+	Add general information on the plotting script and the linewidth
+	function in typhon and atmlab.
+
+	* exercises/03-line_shape/line_shape.arts:
+
+	Use the split line catalogue for consistency.
+
 2017-11-22  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
 
 	* script/AdvRaRe_script.tex (Line shape): Revised this section.

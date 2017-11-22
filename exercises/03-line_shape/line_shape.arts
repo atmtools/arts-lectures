@@ -21,7 +21,12 @@ abs_speciesSet( species=["H2O-161"] )
 ArrayOfIndexSet( abs_species_active, [0] )
 
 # Line catalogue: Perrin or HITRAN
-abs_linesReadFromHitran( abs_lines, "HITRAN2012.par", 180e9, 190e9 )
+abs_linesReadFromSplitArtscat(
+    abs_lines, abs_species,
+    "HitranSplit/",
+    180e9,
+    190e9
+    )
 abs_lines_per_speciesCreateFromLines
 
 # Set the lineshape function for all calculated tags
