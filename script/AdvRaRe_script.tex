@@ -15,8 +15,8 @@
 \usepackage{textcomp}  % Korrekte serifenlose Aufzählungszeichen
 
 %% Farbige Umrahmungen
-\usepackage{framed}
-\definecolor{shadecolor}{rgb}{0.9,0.9,0.9}
+%\usepackage{framed}
+%\definecolor{shadecolor}{rgb}{0.9,0.9,0.9}
 
 %% Chemische Formeln
 \usepackage{chemfig}
@@ -866,7 +866,7 @@ moving towards me and one part is moving away). The
 Maxwell-distribution for velocity (valid for LTE) is:
 
 \begin{equation}
-p(n) = \sqrt{\frac{m}{2\pi kT}} \,\, \exp \left(\frac{-mu^{2}}{2kT}
+p(u) = \sqrt{\frac{m}{2\pi kT}} \,\, \exp \left(\frac{-mu^{2}}{2kT}
 \right)  \quad ,
 \end{equation}
 where $u$ is the velocity and $m$ is the mass of the molecule. 
@@ -895,7 +895,7 @@ take no time, that there is no interaction between collisions and that
 collisions completely "reset" the state, then the resulting shape is
 again Lorentzian:
 \begin{equation}
-F_{D}(\nu) = \frac{1}{\pi} \frac{\gamma_{C}}{(\nu - \nu_{0})^{2} +
+F_{L}(\nu) = \frac{1}{\pi} \frac{\gamma_{C}}{(\nu - \nu_{0})^{2} +
   \gamma_{C}^{2}} \quad .
 \end{equation}
 
@@ -917,34 +917,62 @@ In the exercise you will find out which effect of broadening dominates when.
 % CHAPTER 5 - THERMAL RADIATION
 \section{Thermal radiation}
 
-We now want to look at the balance between Radiation and Temperature. If an object receives more radiation, its temperature rises. And a higher temperature results in a higher emission of radiation. We first look at a black body that absorbs all incoming radiation without any reflection. This is the case e.g. in a hollow space. If the Temperature is kept constant, there will be a radiative equilibrium between the walls and the radiation on the inside of the hollow space. This radiative equilibrium is \textit{only} dependent on the temperature, every other dependancy would be contradicting the laws of Thermodynamics.
+We now want to look at the balance between Radiation and
+Temperature. If an object receives more radiation, its temperature
+rises. And a higher temperature results in a higher emission of
+radiation. We first look at a black body that absorbs all incoming
+radiation without any reflection. This is the case e.g. in a hollow
+space. If the Temperature is kept constant, there will be a radiative
+equilibrium between the walls and the radiation on the inside of the
+hollow space. This radiative equilibrium is \textit{only} dependent on
+the temperature, every other dependancy would be contradicting the
+laws of Thermodynamics.
 
-The relationship between temperature and radiation is described in what now is known as \textit{Planck's law}:
+The relationship between temperature and radiation is described in
+what now is known as \textit{Planck's law}:
 \begin{equation}
 I_{\nu} = B_{\nu}(T) = \frac{2h\nu^3}{c^2(e^{\frac{h\nu}{kT}}-1)}, 
-               \hspace{3cm} B_{\nu}(T) = \frac{2hc^2}{\lambda^5(e^{\frac{hc}{\lambda kT}}-1)}
+               \hspace{3cm} B_{\lambda}(T) = \frac{2hc^2}{\lambda^5(e^{\frac{hc}{\lambda kT}}-1)} \quad ,
 \end{equation}
-$I_\nu$ is the spectral radiance [W\,m$^{-2}$\,sr$^{-1}$\,Hz$^{-1}$], B the Planck function, T the temperature, h the  Plack constant, $\nu$ the frequency, c the speed of light, k the Boltzmann constant and $\lambda$ the wave length.\\
-There are different approximations for the equation. The Rayleigh-Jeans Approximation describes shows a similar behaviour for the spectral radiance for low frequencies:
+where $I_\nu$ is the spectral radiance
+[W\,m$^{-2}$\,sr$^{-1}$\,Hz$^{-1}$], B the Planck function, T the
+temperature, h the Plack constant, $\nu$ the frequency, c the speed of
+light, k the Boltzmann constant and $\lambda$ the wave length.
+The low frequency approximation of Planck's law is the
+Rayleigh-Jeans law, which was already known before Planck's law:
 \begin{equation}
-I_{\nu} = B_{\nu, RJ}(T) = \frac{2kT}{c^2}\nu^2
+I_{\nu} = B_{\nu, RJ}(T) = \frac{2kT}{c^2}\nu^2  \quad .
 \end{equation}
-Wien's displacement law states that the black body radiation curve for different temperatures peaks at a frequency proportional to the temperature.
+
+Wien's displacement law states that the black body radiation curve for different temperatures peaks at a frequency proportional to the temperature
 \begin{equation}
-\nu_{max} \propto T
+\nu_{max} \propto T  \quad .
 \end{equation}
-When radiation meets a surface, it is either absorbed or reflected. The absorption coefficient $\alpha$ therefore has values between 0 and 1. A body that emits thermal radiation has an emissivity coefficient $\epsilon$ between 0 and 1. An emissivity coefficient $\epsilon$ = 0 means no radiation is emitted, a body with $\epsilon$ = 1 emits the same amount of radiation a blackbody of same temperature would:
+
+When radiation meets a surface, it is either absorbed or
+reflected. The absorption coefficient $\alpha$ therefore has values
+between 0 and 1. A body that emits thermal radiation has an emissivity
+coefficient $\epsilon$ between 0 and 1. An emissivity coefficient
+$\epsilon$ = 0 means no radiation is emitted, a body with $\epsilon$ =
+1 emits the same amount of radiation that a blackbody of the same
+temperature would emit:
 \begin{equation}
-I_\nu = \epsilon(\nu)B_\nu(T)
+I_\nu = \epsilon(\nu)B_\nu(T)  \quad .
 \end{equation}
-Absorption and Emissivity have to balanced, otherwise this would be contradicting to the second law of Thermodynamics. \textit{Kirchhoff's law of thermal radiation} states that for all frequencies and angles 
+
+Absorption and Emission have to balanced, otherwise this would be
+contradicting the second law of Thermodynamics. \textit{Kirchhoff's
+  law of thermal radiation} states that for all frequencies and angles
 \begin{equation}
 \epsilon(\vartheta,\varphi,\nu) = \alpha(\vartheta,\varphi,\nu) \quad .
 \end{equation}
 
-\colorbox{red}{FIXME: Should 'Exkurs' (p25-36 script) also be covered?} \vspace{1cm}
-
-We now apply these rules to our climate system. The earth itself emits radiation at the temperature of its surface. Due to the natural greenhouse effect, the temperature at earth's surface is increased by 34\,K. This can be seen in Figure \ref{Buehler_et_al_OLR_spectra} which shows the spectra of longwave radiation of the earth as seen from space.
+We now apply these rules to our climate system. The earth itself emits
+radiation at the temperature of its surface. Due to the natural
+greenhouse effect, the temperature at earth's surface is increased by
+34\,K. This can be seen in Figure \ref{Buehler_et_al_OLR_spectra}
+which shows the spectra of longwave radiation of the earth as seen
+from space.
 
  \begin{figure}
 \begin{center}
@@ -954,11 +982,15 @@ We now apply these rules to our climate system. The earth itself emits radiation
 \end{center}
 \end{figure}
 
-Comparing the radiational intensities to the Planck curves shows at which temperature the radiation was emitted. 
+Comparing the radiational intensities to the Planck curves shows at which temperature the radiation was emitted
 \begin{equation}
-T_b = B^{-1}_{\nu}(I_{\nu})
+T_b = B^{-1}_{\nu}(I_{\nu}) \quad ,
 \end{equation}
-$T_b$ is called the brightness temperature. Using the brightness temperature in remote sensing is very common since it is an intuitive unit for the intensity. E.g. one would interpret $T_b = 300$\,K as a high value since there are not much higher temperatures in the atmosphere. $T_b = 200$\,K on the other hand, would not be very much.
+where $T_b$ is called the brightness temperature. Using the brightness
+temperature in remote sensing is very common since it is an intuitive
+unit for the intensity. E.g., one would interpret $T_b = 300$\,K as a
+high value since there are not much higher temperatures in the
+atmosphere. $T_b = 200$\,K on the other hand, would not be very much.
  
 
 
@@ -968,7 +1000,7 @@ The radiative transfer equation (RTE) describes the change of radiation along a 
 for example from the ground to a sensor above the surface. The RTE is expressed in 
 terms of the monochromatic Intensity $I$. It can be written as
 \begin{equation}
-	\frac{dI}{ds} = - (\alpha + \sigma)I + \alpha B(T) + \sigma \int_\Omega PI 
+	\frac{dI}{ds} = - (\alpha + \sigma)I + \alpha B(T) + \sigma \int_\Omega PI  \quad ,
 	\frac{d\Omega}{4\pi}
 \end{equation}
 where $ds$ is a path element. The first term on the right hand side is 
@@ -978,19 +1010,22 @@ due to thermal emission $B(T)$. The third term is a source term due to radiation
 is scattered into the path. It is calculated using the phase matrix $P$ of the 
 scattering particles. The calculation involves an integration of the intensity over the 
 whole solid angle $\Omega$. Note, that normally every variable depends on the frequency
-and the viewing direction. \\
+and the viewing direction. 
+
 We see that if we include scattering in the RTE, it is very difficult to solve, because 
 in order to compute the intensity in one direction, we need to know the intensity in 
-every other direction.\\
+every other direction.
+
 One of the most used simplifications of the RTE is to neglect scattering. If we look at
 thermal radiation, this is mostly true for a clear sky atmosphere. If we neglect 
 scattering, the last term as well as the $\sigma$ in the first term vanish and the 
 (clear sky) RTE looks like this:
 \begin{equation}
-	\frac{dI}{ds} = -\alpha I + \alpha B(T) = \alpha ( B(T) - I )
+	\frac{dI}{ds} = -\alpha I + \alpha B(T) = \alpha ( B(T) - I ) \quad .
 \end{equation}
 This equation is also known as Schwarzschild's equation because if was formulated by 
-K. Schwarzschild in 1906.\\
+K. Schwarzschild in 1906. 
+
 Using this equation, let's look at what happens in a homogeneous medium ($\alpha$ and $T$
 constant). If the radiation passes through the medium long enough ($s \rightarrow \infty$)
 the difference between $B$ and $I$ has to get smaller and smaller. This means that eventually,
@@ -999,15 +1034,16 @@ we hardly see which radiation came into the medium, we only see the emission of 
 Schwarzschild's equation can be integrated along a path through a layer
 (a complete derivation can be found in Petty, Eq. 8.5 - 8.13):
 \begin{equation}
-	I(s) = I(0) e^{-\tau (0,s)} + \int_{0}^{s} \alpha (s') B(s') 
+	I(s) = I(0) e^{-\tau (0,s)} + \int_{0}^{s} \alpha (s') B(s')  \quad ,
 	e^{-\tau (s',s)} ds' 
 \end{equation}
-where $\tau(0,s)$ is the opacity between the points. It is defined as:
+where $\tau(0,s)$ is the opacity between the points, defined as
 \begin{equation}
 	\tau (0,s) = \int_{0}^{s} \alpha(s') ds' \quad .
 \end{equation}
 We see that the layer emits radiation, while the incoming radiation $I(0)$ is 
-attenuated exponentially. \\
+attenuated exponentially. 
+
 In radiative transfer models such as ARTS, the atmosphere is usually divided 
 into homogeneous layers and the RTE is calculated through these layers. So to understand
 the calculations in the model, it is useful to look at the solution of Schwarzschild's
@@ -1016,28 +1052,34 @@ layer, we can write as
 \begin{equation}
 	\tau(0,s) = \int_{0}^{s} \alpha(s') ds' = \alpha s \quad .
 \end{equation}
-To get the solution, we just plugin a homogeneous layer from 0 to $s$ into the integral 
+
+To get the solution, we just plug a homogeneous layer from 0 to $s$ into the integral 
 form of the equation:
 \begin{equation}
-	I(s) = I(0) e^{-\alpha s} + \alpha B(T)\int_{0}^{s} e^{-\alpha (s-s')} ds' 
+	I(s) = I(0) e^{-\alpha s} + \alpha B(T)\int_{0}^{s} e^{-\alpha (s-s')} ds'  \quad ,
 \end{equation}
-which, after some algebra, gives this:
+which, after some algebra, gives
 \begin{equation}
 	I(s) = I(0) e^{-\alpha s} + B(T) \left( 1-e^{-\alpha s}
         \right) \quad .
 \end{equation}
+
 With the definition of the transmission $t = e^{-\alpha s}$, we can rewrite the solution as
 \begin{equation}
 	I(s) = t I(0)  + \left( 1-t \right) B(T) \quad .
 \end{equation}
-Let's look at a few extreme cases of the solution.\\
-\underline{Optically thick:}\\
+
+It is instructional to look at two extreme cases of the solution:
+
+\begin{description}
+\item[Optically thick]
 What happens if the opacity of the layer is very high, so $ t\rightarrow0$ ? 
-Then we just see the Planck emission of the layer. the incoming radiation does not reach us.\\
-\underline{Optically thin:}\\
-What happens if the opacity of the layer is 0, to $ t \rightarrow \infty$ ? Then we just see
-the incoming radiation $I(0)$. the layer doesn't do anything.\\
-An interesting special case is when the opacity is small, but not zero. For small opacities, 
+Then we just see the Planck emission of the layer. The incoming radiation does not reach us.
+\item[Optically thin]
+What happens if the opacity of the layer is 0, to $ t \rightarrow 1$ ? Then we just see
+the incoming radiation $I(0)$. The layer doesn't do anything.\\
+
+A more interesting special case is when the opacity is small, but not zero. For small opacities, 
 we can use a linear approximation of the transmission, which comes from the Taylor expansion
 of the exponential function:
 \begin{equation}
@@ -1045,9 +1087,13 @@ of the exponential function:
 \end{equation}
 If we plug this into the solution of a homogeneous layer, we get
 \begin{equation}
-	I(s) = t I(0)  + \left( 1-t \right) B(T) \approx I(0) + \tau \left( B - I(0)\right)
+	I(s) = t I(0)  + \left( 1-t \right) B(T) \approx I(0) + \tau \left( B - I(0)\right) \quad ,
 \end{equation}
 which has exactly the same form as Schwarzschild's equation itself.
+\end{description}
+
+\underline{:}\\
+\underline{:}\\
 %FIXME: Mostly covered by script from Bachelor lecture, but at least
 %state the RTE here.
 
