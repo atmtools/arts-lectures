@@ -982,7 +982,8 @@ from space.
 \end{center}
 \end{figure}
 
-Comparing the radiational intensities to the Planck curves shows at which temperature the radiation was emitted
+Comparing the radiational intensities to the Planck curves shows at
+which temperature the radiation was emitted
 \begin{equation}
 T_b = B^{-1}_{\nu}(I_{\nu}) \quad ,
 \end{equation}
@@ -996,9 +997,30 @@ atmosphere. $T_b = 200$\,K on the other hand, would not be very much.
 
 % CHAPTER 6 - RADIATIVE TRANSFER EQUATION
 \section{Radiative transfer equation}
+
+First we need to define some important radiation quantities:
+\begin{description}
+\item[Spectral Radiance = monochromatic pencil beam radiance = Intensity ($I$)] The radiation power per square
+  meter that is traveling in a particular direction, per frequency
+  interval, per solid angle interval. Unit: 
+  \begin{equation*}
+    \frac{\mathrm{W}}{\mathrm{m^2  \, Hz \, sr}}
+  \end{equation*}
+\item[Radiance ($L$)] is obtained by integrating $I$ over frequency. Unit:
+  \begin{equation*}
+    \frac{\mathrm{W}}{\mathrm{m^2  \, sr}}
+  \end{equation*}
+\item[Irradiance = Radiative Flux ($F$)] is obtained by integrating $L$ over solid
+  angle (one hemisphere), taking the projection onto the nominal
+  direction of the flux. Unit:
+  \begin{equation*}
+    \frac{\mathrm{W}}{\mathrm{m^2}}
+  \end{equation*}
+\end{description}
+
 The radiative transfer equation (RTE) describes the change of radiation along a path,
 for example from the ground to a sensor above the surface. The RTE is expressed in 
-terms of the monochromatic Intensity $I$. It can be written as
+terms of the Intensity $I$. It can be written as
 \begin{equation}
 	\frac{dI}{ds} = - (\alpha + \sigma)I + \alpha B(T) + \sigma \int_\Omega PI  \quad ,
 	\frac{d\Omega}{4\pi}

@@ -1,5 +1,12 @@
 2017-12-13  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
 
+	* script/AdvRaRe_script.tex (Radiative Transfer	Equation): Added
+	radiation quantity definitions.
+
+	* slides_from_basic_lecture: Added.
+
+2017-12-13  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
+
 	* script/AdvRaRe_script.tex (Thermal Radiation, Radiative Transfer
 	Equation): Cosmetic work-over of these sections.
 
