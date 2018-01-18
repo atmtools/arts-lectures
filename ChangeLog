@@ -1,5 +1,13 @@
 2018-01-18  Lukas Kluft  <lukas.kluft@gmail.com>
 
+	* exercises/04-rtcalc/exe4_description.docx,
+	  exercises/04-rtcalc/exe4_description.pdf:
+
+	Add information on which result plots  to consider for the
+	different blocks of questions.
+
+2018-01-18  Lukas Kluft  <lukas.kluft@gmail.com>
+
 	* exercises/04-rtcalc/plot_bt.py:
 
 	Fix unit conversion in figure title.
