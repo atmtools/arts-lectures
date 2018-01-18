@@ -43,6 +43,6 @@ ax.set_ylim(bottom=0)
 ax.set_xlabel('Frequency [GHz]')
 ax.set_ylabel('Brightness temperature [K]')
 ax.set_title('{s}, {h}km, {z}°'.format(
-    s=', '.join(species), h=height, z=zenith_angle))
+    s=', '.join(species), h=height / 1e3, z=zenith_angle))
 fig.savefig('plots/brightness_temperature_{s}_{h}km_{z}deg.pdf'.format(
     s='+'.join(species), h=height / 1e3, z=zenith_angle))

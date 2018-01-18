@@ -1,3 +1,9 @@
+2018-01-18  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/04-rtcalc/plot_bt.py:
+
+	Fix unit conversion in figure title.
+
 2018-01-11  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
 
 	* script/AdvRaRe_script.tex: Changed exam date to February 28.
