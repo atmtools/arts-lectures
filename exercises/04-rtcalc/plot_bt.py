@@ -30,7 +30,7 @@ ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
 ax.set_xlabel('Frequency [GHz]')
 ax.set_ylabel('Zenith opacity')
 ax.set_title('{s}, {h}km, {z}°'.format(
-    s=', '.join(species), h=height, z=zenith_angle))
+    s=', '.join(species), h=height / 1e3, z=zenith_angle))
 fig.savefig('plots/opacity_{s}_{h}km_{z}deg.pdf'.format(
     s='+'.join(species), h=height / 1e3, z=zenith_angle))
 
