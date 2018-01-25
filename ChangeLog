@@ -1,3 +1,16 @@
+2018-01-25  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/05-jacobian/exe5_description.docx,
+	  exercises/05-jacobian/exe5_description.pdf:
+
+	Update exercise description to mention Matlab *and* Python
+	plotting scripts.
+
+	* exercises/05-jacobian/plot_jacobian.py:
+
+	Remove duplicate assignment of `freq_ind` variable (probably
+	remaining from testing the script).
+
 2018-01-25  Stefan Buehler  <stefan.buehler(at)uni-hamburg.de>
 
 	* script/AdvRaRe_script.tex (Jacobians): Minor cosmetics.

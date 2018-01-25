@@ -14,7 +14,6 @@ import numpy as np
 
 # select frequency
 freq_ind = -1
-freq_ind = 100
 
 # read in everything
 freq = xml.load('./results/f_grid.xml')
