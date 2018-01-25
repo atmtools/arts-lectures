@@ -23,8 +23,7 @@
 
 %% Inhalt der Titelseite
 \title{Advanced radiation and remote sensing}
-\author{Stefan A Buehler, Lukas Kluft, Christoph Sauter, Jakob Doerr, Laura Dietrich  \colorbox{red}{FIXME} all that worked on
-the script}
+\author{Stefan A Buehler, Lukas Kluft, Christoph Sauter, Jakob Doerr, Laura Dietrich}
 \date{\today}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1150,16 +1149,17 @@ $i^{th}$ element if the $j^{th}$ element of $\vec{x}$ varies.\
 There are two possible methods of calculating a Jacobian.
 
 \subsection*{Pertubation Method}
-This method is a 'naive' but always working method because it is the most
-straightforward method. The Jacobian is calculated by perturbing the state
-variable $\vec{x}$ by a small disturbance $\vec{\Delta x}$. The Jacobian
-corresponding to the state variable $\vec{x}$ can thus be calculated as
+This method is a 'naive' but always working method. It is quite
+straightforward to implement and can be used where other methods
+fail. The Jacobian is calculated by perturbing the state variable
+$\vec{x}$ by a small disturbance $\vec{\Delta x}$. The Jacobian
+corresponding to the state variable $\vec{x}$ can thus be calculated
+as
 \begin{equation}
 J(i,j)=\frac{\partial y_i}{\partial x_j} \approx \frac{\Delta y_i}{\Delta x_j} =
 \frac{F(\vec{x}+\vec{\Delta x_j})-F(\vec{x})}{\Delta x} \quad ,
 \end{equation}
-where $\Delta x$ is the $j^{th}$ element of $\vec{\Delta x} $ and F is the
-forward model.
+where $\Delta x$ is the $j^{th}$ element of $\vec{\Delta x} $, as in:
 {\setstretch{0.7}
 	\begin{equation*}
 	\vec{\Delta x}_j=\left[\begin{array}{c} 0 \\ \vdots \\0\\ \Delta x \\ 0\\ \vdots
@@ -1172,12 +1172,11 @@ model F for every element of $\vec{x}$, only perturbing them once at a time.
 
 \subsection*{Analytical Method}
 For the analytical method, we use the integral form of the clear-sky radiative
-transfer equation (RTE) for one certain frequency
+transfer equation (RTE) for a given frequency
 \begin{equation*}
 y=I=I_0 \cdot e^{-\int_0^\infty \alpha(s') ds'}+ \int_0^\infty \alpha(s)B(T(s)))
 \cdot e^{-\int_0^s \alpha(s')ds'} ds \quad ,
 \end{equation*}
-
 where $\alpha$ is the absorption coefficient and B is the thermal emission. Or
 in a discrete form
 \begin{equation*}
