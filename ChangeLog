@@ -1,3 +1,16 @@
+2018-02-01  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/06-olr/exe6_description.docx,
+	  exercises/06-olr/exe6_description.pdf:
+
+	Add slight improvements to the exercise description (e.g.
+	consistent typesetting and references to controfile).
+
+	* exercises/06-olr/olr.arts:
+
+	Use line cataologue in SplitArtscat format to speedup
+	calculations especially on weak (virtual) machines.
+
 2018-01-25  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/05-jacobian/exe5_description.docx,

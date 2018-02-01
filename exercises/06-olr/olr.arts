@@ -53,7 +53,7 @@ abs_speciesSet( species=["H2O,H2O-SelfContCKDMT252, H2O-ForeignContCKDMT252",
                          "CO2, CO2-CKDMT252"] )
 
 # Read a line file and a matching small frequency grid
-abs_linesReadFromHitran( abs_lines, "HITRAN2012.par", 0,80e12 )
+abs_linesReadFromSplitArtscat(abs_lines, abs_species, "HitranSplit/", 0, 80e12)
 
 # Sort the line file according to species
 abs_lines_per_speciesCreateFromLines
