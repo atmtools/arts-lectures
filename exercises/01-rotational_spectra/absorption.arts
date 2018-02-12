@@ -46,7 +46,7 @@ NumericSet( rtp_temperature, 300 ) # temperature in [K]
 VectorSet( rtp_vmr, [1] ) # volume mixing ratio (VMR),
                           # units differ between the elements,
                           # can be VMR, kg/m3 or #/m3
-VectorSet( rtp_temperature_nlte, [] )
+VectorSet( rtp_nlte, [] )
 
 AbsInputFromRteScalars
 

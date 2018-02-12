@@ -46,7 +46,7 @@ VectorNLogSpace( rtp_pressures, 10, 0.01, 1000e2 )  # pressure in [Pa]
 
 NumericSet( rtp_temperature, 300 ) # temperature in [K]
 VectorSet( rtp_vmr, [1e-6] ) # volume mixing ratio (VMR),
-VectorSet( rtp_temperature_nlte, [] )
+VectorSet( rtp_nlte, [] )
 
 # Create a frequency grid
 VectorNLinSpace( f_grid, 100000, 163e+9, 203e+9 )

@@ -1,3 +1,10 @@
+2018-02-12  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/01-rotational_spectra/absorption.arts,
+	  exercises/03-line_shape/line_shape.arts:
+
+	Adapt name of WSV `rtp_temperature_nlte` to `rtp_nlte`.
+
 2018-02-01  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/06-olr/exe6_description.docx,
