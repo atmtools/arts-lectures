@@ -1,3 +1,9 @@
+2018-02-25  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/05-jacobian/jacobian.arts:
+
+	Restore relative Jacobian calculation after default has changed.
+
 2018-02-12  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/01-rotational_spectra/absorption.arts,

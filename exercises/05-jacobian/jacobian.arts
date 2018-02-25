@@ -104,7 +104,8 @@ VectorCreate( g2 )
 VectorCreate( g3 )
 
 jacobianAddAbsSpecies( jacobian_quantities, jacobian_agenda, atmosphere_dim,
-    p_grid, lat_grid, lon_grid, p_grid, lat_grid, lon_grid, "H2O" )
+    p_grid, lat_grid, lon_grid, p_grid, lat_grid, lon_grid, "H2O",
+    "analytical", "rel" )
 jacobianClose
 
 # Clearsky = No scattering
