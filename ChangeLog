@@ -1,3 +1,10 @@
+2018-02-26  Lukas Kluft  <lukas.kluft@gmail.com>
+
+	* exercises/05-jacobian/jacobian.arts:
+
+	Strip specific input and use keywords for generic input for a
+	cleaner and more verbose call of `jacobianAddAbsSpecies`.
+
 2018-02-25  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/05-jacobian/jacobian.arts:
