@@ -54,6 +54,10 @@ abs_speciesSet( species=["H2O,H2O-SelfContCKDMT252, H2O-ForeignContCKDMT252",
 
 # Read a line file and a matching small frequency grid
 abs_linesReadFromSplitArtscat(abs_lines, abs_species, "HitranSplit/", 0, 80e12)
+# Replace the previous with the following line to use an original HITRAN
+# catalog file. Or use arts-lectures/bin/split-hitran.arts to convert a HITRAN
+# catalog into a split ARTSCAT.
+# abs_linesReadFromHitran(filename="HITRAN2012.par", fmin=0, fmax=80e12)
 
 # Sort the line file according to species
 abs_lines_per_speciesCreateFromLines

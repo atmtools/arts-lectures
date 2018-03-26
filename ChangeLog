@@ -1,3 +1,14 @@
+2018-03-26  Oliver Lemke  <olemke@core-dump.info>
+
+	* bin/split-hitran.arts:
+
+	ARTS controlfile to create a split ARTSCAT-5 from HITRAN2012.
+
+	* exercises/06-olr/olr.arts:
+
+	Add comment and code to read the original HITRAN file instead of the
+	split version.
+
 2018-02-26  Lukas Kluft  <lukas.kluft@gmail.com>
 
 	* exercises/05-jacobian/jacobian.arts:

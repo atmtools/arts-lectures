@@ -1,0 +1,28 @@
+#!/usr/bin/env arts -r020
+#
+# This controlfiles reads the entire HITRAN catalog and splits it
+# into one file per species.
+#
+# You need to create the output directory "HitranSplit" before running this
+# script. HITRAN2012.par must be located in the current directory.
+#
+# Using a split catalog gives a major speed up when the reading the catalog.
+
+
+Arts2{
+
+abs_speciesSet( species=[
+    "C2H2", "CH3Br", "CH4", "CO", "H2O", "HC3N", "HF", "HOBr", "NH3", "O2", "O",
+    "C2H4", "CH3Cl", "ClO", "CS", "H2S", "HCl", "HI", "HOCl", "NO2", "O3",
+    "PH3", "C2H6", "CH3CN", "CO2", "H2CO", "H2", "HCN", "HNO3", "N2O", "NO",
+    "OCS", "SO2", "C4H2", "CH3OH", "COF2", "H2O2", "HBr", "HCOOH", "HO2", "N2",
+    "NO+", "OH", "SO3" ])
+
+abs_linesReadFromHitran(abs_lines, "HITRAN2012.par", 0, 1e100)
+abs_linesArtscat5FromArtscat34
+abs_lines_per_speciesCreateFromLines
+abs_lines_per_speciesWriteToSplitArtscat("zascii", abs_lines_per_species,
+                                         "HitranSplit/")
+
+}
+
