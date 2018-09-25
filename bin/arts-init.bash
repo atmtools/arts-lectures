@@ -24,7 +24,7 @@ export PATH ARTS_DATA_PATH ARTS_INCLUDE_PATH MATLABPATH
 export OMP_NUM_THREADS=2
 
 # Load latest MATLAB version.
-module unload matlab && module load matlab/2016a
+module unload matlab && module load matlab/2018a
 MATLABPATH="/data/share/lehre/unix/rtcourse/atmlab/atmlab:$MATLABPATH"
 
 # Setup Python 3 environent (using Anaconda).
