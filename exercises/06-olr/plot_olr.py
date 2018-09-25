@@ -27,7 +27,7 @@ for t, color in sorted(zip(temps, temp_colors)):
             color=color)
 ax.plot(wn, olr, label='Radiance', color='steelblue')
 ax.legend(framealpha=0.5)
-ax.grid('on')
+ax.grid(True)
 ax.set_title(r'OLR = {:3.2f} $Wm^{{-2}}Sr^{{-1}}$'.format(np.trapz(olr, f)))
 ax.set_xlim(wn.min(), wn.max())
 ax.set_xlabel(r'Wave number [$cm^{-1}$]')
