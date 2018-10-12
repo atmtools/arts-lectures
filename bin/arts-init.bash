@@ -20,8 +20,5 @@ ARTS_INCLUDE_PATH="/data/share/lehre/unix/rtcourse/arts/controlfiles:$ARTS_INCLU
 
 export PATH ARTS_DATA_PATH ARTS_INCLUDE_PATH MATLABPATH
 
-# Limit ARTS CPU usage to four cores.
-export OMP_NUM_THREADS=2
-
 # Setup Python 3 environent (using Anaconda).
 export PATH="/data/share/lehre/unix/rtcourse/anaconda3/bin:$PATH"
