@@ -21,18 +21,6 @@ support the postprocessing of simulation results.
 routines for ARTS XML files as well as helpful functions related to radiation
 and remote sensing.
 
-### atmlab
-Run the following command in MATLAB to initialize atmlab (or add it to
-your `startup.m`):
-```matlab
-atmlab_init
-```
-
-### typhon
-Typhon includes unittests which can be run to test the installation:
-```python
-pytest --pyargs typhon
-```
 
 [ARTS]: http://radiativetransfer.org/
 [ARTS lecture]: https://www.mi.uni-hamburg.de/en/arbeitsgruppen/strahlung-und-fernerkundung/intern/howtos/arts-lecture.html
