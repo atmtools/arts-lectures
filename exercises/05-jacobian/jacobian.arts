@@ -15,8 +15,16 @@ INCLUDE "general/planet_earth.arts"
 # Agenda for scalar gas absorption calculation
 Copy(abs_xsec_agenda, abs_xsec_agenda__noCIA )
 
-# (standard) emission calculation
-Copy( iy_main_agenda, iy_main_agenda__Emission )
+# Modified emission agenda to store internally calculated optical thickness.
+AgendaCreate( iy_main_agenda__EmissionOpacity )
+AgendaSet( iy_main_agenda__EmissionOpacity ){
+  ppathCalc
+  iyEmissionStandard
+  ppvar_optical_depthFromPpvar_trans_cumulat
+  WriteXML("ascii", ppvar_optical_depth, "results/optical_thickness.xml")
+  WriteXML("ascii", ppvar_p, "results/ppvar_p.xml")
+}
+Copy( iy_main_agenda, iy_main_agenda__EmissionOpacity )
 
 # cosmic background radiation
 Copy( iy_space_agenda, iy_space_agenda__CosmicBackground )
@@ -74,13 +82,6 @@ sensorOff
 # We select here to use Planck brightness temperatures
 StringSet( iy_unit, "PlanckBT" )
 
-
-# Extract optical depth as auxiliary variables
-ArrayOfStringSet( iy_aux_vars, [ "Pressure", "Absorption, summed"] )
-
-# Create vector container for the optical depth
-VectorCreate( odepth )
-
 #########################################################################
 
 # Atmosphere and surface
@@ -122,17 +123,12 @@ atmgeom_checkedCalc
 cloudbox_checkedCalc
 sensor_checkedCalc
 
-iyCalc
-WriteXML( "ascii", iy_aux, "results/iy_aux.xml" )
-
-ArrayOfStringSet( iy_aux_vars, [ "Optical depth"] )
 yCalc
 
 # Write output
-WriteXML( "ascii", iy, "results/bt.xml" )
 WriteXML( "ascii", f_grid, "results/f_grid.xml" )
-WriteXML( "ascii", abs_species, "results/species.xml" )
-WriteXML( "ascii", y_aux, "results/y_aux.xml" )
+WriteXML( "ascii", p_grid, "results/p_grid.xml" )
 WriteXML( "ascii", jacobian, "results/jacobian.xml" )
 WriteXML( "ascii", z_field, "results/z_field.xml" )
+WriteXML( "ascii", y, "results/y.xml" )
 }
