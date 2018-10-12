@@ -28,5 +28,4 @@ module unload matlab && module load matlab/2018a
 MATLABPATH="/data/share/lehre/unix/rtcourse/atmlab/atmlab:$MATLABPATH"
 
 # Setup Python 3 environent (using Anaconda).
-source "/data/share/lehre/unix/rtcourse/anaconda3/etc/profile.d/conda.sh"
-conda activate typhon
+export PATH="/data/share/lehre/unix/rtcourse/anaconda3/bin:$PATH"
