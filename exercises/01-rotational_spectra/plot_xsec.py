@@ -31,7 +31,7 @@ ax.plot(freq / 1e9, abs_xsec)
 ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
 ax.set_ylim(bottom=0)
 ax.set_xlabel('Frequency [GHz]')
-ax.set_ylabel('Abs. cross section [$m^2$]')
+ax.set_ylabel('Abs. cross section [$\sf m^2$]')
 ax.set_title('{n} p:{p:0.0f} hPa T:{T:0.0f} K'.format(**kwargs))
 
 # Save figure.
