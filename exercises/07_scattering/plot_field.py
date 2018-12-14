@@ -13,7 +13,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from typhon.arts import xml
 from typhon.plots import styles
-from typhon.physics import units
+from typhon import physics
 
 plt.close('all')
 plt.style.use(styles('typhon'))
@@ -38,14 +38,14 @@ ifield = xml.load('./output/DOIT_ifield.xml')
 ifield_clearsky = xml.load('./output/DOIT_ifield_clearsky.xml')
 ifield = np.squeeze(ifield)
 ifield_clearsky = np.squeeze(ifield_clearsky)
-ifield = units.specrad_frequency_to_planck_bt(ifield,f)
-ifield_clearsky = units.specrad_frequency_to_planck_bt(ifield_clearsky,f)
+ifield = physics.radiance2planckTb(f,ifield)
+ifield_clearsky = physics.radiance2planckTb(f,ifield_clearsky)
 
 ## Plot Tb vs height for a specific viewing angle
 f0, a0 = plt.subplots(1,1 ,figsize=(10,9))
 a0.plot(ifield[:,zenith_angle],p/100)
 a0.plot(ifield_clearsky[:,zenith_angle],p/100)
-a0.set_xlim([np.min(ifield.data[:,zenith_angle])-10,np.max(ifield.data[:,zenith_angle])+10])
+a0.set_xlim([np.min(ifield[:,zenith_angle])-10,np.max(ifield[:,zenith_angle])+10])
 a0.grid()
 a0.invert_yaxis()
 a0.set_ylabel('Pressure [hPa]')
