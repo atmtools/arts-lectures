@@ -17,12 +17,14 @@ from typhon import physics
 
 plt.close('all')
 plt.style.use(styles('typhon'))
+
 zenith_angle = -1
 pressure_level = -1
 
 ## Mass of the scattering particle
 mass = 1.295954e-8
 
+# Load the output data and prepare it
 f = xml.load('./output/f_grid.xml')
 p = xml.load('./output/p_grid.xml')
 t = xml.load('./output/t_field.xml')
@@ -59,7 +61,7 @@ if pressure_level > -1:
 	f1, a1 = plt.subplots(1,1, figsize=(10,9))
 	a1.plot(zenith_angles,ifield[pressure_level,:])
 	a1.plot(zenith_angles,ifield_clearsky[pressure_level,:])
-	a1.set_ylim([np.min(ifield_clearsky.data[pressure_level,:])-10,np.max(ifield_clearsky.data[pressure_level,:])+10])
+	a1.set_ylim([np.min(ifield_clearsky[pressure_level,:])-10,np.max(ifield_clearsky[pressure_level,:])+10])
 	a1.grid()
 	a1.set_xlabel('Viewing angle [°]')
 	a1.set_ylabel('Brightness Temperature [K]')
