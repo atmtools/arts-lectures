@@ -160,16 +160,16 @@ DoitGetIncoming( rigorous=0 )
 doit_i_fieldSetClearsky
 DoitCalc
 
-WriteXML( "ascii",doit_i_field,"./output/DOIT_ifield.xml" )
-WriteXML("ascii",f_grid,"./output/f_grid.xml")
-WriteXML("ascii",p_grid,"./output/p_grid.xml")
-WriteXML("ascii",scat_za_grid,"./output/za_grid.xml")
-WriteXML("ascii",cloudbox_limits,"./output/cloudbox_limits.xml")
-WriteXML("ascii",t_field,"./output/t_field.xml")
-WriteXML("ascii",vmr_field,"./output/vmr_field.xml")
-WriteXML("ascii",pnd_field,"./output/pnd_field.xml")
+WriteXML("ascii",doit_i_field, "./results/DOIT_ifield.xml")
+WriteXML("ascii",f_grid, "./results/f_grid.xml")
+WriteXML("ascii",p_grid, "./results/p_grid.xml")
+WriteXML("ascii",scat_za_grid, "./results/za_grid.xml")
+WriteXML("ascii",cloudbox_limits, "./results/cloudbox_limits.xml")
+WriteXML("ascii",t_field, "./results/t_field.xml")
+WriteXML("ascii",vmr_field, "./results/vmr_field.xml")
+WriteXML("ascii",pnd_field, "./results/pnd_field.xml")
 
 Tensor4Scale(pnd_field,pnd_field,0)
 DoitCalc
-WriteXML("ascii",doit_i_field, "./output/DOIT_ifield_clearsky.xml")
+WriteXML("ascii",doit_i_field, "./results/DOIT_ifield_clearsky.xml")
 } # End of Main

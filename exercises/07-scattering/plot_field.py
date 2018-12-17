@@ -25,19 +25,19 @@ pressure_level = -1
 mass = 1.295954e-8
 
 # Load the output data and prepare it
-f = xml.load('./output/f_grid.xml')
-p = xml.load('./output/p_grid.xml')
-t = xml.load('./output/t_field.xml')
-pnd = xml.load('./output/pnd_field.xml')
+f = xml.load('./results/f_grid.xml')
+p = xml.load('./results/p_grid.xml')
+t = xml.load('./results/t_field.xml')
+pnd = xml.load('./results/pnd_field.xml')
 
-cloudbox_limits = xml.load('./output/cloudbox_limits.xml')
-zenith_angles = xml.load('./output/za_grid.xml')
+cloudbox_limits = xml.load('./results/cloudbox_limits.xml')
+zenith_angles = xml.load('./results/za_grid.xml')
 p = p[cloudbox_limits[0]:cloudbox_limits[1]+1]
 t = t[cloudbox_limits[0]:cloudbox_limits[1]+1]
 mass_mixing_ratio = mass*pnd[0,cloudbox_limits[0]:cloudbox_limits[1]+1,0,0]
 
-ifield = xml.load('./output/DOIT_ifield.xml')
-ifield_clearsky = xml.load('./output/DOIT_ifield_clearsky.xml')
+ifield = xml.load('./results/DOIT_ifield.xml')
+ifield_clearsky = xml.load('./results/DOIT_ifield_clearsky.xml')
 ifield = np.squeeze(ifield)
 ifield_clearsky = np.squeeze(ifield_clearsky)
 ifield = physics.radiance2planckTb(f,ifield)
@@ -58,14 +58,14 @@ f0.savefig('./plots/Brightness_temperature_angle_%d.pdf'%(zenith_angles[zenith_a
 
 ## Plot Tb vs Viewing angle for a specific pressure level:
 if pressure_level > -1:
-	f1, a1 = plt.subplots(1,1, figsize=(10,9))
-	a1.plot(zenith_angles,ifield[pressure_level,:])
-	a1.plot(zenith_angles,ifield_clearsky[pressure_level,:])
-	a1.set_ylim([np.min(ifield_clearsky[pressure_level,:])-10,np.max(ifield_clearsky[pressure_level,:])+10])
-	a1.grid()
-	a1.set_xlabel('Viewing angle [°]')
-	a1.set_ylabel('Brightness Temperature [K]')
-	a1.legend(['Scattering','Clear-sky'])
-	a1.set_title('Brightness Temperature at p = %d hPa'%(p[pressure_level]/100))
-	f1.savefig('./plots/Brightness_temperature_pressure_%dhPa.pdf'%(p[pressure_level]/100))
-	print('Temperature at %dhPa: %dK'%(p[pressure_level]/100,t[pressure_level]))
+    f1, a1 = plt.subplots(1,1, figsize=(10,9))
+    a1.plot(zenith_angles,ifield[pressure_level,:])
+    a1.plot(zenith_angles,ifield_clearsky[pressure_level,:])
+    a1.set_ylim([np.min(ifield_clearsky[pressure_level,:])-10,np.max(ifield_clearsky[pressure_level,:])+10])
+    a1.grid()
+    a1.set_xlabel('Viewing angle [°]')
+    a1.set_ylabel('Brightness Temperature [K]')
+    a1.legend(['Scattering','Clear-sky'])
+    a1.set_title('Brightness Temperature at p = %d hPa'%(p[pressure_level]/100))
+    f1.savefig('./plots/Brightness_temperature_pressure_%dhPa.pdf'%(p[pressure_level]/100))
+    print('Temperature at %dhPa: %dK'%(p[pressure_level]/100,t[pressure_level]))
