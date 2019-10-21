@@ -35,7 +35,7 @@ def main():
 def calculate_absxsec(species='N2O', pressure=800e2, temperature=300.,
                       fmin=10e9, fmax=2000e9, fnum=10_000,
                       lineshape='Lorentz', forefactor='Rosenkranz_quadratic',
-                      verbosity=0):
+                      verbosity=2):
     """Calculate absorption cross sections.
 
     Parameters:
@@ -53,10 +53,11 @@ def calculate_absxsec(species='N2O', pressure=800e2, temperature=300.,
         ndarray, ndarray: Frequency grid [Hz], Abs. cross sections [m^2]
     """
     # Create ARTS workspace and load default settings
-    ws = ty.arts.workspace.Workspace(verbosity=verbosity)
-    ws.execute_controlfile("general.arts")
-    ws.execute_controlfile("continua.arts")
-    ws.execute_controlfile("agendas.arts")
+    ws = ty.arts.workspace.Workspace(verbosity=0)
+    ws.execute_controlfile("general/general.arts")
+    ws.execute_controlfile("general/continua.arts")
+    ws.execute_controlfile("general/agendas.arts")
+    ws.verbositySetScreen(ws.verbosity, verbosity)
 
     # We do not want to calculate the Jacobian Matrix
     ws.jacobianOff()
