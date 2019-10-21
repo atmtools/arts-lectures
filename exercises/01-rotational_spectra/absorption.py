@@ -54,9 +54,9 @@ def calculate_absxsec(species='N2O', pressure=800e2, temperature=300.,
     """
     # Create ARTS workspace and load default settings
     ws = ty.arts.workspace.Workspace(verbosity=verbosity)
-    ws.execute_controlfile("general.arts")
-    ws.execute_controlfile("continua.arts")
-    ws.execute_controlfile("agendas.arts")
+    ws.execute_controlfile("general/general.arts")
+    ws.execute_controlfile("general/continua.arts")
+    ws.execute_controlfile("general/agendas.arts")
 
     # We do not want to calculate the Jacobian Matrix
     ws.jacobianOff()
