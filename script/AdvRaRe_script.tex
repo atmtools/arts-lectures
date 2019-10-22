@@ -187,6 +187,44 @@ subdirectory. You can use Evince to display the plots:
 evince plots/plot_xsec_N2O_800hPa_300K.pdf
 \end{verbatim}
 
+\section{Absorption coefficients and absorption cross-sections}
+\label{sec:absorption}
+
+The law of Lambert, Beer, and Bouguer describes how radiation is
+absorbed by a gas in a transmission experiment:
+\begin{equation}
+  dI(\nu)/ds = \alpha(\nu) I(\nu)\\
+  I_1(\nu) = I_0(\nu) \exp \left( \int \alpha(\nu)ds \right)
+\end{equation}
+where $I$ is radiation intensity (in W/m$^2$/sr/Hz), $ds$ is distance in
+the direction in which the radiation travels, $\alpha(\nu)$ is the
+\emph{absorption coefficient} (in 1/m), and $\nu$ is frequency (in
+Hz). We can take the above equations as the definition of $\alpha$.
+
+For a gas, $\alpha(\nu)$ is richly structured; it contains
+\emph{spectral lines} at certain frequencies where absorption is
+strongly enhanced, and regions of little (or in any case less)
+absorption in-between.
+
+These lines come from quantum mechanics, to understand them we need to
+understand the physical properties of single gas molecules. The
+absorption coefficient $\alpha(\nu)$ can in good approximation be
+decomposed as
+\begin{equation}
+  \alpha(\nu) = n \sigma(\nu)
+\end{equation}
+where $n$ is the number density (in 1/m$^3$) of the absorbing molecule
+and $\sigma(\nu)$ is the \emph{absorption cross-section} (in
+m$^2$). Cross-section on one hand refers to the unit, on the other
+hand it allows also a simple geometrical interpretation of the
+molecules as radiation-intercepting objects of a given cross-sectional
+area. The linearity in the equation implies that the concentration of
+the molecules is so low, that they do not `shadow' each other; twice
+as many molecules means twice as much radiation absorbed. Earth's
+atmosphere is so tenuous that this approximation is always valid. 
+
+We can now turn to the physics underlying the absorption cross-section
+$\sigma(\nu)$. 
 
 \section{Energy states and photons}
 \label{sec:energy-states}
