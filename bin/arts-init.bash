@@ -10,6 +10,9 @@ RTPATH="/data/share/lehre/unix/rtcourse"
 # ... the ARTS API
 export ARTS_BUILD_PATH="$RTPATH/arts/build"
 
+# Pre-load the ARTS API to avoid exceeding the amount of loaded static TLS
+export LD_PRELOAD="$ARTS_BUILD_PATH/src/libarts_api.so"
+
 # ... and ARTS auxiliary data,
 export ARTS_DATA_PATH="$RTPATH/arts-xml-data:$ARTS_DATA_PATH"
 export ARTS_DATA_PATH="$RTPATH/catalogue:$ARTS_DATA_PATH"
