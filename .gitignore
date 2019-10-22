@@ -1,1 +1,16 @@
 .DS_Store
+script/AdvRaRe_script_print.aux
+script/AdvRaRe_script_print.fdb_latexmk
+script/AdvRaRe_script_print.fls
+script/AdvRaRe_script_print.log
+script/AdvRaRe_script_print.out
+script/AdvRaRe_script_print.pdf
+script/AdvRaRe_script_print.synctex.gz
+script/AdvRaRe_script_print.toc
+script/AdvRaRe_script_screen.aux
+script/AdvRaRe_script_screen.fdb_latexmk
+script/AdvRaRe_script_screen.fls
+script/AdvRaRe_script_screen.log
+script/AdvRaRe_script_screen.out
+script/AdvRaRe_script_screen.pdf
+script/AdvRaRe_script_screen.toc
