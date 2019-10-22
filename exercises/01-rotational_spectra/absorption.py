@@ -27,7 +27,7 @@ def main():
     ax.set_title(f'{species} p:{pressure/100} hPa T:{temperature:0.0f} K')
 
     fig.savefig(  # Save figure.
-        f'plots/plot_xsec_{species}_{pressure/100}hPa_{temperature:.0f}K.pdf'
+        f'plots/plot_xsec_{species}_{pressure:.0f}Pa_{temperature:.0f}K.pdf'
     )
     plt.show()  # Open an interactive figure
 
