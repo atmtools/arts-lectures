@@ -17,9 +17,8 @@ export LD_PRELOAD="$ARTS_BUILD_PATH/src/libarts_api.so"
 export LD_PRELOAD="/sw/jessie-x64/gcc/gcc-8.1.0/lib64/libstdc++.so.6:$LD_PRELOAD"
 
 # ... and ARTS auxiliary data,
-export ARTS_DATA_PATH="$RTPATH/arts-xml-data:$ARTS_DATA_PATH"
-export ARTS_DATA_PATH="$RTPATH/catalogue:$ARTS_DATA_PATH"
-export ARTS_INCLUDE_PATH="$RTPATH/arts/controlfiles:$ARTS_INCLUDE_PATH"
+export ARTS_DATA_PATH="$RTPATH/arts-xml-data:$RTPATH/catalogue"
+export ARTS_INCLUDE_PATH="$RTPATH/arts/controlfiles"
 
 # Setup the user search path to include the ARTS binary
 # and our Anaconda Python Distribution.
