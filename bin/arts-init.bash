@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Unload CEN-IT python modules because they break the PYTHONPATH
-module unload python3 python
+# Unload CEN-IT python modules
+module unload anaconda{2,3} python{,3}
 
 # Define base path to radiative transfer course
 RTPATH="/data/share/lehre/unix/rtcourse"
