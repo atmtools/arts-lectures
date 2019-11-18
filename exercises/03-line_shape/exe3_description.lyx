@@ -1,0 +1,226 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language american
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "lmodern" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3cm
+\topmargin 1cm
+\rightmargin 3cm
+\bottommargin 4cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "basicstyle={\footnotesize\bfseries\ttfamily},breaklines=true,commentstyle={\itshape\color{OliveGreen}},keywordstyle={\bfseries\color{blue}},showstringspaces=true,stringstyle={\bfseries\color{RoyalPurple}}"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Advanced radiation and remote sensing 
+\end_layout
+
+\begin_layout Author
+Lukas Kluft, Manfred Brath, Stefan Bühler
+\end_layout
+
+\begin_layout Subsection*
+Exercise No.
+ 3 – Line shape
+\end_layout
+
+\begin_layout Standard
+You can reuse the python script from the first exercise as a starting point
+ for this exercise.
+ First, copy the python script from the first exercise into the directory
+ of exercise no.
+ 3:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ cd ~/arts-lectures/exercises/03-line_shape/ 
+\end_layout
+
+\begin_layout Plain Layout
+
+$ cp ../01-rotational_spectra/absorption.py line_shape.py
+\end_layout
+
+\end_inset
+
+
+\begin_inset VSpace medskip
+\end_inset
+
+The 
+\begin_inset Quotes eld
+\end_inset
+
+calculate_absxsec
+\begin_inset Quotes erd
+\end_inset
+
+ function within your python script calculates absorption cross sections
+ and uses several keyword arguments as inputs, among other lineshape and
+ forefactor.
+ Please use 
+\begin_inset Quotes eld
+\end_inset
+
+Voigt_Kuntz6
+\begin_inset Quotes erd
+\end_inset
+
+ as line shape and 
+\begin_inset Quotes eld
+\end_inset
+
+VVH
+\begin_inset Quotes erd
+\end_inset
+
+ as fore factor:
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Choose an individual line of for example water vapor and perform calculations
+ over a restricted frequency range for a number of different pressures.
+ Keep the temperature constant.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+How does the shape of the spectral lines change?
+\end_layout
+
+\begin_layout Standard
+By now we investigated absorption in terms of the absorption cross-section
+ 
+\begin_inset Formula $\sigma$
+\end_inset
+
+.
+ Another widely used unit is the absorption coeffiction 
+\begin_inset Formula $\alpha$
+\end_inset
+
+.
+ It takes the number concentration 
+\begin_inset Formula $n$
+\end_inset
+
+ of the absorber into account:
+\begin_inset Formula 
+\begin{equation}
+\alpha=n\cdot\sigma
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+How does the absorption coefficient in the line centre change, if pressure
+ is changed?
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The full-width at half maximum (FWHM) is a measure of the line width.
+ Typhon provides the function 
+\emph on
+typhon.spectroscopy.linewidth()
+\emph default
+ to calculate the FWHM for a given absorption spectrum.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Make a plot of this as a function of altitude (pressure) for a microwave
+ line and an infrared absorption line.
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
