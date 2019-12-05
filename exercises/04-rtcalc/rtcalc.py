@@ -45,13 +45,17 @@ def main():
     )
 
 
-def run_arts(species, zenith_angle=0.0, height=0.0, verbosity=2):
+def run_arts(species, zenith_angle=0.0, height=0.0, fmin=10e9, fmax=250e9,
+             fnum=1_000, verbosity=2):
     """Perform a radiative transfer simulation.
 
     Parameters:
         species (list[str]): List of species tags.
         zenith_angle (float): Viewing angle [deg].
         height (float): Sensor height [m].
+        fmin (float): Minimum frequency [Hz].
+        fmax (float): Maximum frequency [Hz].
+        fnum (int): Number of frequency grid points.
 
     Returns:
         ndarray, ndarray, ndarray:
@@ -101,7 +105,7 @@ def run_arts(species, zenith_angle=0.0, height=0.0, verbosity=2):
 
     # Read a line file and a matching small frequency grid
     ws.abs_linesReadFromSplitArtscat(
-        ws.abs_species, "hitran/hitran_split_artscat5/", 0.0, 300e9
+        ws.abs_species, "hitran/hitran_split_artscat5/", 0.9 * fmin, 1.1 * fmax
     )
 
     # Sort the line file according to species
@@ -118,7 +122,7 @@ def run_arts(species, zenith_angle=0.0, height=0.0, verbosity=2):
     )
 
     # Create a frequency grid
-    ws.VectorNLinSpace(ws.f_grid, 1_000, 10e9, 250e9)
+    ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
 
     # No sensor properties
     ws.sensorOff()
