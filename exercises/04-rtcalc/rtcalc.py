@@ -31,18 +31,18 @@ def main():
     ax.set_title(f"{', '.join(species)}")
     fig.savefig(f"plots/opacity_{'+'.join(species)}.pdf")
 
-    # Plot the brithtness temperature
-    fig, ax = plt.subplots()
-    ax.plot(freq / 1e9, bt)
-    ax.grid(True)
-    ax.set_xticks(HIGHLIGHT_FREQS)
-    ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
-    ax.set_xlabel("Frequency [GHz]")
-    ax.set_ylabel("Brightness temperature [K]")
-    ax.set_title(f"{', '.join(species)}, {height / 1e3}km, {zenith_angle}°")
-    fig.savefig(
-        f"plots/brightness_temperature_{'+'.join(species)}_{height / 1e3:.0f}km_{zenith_angle:.0f}deg.pdf"
-    )
+    # # Plot the brithtness temperature
+    # fig, ax = plt.subplots()
+    # ax.plot(freq / 1e9, bt)
+    # ax.grid(True)
+    # ax.set_xticks(HIGHLIGHT_FREQS)
+    # ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
+    # ax.set_xlabel("Frequency [GHz]")
+    # ax.set_ylabel("Brightness temperature [K]")
+    # ax.set_title(f"{', '.join(species)}, {height / 1e3}km, {zenith_angle}°")
+    # fig.savefig(
+    #     f"plots/brightness_temperature_{'+'.join(species)}_{height / 1e3:.0f}km_{zenith_angle:.0f}deg.pdf"
+    # )
 
 
 def run_arts(species, zenith_angle=0.0, height=0.0, fmin=10e9, fmax=250e9,
