@@ -28,10 +28,8 @@ def main():
     ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
     ax.set_xlabel("Frequency [GHz]")
     ax.set_ylabel("Zenith opacity")
-    ax.set_title(f"{', '.join(species)}, {height / 1e3}km, {zenith_angle}°")
-    fig.savefig(
-        f"plots/opacity_{'+'.join(species)}_{height / 1e3:.0f}km_{zenith_angle:.0f}deg.pdf"
-    )
+    ax.set_title(f"{', '.join(species)}")
+    fig.savefig(f"plots/opacity_{'+'.join(species)}.pdf")
 
     # Plot the brithtness temperature
     fig, ax = plt.subplots()
