@@ -1,0 +1,105 @@
+%% LyX 2.3.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[american]{article}
+\usepackage{lmodern}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=1cm,bmargin=4cm,lmargin=3cm,rmargin=3cm}
+\usepackage{color}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{amstext}
+\usepackage[authoryear]{natbib}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\lstset{basicstyle={\footnotesize\bfseries\ttfamily},
+breaklines=true,
+commentstyle={\itshape\color{OliveGreen}},
+keywordstyle={\bfseries\color{blue}},
+showstringspaces=true,
+stringstyle={\bfseries\color{RoyalPurple}}}
+\begin{document}
+\title{Advanced radiation and remote sensing }
+\author{Lukas Kluft, Manfred Brath, Stefan Bühler}
+\maketitle
+
+\subsection*{Exercise No. 5 -- Jacobian and opacity rule}
+\begin{enumerate}
+\item Run the Python script jacobian.py to calculate the brightness temperature
+spectrum in nadir direction and the zenith opacity around the $183\,\text{GHz}$
+line of water vapor for a midlatitude summer atmosphere. Answer following
+question:
+\begin{itemize}
+\item Are there window regions?
+\end{itemize}
+The atmospheric temperature profile for the calculation was:\medskip{}
+
+\centerline{%
+\begin{tabular}{c|c|c}
+\hline 
+\multirow{2}{*}{\textbf{Pressure} $\left[\text{hPa}\right]$} & \multirow{2}{*}{\textbf{Temperature} $\left[\text{K}\right]$} & \multirow{2}{*}{\textbf{Altitude} $\left[\text{km}\right]$}\tabularnewline
+ &  & \tabularnewline
+\hline 
+1013.0 & 294.2 & 0\tabularnewline
+902.0 & 289.7 & 1\tabularnewline
+802.0 & 285.2 & 2\tabularnewline
+710.0 & 279.2 & 3\tabularnewline
+628.0 & 273.2 & 4\tabularnewline
+554.0 & 267.2 & 5\tabularnewline
+487.0 & 261.2 & 6\tabularnewline
+426.0 & 254.7 & 7\tabularnewline
+372.0 & 248.2 & 8\tabularnewline
+324.0 & 241.7 & 9\tabularnewline
+281.0 & 235.3 & 10\tabularnewline
+243.0 & 228.8 & 11\tabularnewline
+209.0 & 222.3 & 12\tabularnewline
+179.0 & 215.8 & 13\tabularnewline
+153.0 & 215.7 & 14\tabularnewline
+130.0 & 215.7 & 15\tabularnewline
+111.0 & 215.7 & 16\tabularnewline
+95.0 & 215.7 & 17\tabularnewline
+81.2 & 216.8 & 18\tabularnewline
+69.5 & 217.9 & 19\tabularnewline
+59.5 & 219.2 & 20\tabularnewline
+\hline 
+\end{tabular}}\medskip{}
+
+Consider the table and answer following questions:
+\begin{itemize}
+\item From which altitude does the radiation at the peak of the line ($\approx183\,\text{GHz}$)
+originate? 
+\item From which altitude does the radiation at the wing ($150\,\text{GHz}$)
+originate? 
+\end{itemize}
+\item Change the variable $\texttt{highlight\_frequency}$ from $\texttt{None}$
+to any desired frequency in $[\text{Hz}]$ within the range of the
+brightness temperature spectrum of task 1 and rerun the Python script
+jacobian.py. This will calculate the water vapor Jacobian and the
+opacity $\tau$ between the top of the atmosphere $z_{TOA}$ and altitude
+$z$ for the selected frequency. Additionally, a circle marks the
+selected frequency in the plot of the brightness temperature spectrum
+and in the plot of the zenith opacity.
+
+Write down the altitude of the Jacobian peak and the altitude where
+the opacity reaches 1 for some different frequencies and answer following
+questions:
+\begin{itemize}
+\item Why are the altitude where the opacity reaches 1 and the altitude
+of the Jacobian peak not exactly the same?
+\item Why are the Jacobians sometimes positive and sometimes negative?
+\end{itemize}
+\end{enumerate}
+
+\end{document}
