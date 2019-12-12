@@ -96,7 +96,7 @@ def plot_jacobian(height, jacobian, ax=None):
     ax.set_ylim(0.4, 70)
     ax.set_xlabel("H$_2$O Jacobian [K/1]")
     ax.set_ylabel("$z$ [km]")
-    jac_peak = height[np.argmin(jacobian)] / 1000.0
+    jac_peak = height[np.abs(jacobian).argmax()] / 1000.0
     trans = blended_transform_factory(ax.transAxes, ax.transData)
     lh = ax.axhline(jac_peak, color="ty:jetblack", zorder=3)
     ax.text(
