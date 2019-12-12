@@ -1,4 +1,6 @@
 """Calculate and plot zenith opacity and brightness temperatures. """
+import re
+
 import matplotlib.pyplot as plt
 import numpy as np
 import typhon as ty
@@ -28,7 +30,7 @@ def main():
     ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
     ax.set_xlabel("Frequency [GHz]")
     ax.set_ylabel("Zenith opacity")
-    ax.set_title(f"{', '.join(species)}")
+    ax.set_title(f"{', '.join(tags2tex(species))}")
     fig.savefig(f"plots/opacity_{'+'.join(species)}.pdf")
 
     # # Plot the brithtness temperature
@@ -39,10 +41,15 @@ def main():
     # ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
     # ax.set_xlabel("Frequency [GHz]")
     # ax.set_ylabel("Brightness temperature [K]")
-    # ax.set_title(f"{', '.join(species)}, {height / 1e3}km, {zenith_angle}°")
+    # ax.set_title(f"{', '.join(tags2tex(species))}, {height / 1e3} km, {zenith_angle}°")
     # fig.savefig(
     #     f"plots/brightness_temperature_{'+'.join(species)}_{height / 1e3:.0f}km_{zenith_angle:.0f}deg.pdf"
     # )
+
+
+def tags2tex(tags):
+    """Replace all numbers in every species tag with LaTeX subscripts."""
+    return [re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag) for tag in tags]
 
 
 def run_arts(species, zenith_angle=0.0, height=0.0, fmin=10e9, fmax=250e9,
