@@ -1,4 +1,6 @@
 """Calculate and plot absorption cross sections. """
+import re
+
 import matplotlib.pyplot as plt
 import numpy as np
 import typhon as ty
@@ -24,12 +26,17 @@ def main():
     ax.set_ylim(bottom=0)
     ax.set_xlabel('Frequency [GHz]')
     ax.set_ylabel('Abs. cross section [$\sf m^2$]')
-    ax.set_title(f'{species} p:{pressure/100} hPa T:{temperature:0.0f} K')
+    ax.set_title(f'{tag2tex(species)} p:{pressure/100} hPa T:{temperature:0.0f} K')
 
     fig.savefig(  # Save figure.
         f'plots/plot_xsec_{species}_{pressure:.0f}Pa_{temperature:.0f}K.pdf'
     )
     plt.show()  # Open an interactive figure
+
+
+def tag2tex(tag):
+    """Replace all numbers in a species tag with LaTeX subscripts."""
+    return re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag)
 
 
 def calculate_absxsec(species='N2O', pressure=800e2, temperature=300.,
