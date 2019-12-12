@@ -166,7 +166,25 @@ There is some “pollution” in the P-branch that comes from lines of
 \end_inset
 
 .
- Recalculate the spectrum for only the main isotopologue.
+ Recalculate the spectrum for the main isotopologue only by setting the
+ species to 
+\begin_inset Quotes eld
+\end_inset
+
+CO-26
+\begin_inset Quotes erd
+\end_inset
+
+.
+ What does the 
+\begin_inset Quotes eld
+\end_inset
+
+-26
+\begin_inset Quotes erd
+\end_inset
+
+ suffix mean?
 \end_layout
 
 \end_deeper
