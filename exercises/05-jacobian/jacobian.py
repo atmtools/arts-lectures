@@ -126,8 +126,8 @@ def plot_opacity_profile(height, opacity, ax=None):
 
     try:
         tau1 = height[::-1][np.where(opacity >= 1)[0][0]]
-    except Exception:
-        print("No opacity greater than 1")
+    except IndexError:
+        pass
     else:
         tau1 /= 1000
         trans = blended_transform_factory(ax.transAxes, ax.transData)
