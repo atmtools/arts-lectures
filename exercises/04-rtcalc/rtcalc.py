@@ -45,6 +45,7 @@ def main():
     # fig.savefig(
     #     f"plots/brightness_temperature_{'+'.join(species)}_{height / 1e3:.0f}km_{zenith_angle:.0f}deg.pdf"
     # )
+    plt.show()
 
 
 def tags2tex(tags):
