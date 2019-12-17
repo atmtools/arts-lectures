@@ -239,7 +239,7 @@ def calc_jacobians(species="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=2)
 
     # Atmosphere and surface
     ws.AtmosphereSet1D()
-    ws.AtmFieldsCalc()
+    ws.AtmFieldsCalc(interp_order=3)
     ws.Extract(ws.z_surface, ws.z_field, 0)
     ws.Extract(ws.t_surface, ws.t_field, 0)
 
