@@ -1,3 +1,5 @@
+import re
+
 import matplotlib.pyplot as plt
 import numpy as np
 import typhon as ty
@@ -11,7 +13,8 @@ def main():
     highlight_frequency = None  # Hz
 
     # Calculate Jacobians (ARTS)
-    calc_h2o_jacobians()
+    species = "H2O"
+    calc_jacobians(species=species)
 
     # read in everything
     freq = xml.load("results/f_grid.xml")
@@ -19,6 +22,7 @@ def main():
     bt = xml.load("results/y.xml")
     jac = xml.load("results/jacobian.xml")
     alt = xml.load("results/z_field.xml").ravel()
+    jac /= np.gradient(alt / 1000)  # normalize by layer thickness in km
 
     ty.plots.styles.use()
 
@@ -32,7 +36,7 @@ def main():
         plot_brightness_temperature(freq, bt, where=highlight_frequency, ax=ax0)
         plot_opacity(freq, tau, where=highlight_frequency, ax=ax1)
         freq_ind = argclosest(freq, highlight_frequency)
-        plot_jacobian(alt, jac[freq_ind, :], ax=ax2)
+        plot_jacobian(alt, jac[freq_ind, :], species=species, ax=ax2)
         plot_opacity_profile(alt, tau[:, freq_ind], ax=ax3)
     fig.tight_layout()
     fig.savefig(f"plots/jacobians-{freq_ind}.pdf")
@@ -42,6 +46,11 @@ def main():
 def argclosest(array, value):
     """Returns the index in ``array`` which is closest to ``value``."""
     return np.abs(array - value).argmin()
+
+
+def tag2tex(tag):
+    """Replace all numbers in a species tag with LaTeX subscripts."""
+    return re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag)
 
 
 def plot_brightness_temperature(frequency, y, where=None, ax=None):
@@ -88,13 +97,14 @@ def plot_opacity(frequency, opacity, where=None, ax=None):
         )
 
 
-def plot_jacobian(height, jacobian, ax=None):
+def plot_jacobian(height, jacobian, species, ax=None):
     if ax is None:
         ax = plt.gca()
 
     ax.semilogy(jacobian, height / 1000.0)
     ax.set_ylim(0.4, 70)
-    ax.set_xlabel("H$_2$O Jacobian [K/1]")
+    unit = "K/K/km" if species == "T" else "K/1/km"
+    ax.set_xlabel(f"{tag2tex(species)} Jacobian [{unit}]")
     ax.set_ylabel("$z$ [km]")
     jac_peak = height[np.abs(jacobian).argmax()] / 1000.0
     trans = blended_transform_factory(ax.transAxes, ax.transData)
@@ -146,8 +156,8 @@ def plot_opacity_profile(height, opacity, ax=None):
         ax.axvline(1, color="ty:darkgrey", linewidth=0.8, zorder=-1)
 
 
-def calc_h2o_jacobians(verbosity=2):
-    """Caculate water vapor jacobians around the 183 GHz absorption line."""
+def calc_jacobians(species="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=2):
+    """Calculate jacobians for a given species and frequency range."""
     ws = ty.arts.workspace.Workspace(verbosity=0)
     ws.execute_controlfile("general/general.arts")
     ws.execute_controlfile("general/continua.arts")
@@ -195,11 +205,15 @@ def calc_h2o_jacobians(verbosity=2):
     # Definition of species:
     # you can take out and add again one of the species to see what effect it has
     # on radiative transfer in the ws.atmosphere.
-    ws.abs_speciesSet(species=["N2", "O2", "H2O"])
+    abs_species = {"N2", "O2", "H2O"}
+    if species != "T":
+        abs_species.add(species)
+
+    ws.abs_speciesSet(species=list(abs_species))
 
     # Read a line file and a matching small frequency grid
     ws.abs_linesReadFromSplitArtscat(
-        ws.abs_species, "hitran/hitran_split_artscat5/", 150e9, 200e9
+        ws.abs_species, "hitran/hitran_split_artscat5/", 0.9 * fmin, 1.1 * fmax
     )
 
     # Sort the line file according to species
@@ -216,7 +230,7 @@ def calc_h2o_jacobians(verbosity=2):
     )
 
     # Create a frequency grid
-    ws.VectorNLinSpace(ws.f_grid, 200, 150e9, 200e9)
+    ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
 
     # We select here to use Planck brightness temperatures
     ws.StringSet(ws.iy_unit, "PlanckBT")
@@ -238,9 +252,12 @@ def calc_h2o_jacobians(verbosity=2):
 
     # Jacobian calculation
     ws.jacobianInit()
-    ws.jacobianAddAbsSpecies(
-        g1=ws.p_grid, g2=ws.lat_grid, g3=ws.lon_grid, species="H2O", unit="rel"
-    )
+    if species == "T":
+        ws.jacobianAddTemperature(g1=ws.p_grid, g2=ws.lat_grid, g3=ws.lon_grid)
+    else:
+        ws.jacobianAddAbsSpecies(
+            g1=ws.p_grid, g2=ws.lat_grid, g3=ws.lon_grid, species=species, unit="rel"
+        )
     ws.jacobianClose()
 
     # Clearsky = No scattering
