@@ -13,8 +13,8 @@ def main():
     highlight_frequency = None  # Hz
 
     # Calculate Jacobians (ARTS)
-    species = "H2O"
-    calc_jacobians(species=species)
+    jacobian_quantity = "H2O"
+    calc_jacobians(jacobian_quantity=jacobian_quantity)
 
     # read in everything
     freq = xml.load("results/f_grid.xml")
@@ -36,7 +36,7 @@ def main():
         plot_brightness_temperature(freq, bt, where=highlight_frequency, ax=ax0)
         plot_opacity(freq, tau, where=highlight_frequency, ax=ax1)
         freq_ind = argclosest(freq, highlight_frequency)
-        plot_jacobian(alt, jac[freq_ind, :], species=species, ax=ax2)
+        plot_jacobian(alt, jac[freq_ind, :], jacobian_quantity=jacobian_quantity, ax=ax2)
         plot_opacity_profile(alt, tau[:, freq_ind], ax=ax3)
     fig.tight_layout()
     fig.savefig(f"plots/jacobians-{freq_ind}.pdf")
@@ -97,14 +97,14 @@ def plot_opacity(frequency, opacity, where=None, ax=None):
         )
 
 
-def plot_jacobian(height, jacobian, species, ax=None):
+def plot_jacobian(height, jacobian, jacobian_quantity, ax=None):
     if ax is None:
         ax = plt.gca()
 
     ax.semilogy(jacobian, height / 1000.0)
     ax.set_ylim(0.4, 70)
-    unit = "K/K/km" if species == "T" else "K/1/km"
-    ax.set_xlabel(f"{tag2tex(species)} Jacobian [{unit}]")
+    unit = "K/K/km" if jacobian_quantity == "T" else "K/1/km"
+    ax.set_xlabel(f"{tag2tex(jacobian_quantity)} Jacobian [{unit}]")
     ax.set_ylabel("$z$ [km]")
     jac_peak = height[np.abs(jacobian).argmax()] / 1000.0
     trans = blended_transform_factory(ax.transAxes, ax.transData)
@@ -156,7 +156,7 @@ def plot_opacity_profile(height, opacity, ax=None):
         ax.axvline(1, color="ty:darkgrey", linewidth=0.8, zorder=-1)
 
 
-def calc_jacobians(species="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=2):
+def calc_jacobians(jacobian_quantity="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=2):
     """Calculate jacobians for a given species and frequency range."""
     ws = ty.arts.workspace.Workspace(verbosity=0)
     ws.execute_controlfile("general/general.arts")
@@ -206,8 +206,8 @@ def calc_jacobians(species="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=2)
     # you can take out and add again one of the species to see what effect it has
     # on radiative transfer in the ws.atmosphere.
     abs_species = {"N2", "O2", "H2O"}
-    if species != "T":
-        abs_species.add(species)
+    if jacobian_quantity != "T":
+        abs_species.add(jacobian_quantity)
 
     ws.abs_speciesSet(species=list(abs_species))
 
@@ -252,11 +252,11 @@ def calc_jacobians(species="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=2)
 
     # Jacobian calculation
     ws.jacobianInit()
-    if species == "T":
+    if jacobian_quantity == "T":
         ws.jacobianAddTemperature(g1=ws.p_grid, g2=ws.lat_grid, g3=ws.lon_grid)
     else:
         ws.jacobianAddAbsSpecies(
-            g1=ws.p_grid, g2=ws.lat_grid, g3=ws.lon_grid, species=species, unit="rel"
+            g1=ws.p_grid, g2=ws.lat_grid, g3=ws.lon_grid, species=jacobian_quantity, unit="rel"
         )
     ws.jacobianClose()
 
