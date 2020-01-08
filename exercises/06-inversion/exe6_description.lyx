@@ -1,0 +1,431 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language american
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "lmodern" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3cm
+\topmargin 1cm
+\rightmargin 3cm
+\bottommargin 4cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "basicstyle={\footnotesize\bfseries\ttfamily},breaklines=true,commentstyle={\itshape\color{OliveGreen}},keywordstyle={\bfseries\color{blue}},showstringspaces=true,stringstyle={\bfseries\color{RoyalPurple}}"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Advanced radiation and remote sensing 
+\end_layout
+
+\begin_layout Author
+Lukas Kluft, Manfred Brath, Stefan Bühler
+\end_layout
+
+\begin_layout Subsection*
+Exercise No.
+ 6 – Inversion theory: Optimal Estimation Method (OEM)
+\end_layout
+
+\begin_layout Standard
+In this exercise you will work with “realistic” data measured by a water
+ vapor radiometer.
+ The data is not real but has been simulated for a well-known atmospheric
+ state using ARTS.
+ Simulated measurements allow to compare retrieval results to the true atmospher
+ic state.
+ The radiometer (Fig.
+ 1) measures thermal radiation in a frequency range around the 22 GHz water
+ vapor absorption line.
+ As the pressure broadening of absorption lines varies with height the measureme
+nt contains information about the vertical water vapor profile.
+ This information can be retrieved using the “Optimal Estimation Method”
+ (OEM).
+ The radiometer is placed in 10 km height, which resembles an upward looking
+ airborne measurement.
+ The scarce concentration of water vapor in the stratosphere allows to perform
+ a linear retrieval approach.
+ Retrievals that cover the whole atmosphere, including the highly absorbent
+ lower troposphere, need more advanced retrieval approaches like an iterative
+ OEM.
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centerline{
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics
+	filename H2Orad.jpg
+	lyxscale 30
+	width 7cm
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:onsala"
+
+\end_inset
+
+ Onsala water vapor radiometer (photo: Peter Forkman)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Run the Python script 
+\family typewriter
+oem.py
+\family default
+ and plot the observed brightness temperature spectrum 
+\family typewriter
+y_measurement
+\family default
+ as function of frequency 
+\family typewriter
+f_grid
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Uncomment the line with the function call 
+\family typewriter
+forward_model()
+\family default
+ and rerun the script to simulate the brightness temperature spectrum 
+\family typewriter
+y
+\family default
+ and the water vapor Jacobian 
+\family typewriter
+K
+\family default
+ for the 
+\emph on
+a priori
+\emph default
+ state.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Add the simulated brightness temeperature spectrum to the plot of the observed
+ brightness temperature spectrum.
+\end_layout
+
+\begin_layout Enumerate
+Plot the Jacobians 
+\family typewriter
+K
+\family default
+ in a suitable way.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Plot the measurement covariance matrix 
+\family typewriter
+S_y
+\family default
+ and the 
+\emph on
+a priori
+\emph default
+ covariance matrix 
+\family typewriter
+S_xa
+\family default
+ in a suitable way.
+\end_layout
+
+\begin_layout Enumerate
+Implement the function 
+\family typewriter
+retrieve()
+\family default
+ according to the OEM solution:
+\begin_inset Formula 
+\begin{equation}
+\hat{\mathbf{x}}=\mathbf{x}_{a}+\left(\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\mathbf{K}+\mathbf{S}_{xa}^{-1}\right)\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\left(\mathbf{y}_{measure}-\mathbf{y}_{a}\right)
+\end{equation}
+
+\end_inset
+
+ with 
+\begin_inset Formula $\mathbf{x}_{a}$
+\end_inset
+
+ the a priori profile, 
+\begin_inset Formula $\mathbf{K}$
+\end_inset
+
+ the Jacobian, 
+\begin_inset Formula $\mathbf{S}_{y}$
+\end_inset
+
+ the measurement covariance matrix, 
+\begin_inset Formula $\mathbf{S}_{xa}$
+\end_inset
+
+ the 
+\emph on
+a priori
+\emph default
+ covariance matrix, 
+\begin_inset Formula $\mathbf{y}_{measure}$
+\end_inset
+
+ the observed brightness temperature spectrum and 
+\begin_inset Formula $\mathbf{y}_{a}$
+\end_inset
+
+ the simulated brightness temperature spectrum of profile 
+\begin_inset Formula $\mathbf{x}_{a}$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+In Python, a matrix 
+\family typewriter
+M
+\family default
+ can be transposed using 
+\family typewriter
+M.T
+\family default
+ and inversed using 
+\family typewriter
+inv(M)
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+We are using the inverse function 
+\family typewriter
+scipy.linalg.inv() 
+\family default
+provided by the SciPy package.
+\end_layout
+
+\end_inset
+
+
+\family default
+.
+ Two matrices 
+\family typewriter
+M1
+\family default
+ and 
+\family typewriter
+M2
+\family default
+ can be multiplied using 
+\family typewriter
+M1 @ M2.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Use the function 
+\family typewriter
+retrieve()
+\family default
+ to retrieve the water vapor profile.
+\end_layout
+
+\begin_layout Enumerate
+Plot the retrieved water vapor 
+\family typewriter
+x_oem
+\family default
+ and the 
+\emph on
+a priori
+\emph default
+ water vapor profile as function of height
+\begin_inset space ~
+\end_inset
+
+
+\family typewriter
+z
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Load the true water vapor retrieval (
+\family typewriter
+input/x_true.xml
+\family default
+) and add it to the previous plot.
+ Dicuss the results.
+\end_layout
+
+\begin_layout Enumerate
+Implement the function 
+\family typewriter
+averaging_kernel_matrix() 
+\family default
+to calculate the same-named matrix:
+\begin_inset Formula 
+\begin{equation}
+\mathbf{A}=\left(\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\mathbf{K}+\mathbf{S}_{xa}^{-1}\right)\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\mathbf{K}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Plot the kernels (columns) of 
+\begin_inset Formula $\mathbf{A}$
+\end_inset
+
+ as function of height 
+\family typewriter
+z
+\family default
+ and interpret the results.
+\end_layout
+
+\begin_layout Enumerate
+The measurement response is defined as the sum over all averaging kernels
+ in a given height (row).
+ The measurement response indicates in which heights the measurement actually
+ adds information to the retrieval result.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Calculate the measurement response and plot it together with the averaging
+ kernels.
+ 
+\end_layout
+
+\begin_layout Enumerate
+In which heights does the measurement provide useful information? 
+\end_layout
+
+\begin_layout Enumerate
+Is it possible to estimate the vertical resolution?
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
