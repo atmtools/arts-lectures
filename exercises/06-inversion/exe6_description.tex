@@ -60,10 +60,11 @@ priori} state.
 \begin{enumerate}
 \item Add the simulated brightness temeperature spectrum to the plot of
 the observed brightness temperature spectrum.
-\item Plot the Jacobians \texttt{K} in a suitable way.
+\item Plot the Jacobians \texttt{K} in a suitable way. Explain the plot.
 \end{enumerate}
 \item Plot the measurement covariance matrix \texttt{S\_y} and the \emph{a
-priori} covariance matrix \texttt{S\_xa} in a suitable way.
+priori} covariance matrix \texttt{S\_xa} in a suitable way. What do
+the covariance matrices mean?
 \item Implement the function \texttt{retrieve()} according to the OEM solution:
 \begin{equation}
 \hat{\mathbf{x}}=\mathbf{x}_{a}+\left(\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\mathbf{K}+\mathbf{S}_{xa}^{-1}\right)\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\left(\mathbf{y}_{measure}-\mathbf{y}_{a}\right)
