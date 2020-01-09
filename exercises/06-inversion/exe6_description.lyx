@@ -228,6 +228,7 @@ Plot the Jacobians
 K
 \family default
  in a suitable way.
+ Explain the plot.
 \end_layout
 
 \end_deeper
@@ -245,6 +246,7 @@ a priori
 S_xa
 \family default
  in a suitable way.
+ What do the covariance matrices mean?
 \end_layout
 
 \begin_layout Enumerate
