@@ -45,7 +45,7 @@ def main():
     plt.show()
 
 
-def scattering(iwp=2.0, verbosity=2):
+def scattering(iwp=2.0, num_viewing_angles=37, verbosity=2):
     ws = ty.arts.workspace.Workspace(verbosity=0)
     ws.execute_controlfile("general/general.arts")
     ws.execute_controlfile("general/continua.arts")
@@ -179,7 +179,8 @@ def scattering(iwp=2.0, verbosity=2):
     ws.Copy(ws.doit_conv_test_agenda, doit_conv_test_agenda)
 
     ws.doit_za_interpSet(interp_method="linear")
-    ws.DOAngularGridsSet(37, 19, "")
+
+    ws.DOAngularGridsSet(num_viewing_angles, 19, "")
 
     @ty.arts.workspace.arts_agenda
     def doit_mono_agenda(ws):
