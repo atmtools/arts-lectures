@@ -7,6 +7,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import typhon as ty
 import typhon.arts.workspace
+from matplotlib.ticker import StrMethodFormatter
 
 
 def main():
@@ -21,26 +22,31 @@ def main():
     ty.plots.styles.use("typhon")
 
     f0, a0 = plt.subplots()
-    a0.plot(ifield[:, zenith_angle], p / 100)
-    a0.plot(ifield_clearsky[:, zenith_angle], p / 100)
+    a0.plot(ifield_clearsky[:, zenith_angle], p / 100, label="Clear-sky")
+    a0.plot(ifield[:, zenith_angle], p / 100, label="Scattering")
     a0.grid()
-    a0.invert_yaxis()
+    a0.set_ylim(p.max() / 100, p.min() / 100)
     a0.set_ylabel("Pressure [hPa]")
     a0.set_xlabel("$T_\mathrm{B}$ [K]")
-    a0.legend(["Scattering", "Clear-sky"])
+    a0.legend()
     a0.set_title(
         rf"$T_\mathrm{{B}}$ at $\Theta$ = {zenith_angles[zenith_angle]:.0f}°"
     )
 
     ## Plot Tb vs Viewing angle for a specific pressure level:
     if pressure_level > -1:
-        f1, a1 = plt.subplots()
-        a1.plot(zenith_angles, ifield[pressure_level, :], label="Scattering")
-        a1.plot(zenith_angles, ifield_clearsky[pressure_level, :], label="Clear-sky")
-        a1.legend()
-        a1.grid()
-        a1.set_xlabel("Viewing angle [°]")
-        a1.set_ylabel("$T_\mathrm{B}$ [K]")
+        f1, a1 = plt.subplots(subplot_kw=dict(projection="polar"))
+        a1.plot(np.deg2rad(zenith_angles), ifield_clearsky[pressure_level, :], label="Clear-sky")
+        a1.plot(np.deg2rad(zenith_angles), ifield[pressure_level, :], label="Scattering")
+        a1.legend(loc="upper right")
+        a1.set_theta_offset(np.deg2rad(+90))
+        a1.set_theta_direction(-1)
+        a1.set_thetagrids(np.arange(0, 181, 45), ha="left")
+        a1.text(0.01, 0.75, "$T_\mathrm{B}$", transform=a1.transAxes)
+        a1.yaxis.set_major_formatter(StrMethodFormatter("{x:g} K"))
+        a1.set_thetamin(0)
+        a1.set_thetamax(180)
+        a1.set_xlabel("Viewing angle $\Theta$")
         a1.set_title(f"$T_\mathrm{{B}}$ at p = {p[pressure_level]/100:.0f} hPa")
     plt.show()
 
