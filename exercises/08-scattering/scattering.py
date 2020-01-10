@@ -51,7 +51,23 @@ def main():
     plt.show()
 
 
-def scattering(iwp=2.0, num_viewing_angles=37, verbosity=2):
+def scattering(ice_water_path=2.0, num_viewing_angles=37, verbosity=2):
+    """Perform a radiative transfer simulation with a simple cloud.
+
+    Parameters:
+        ice_water_path (float): Integrated ice water in cloud box [kg/m^2].
+        num_viewing_angles (int): Number of zenith viewing angles.
+        verbosity (int): Reporting levels between 0 (only error messages)
+                    and 3 (everything).
+
+    Returns:
+        ndarray, ndarray, ndarray, ndarray:
+            Pressure [hPa],
+            Viewing angles [degree],
+            Radiation field [K],
+            Radiation field clear-sky [K].
+
+    """
     ws = ty.arts.workspace.Workspace(verbosity=0)
     ws.execute_controlfile("general/general.arts")
     ws.execute_controlfile("general/continua.arts")
@@ -165,7 +181,7 @@ def scattering(iwp=2.0, num_viewing_angles=37, verbosity=2):
     iwp0 = np.trapz(mass * ws.pnd_field.value[0, :, 0, 0], z)
 
     # Scale the PND field to get the desired IWP.
-    ws.Tensor4Scale(ws.pnd_field, ws.pnd_field, iwp / iwp0)
+    ws.Tensor4Scale(ws.pnd_field, ws.pnd_field, ice_water_path / iwp0)
 
     # Get case-specific surface properties from corresponding atmospheric fields
     ws.Extract(ws.z_surface, ws.z_field, 0)
