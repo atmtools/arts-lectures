@@ -12,8 +12,8 @@ from matplotlib.ticker import StrMethodFormatter
 
 def main():
     # Control parameters
-    zenith_angle = -1  # viewing angle index
-    pressure_level = -1  # pressure grid index
+    zenith_angle = 180.0  # viewing angle [degree, 180° = upward radiation]
+    pressure_level = None  # pressure level [Pa]
 
     # Run ARTS simulation
     p, zenith_angles, ifield, ifield_clearsky = scattering()
@@ -21,23 +21,27 @@ def main():
     ## Plot Tb vs height for a specific viewing angle
     ty.plots.styles.use("typhon")
 
+    ia, zenith_angle = argclosest(zenith_angles, zenith_angle, retvalue=True)
+
     f0, a0 = plt.subplots()
-    a0.plot(ifield_clearsky[:, zenith_angle], p / 100, label="Clear-sky")
-    a0.plot(ifield[:, zenith_angle], p / 100, label="Scattering")
+    a0.plot(ifield_clearsky[:, ia], p / 100, label="Clear-sky")
+    a0.plot(ifield[:, ia], p / 100, label="Scattering")
     a0.grid()
     a0.set_ylim(p.max() / 100, p.min() / 100)
     a0.set_ylabel("Pressure [hPa]")
     a0.set_xlabel("$T_\mathrm{B}$ [K]")
     a0.legend()
     a0.set_title(
-        rf"$T_\mathrm{{B}}$ at $\Theta$ = {zenith_angles[zenith_angle]:.0f}°"
+        rf"$T_\mathrm{{B}}$ at $\Theta$ = {zenith_angle:.0f}°"
     )
 
     ## Plot Tb vs Viewing angle for a specific pressure level:
-    if pressure_level > -1:
+    if pressure_level is not None:
+        ip, pressure_level = argclosest(p, pressure_level, retvalue=True)
+
         f1, a1 = plt.subplots(subplot_kw=dict(projection="polar"))
-        a1.plot(np.deg2rad(zenith_angles), ifield_clearsky[pressure_level, :], label="Clear-sky")
-        a1.plot(np.deg2rad(zenith_angles), ifield[pressure_level, :], label="Scattering")
+        a1.plot(np.deg2rad(zenith_angles), ifield_clearsky[ip, :], label="Clear-sky")
+        a1.plot(np.deg2rad(zenith_angles), ifield[ip, :], label="Scattering")
         a1.legend(loc="upper right")
         a1.set_theta_offset(np.deg2rad(+90))
         a1.set_theta_direction(-1)
@@ -47,8 +51,15 @@ def main():
         a1.set_thetamin(0)
         a1.set_thetamax(180)
         a1.set_xlabel("Viewing angle $\Theta$")
-        a1.set_title(f"$T_\mathrm{{B}}$ at p = {p[pressure_level]/100:.0f} hPa")
+        a1.set_title(f"$T_\mathrm{{B}}$ at p = {pressure_level/100:.0f} hPa")
     plt.show()
+
+
+def argclosest(array, value, retvalue=False):
+    """Returns the index of the closest value in array.  """
+    idx = np.abs(array - value).argmin()
+
+    return (idx, array[idx]) if retvalue else idx
 
 
 def scattering(ice_water_path=2.0, num_viewing_angles=37, verbosity=2):
