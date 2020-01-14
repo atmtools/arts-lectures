@@ -53,8 +53,15 @@ def tags2tex(tags):
     return [re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag) for tag in tags]
 
 
-def run_arts(species, zenith_angle=0.0, height=0.0, fmin=10e9, fmax=250e9,
-             fnum=1_000, verbosity=2):
+def run_arts(
+    species,
+    zenith_angle=0.0,
+    height=0.0,
+    fmin=10e9,
+    fmax=250e9,
+    fnum=1_000,
+    verbosity=2,
+):
     """Perform a radiative transfer simulation.
 
     Parameters:

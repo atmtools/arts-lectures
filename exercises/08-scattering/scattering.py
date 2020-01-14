@@ -3,7 +3,6 @@
 Based on a script by Jakob Doerr.
 """
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 import typhon as ty
 import typhon.arts.workspace
@@ -18,7 +17,7 @@ def main():
     # Run ARTS simulation
     p, zenith_angles, ifield, ifield_clearsky = scattering()
 
-    ## Plot Tb vs height for a specific viewing angle
+    # Plot Tb vs height for a specific viewing angle
     ty.plots.styles.use("typhon")
 
     ia, zenith_angle = argclosest(zenith_angles, zenith_angle, retvalue=True)
@@ -29,13 +28,11 @@ def main():
     a0.grid()
     a0.set_ylim(p.max() / 100, p.min() / 100)
     a0.set_ylabel("Pressure [hPa]")
-    a0.set_xlabel("$T_\mathrm{B}$ [K]")
+    a0.set_xlabel(r"$T_\mathrm{B}$ [K]")
     a0.legend()
-    a0.set_title(
-        rf"$T_\mathrm{{B}}$ at $\Theta$ = {zenith_angle:.0f}°"
-    )
+    a0.set_title(rf"$T_\mathrm{{B}}$ at $\Theta$ = {zenith_angle:.0f}°")
 
-    ## Plot Tb vs Viewing angle for a specific pressure level:
+    # Plot Tb vs Viewing angle for a specific pressure level:
     if pressure_level is not None:
         ip, pressure_level = argclosest(p, pressure_level, retvalue=True)
 
@@ -46,12 +43,12 @@ def main():
         a1.set_theta_offset(np.deg2rad(+90))
         a1.set_theta_direction(-1)
         a1.set_thetagrids(np.arange(0, 181, 45), ha="left")
-        a1.text(0.01, 0.75, "$T_\mathrm{B}$", transform=a1.transAxes)
+        a1.text(0.01, 0.75, r"$T_\mathrm{B}$", transform=a1.transAxes)
         a1.yaxis.set_major_formatter(StrMethodFormatter("{x:g} K"))
         a1.set_thetamin(0)
         a1.set_thetamax(180)
-        a1.set_xlabel("Viewing angle $\Theta$")
-        a1.set_title(f"$T_\mathrm{{B}}$ at p = {pressure_level/100:.0f} hPa")
+        a1.set_xlabel(r"Viewing angle $\Theta$")
+        a1.set_title(rf"$T_\mathrm{{B}}$ at p = {pressure_level/100:.0f} hPa")
     plt.show()
 
 

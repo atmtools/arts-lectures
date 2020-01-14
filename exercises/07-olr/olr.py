@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-"""Simulate and plot the outgoing longwave radiation (OLR) and Planck curves
-for different temperatures. """
+"""Simulate and plot Earth's outgoing longwave radiation (OLR)."""
 import matplotlib.pyplot as plt
 import numpy as np
 import typhon as ty

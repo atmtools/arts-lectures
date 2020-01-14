@@ -1,3 +1,4 @@
+"""Calculate and plot clear-sky Jacobians."""
 import re
 
 import matplotlib.pyplot as plt
@@ -36,7 +37,9 @@ def main():
         plot_brightness_temperature(freq, bt, where=highlight_frequency, ax=ax0)
         plot_opacity(freq, tau, where=highlight_frequency, ax=ax1)
         freq_ind = argclosest(freq, highlight_frequency)
-        plot_jacobian(alt, jac[freq_ind, :], jacobian_quantity=jacobian_quantity, ax=ax2)
+        plot_jacobian(
+            alt, jac[freq_ind, :], jacobian_quantity=jacobian_quantity, ax=ax2
+        )
         plot_opacity_profile(alt, tau[:, freq_ind], ax=ax3)
     fig.tight_layout()
     fig.savefig(f"plots/jacobians-{freq_ind}.pdf")
@@ -156,7 +159,9 @@ def plot_opacity_profile(height, opacity, ax=None):
         ax.axvline(1, color="ty:darkgrey", linewidth=0.8, zorder=-1)
 
 
-def calc_jacobians(jacobian_quantity="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=2):
+def calc_jacobians(
+    jacobian_quantity="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=2
+):
     """Calculate jacobians for a given species and frequency range."""
     ws = ty.arts.workspace.Workspace(verbosity=0)
     ws.execute_controlfile("general/general.arts")
@@ -256,7 +261,11 @@ def calc_jacobians(jacobian_quantity="H2O", fmin=150e9, fmax=200e9, fnum=200, ve
         ws.jacobianAddTemperature(g1=ws.p_grid, g2=ws.lat_grid, g3=ws.lon_grid)
     else:
         ws.jacobianAddAbsSpecies(
-            g1=ws.p_grid, g2=ws.lat_grid, g3=ws.lon_grid, species=jacobian_quantity, unit="rel"
+            g1=ws.p_grid,
+            g2=ws.lat_grid,
+            g3=ws.lon_grid,
+            species=jacobian_quantity,
+            unit="rel",
         )
     ws.jacobianClose()
 
