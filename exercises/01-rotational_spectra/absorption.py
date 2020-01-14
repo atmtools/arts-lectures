@@ -1,4 +1,4 @@
-"""Calculate and plot absorption cross sections. """
+"""Calculate and plot absorption cross sections."""
 import re
 
 import matplotlib.pyplot as plt
@@ -10,7 +10,7 @@ from typhon.plots import styles
 
 def main():
     # Define parameters
-    species = 'N2O'
+    species = "N2O"
     temperature = 300
     pressure = 800e2
 
@@ -18,18 +18,18 @@ def main():
     freq, abs_xsec = calculate_absxsec(species, pressure, temperature)
 
     # Plot the results.
-    plt.style.use(styles('typhon'))
+    plt.style.use(styles("typhon"))
 
     fig, ax = plt.subplots()
     ax.plot(freq / 1e9, abs_xsec)
     ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
     ax.set_ylim(bottom=0)
-    ax.set_xlabel('Frequency [GHz]')
-    ax.set_ylabel('Abs. cross section [$\sf m^2$]')
-    ax.set_title(f'{tag2tex(species)} p:{pressure/100} hPa T:{temperature:0.0f} K')
+    ax.set_xlabel("Frequency [GHz]")
+    ax.set_ylabel(r"Abs. cross section [$\sf m^2$]")
+    ax.set_title(f"{tag2tex(species)} p:{pressure/100} hPa T:{temperature:0.0f} K")
 
     fig.savefig(  # Save figure.
-        f'plots/plot_xsec_{species}_{pressure:.0f}Pa_{temperature:.0f}K.pdf'
+        f"plots/plot_xsec_{species}_{pressure:.0f}Pa_{temperature:.0f}K.pdf"
     )
     plt.show()  # Open an interactive figure
 
@@ -39,10 +39,17 @@ def tag2tex(tag):
     return re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag)
 
 
-def calculate_absxsec(species='N2O', pressure=800e2, temperature=300.,
-                      fmin=10e9, fmax=2000e9, fnum=10_000,
-                      lineshape='Lorentz', forefactor='Rosenkranz_quadratic',
-                      verbosity=2):
+def calculate_absxsec(
+    species="N2O",
+    pressure=800e2,
+    temperature=300.0,
+    fmin=10e9,
+    fmax=2000e9,
+    fnum=10_000,
+    lineshape="Lorentz",
+    forefactor="Rosenkranz_quadratic",
+    verbosity=2,
+):
     """Calculate absorption cross sections.
 
     Parameters:
@@ -78,27 +85,20 @@ def calculate_absxsec(species='N2O', pressure=800e2, temperature=300.,
 
     # Line catalogue: Perrin or HITRAN
     ws.abs_linesReadFromSplitArtscat(
-        ws.abs_species,
-        "hitran/hitran_split_artscat5/",
-        0.9 * fmin,
-        1.1 * fmax,
-        )
+        ws.abs_species, "hitran/hitran_split_artscat5/", 0.9 * fmin, 1.1 * fmax
+    )
     ws.abs_lines_per_speciesCreateFromLines()
 
     # Set the lineshape function for all calculated tags
-    ws.abs_lineshapeDefine(
-        shape=lineshape,
-        forefactor=forefactor,
-        cutoff=-1.,
-        )
+    ws.abs_lineshapeDefine(shape=lineshape, forefactor=forefactor, cutoff=-1.0)
 
     # Atmospheric settings
     ws.AtmosphereSet1D()
 
     # Setting the pressure, temperature and vmr
-    ws.NumericSet(ws.rtp_pressure, float(pressure)) # [Pa]
-    ws.NumericSet(ws.rtp_temperature, float(temperature)) # [K]
-    ws.VectorSet(ws.rtp_vmr, np.array([1.])) # [VMR]
+    ws.NumericSet(ws.rtp_pressure, float(pressure))  # [Pa]
+    ws.NumericSet(ws.rtp_temperature, float(temperature))  # [K]
+    ws.VectorSet(ws.rtp_vmr, np.array([1.0]))  # [VMR]
     ws.VectorSet(ws.rtp_nlte, np.array([]))
 
     ws.AbsInputFromRteScalars()
@@ -117,5 +117,5 @@ def calculate_absxsec(species='N2O', pressure=800e2, temperature=300.,
     return ws.f_grid.value.copy(), ws.abs_xsec_per_species.value.copy()[0]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
