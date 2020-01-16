@@ -46,8 +46,8 @@ def calculate_absxsec(
     fmin=10e9,
     fmax=2000e9,
     fnum=10_000,
-    lineshape="Lorentz",
-    forefactor="Rosenkranz_quadratic",
+    lineshape="LP",
+    normalization="RQ",
     verbosity=2,
 ):
     """Calculate absorption cross sections.
@@ -60,7 +60,7 @@ def calculate_absxsec(
         fmax (float): Maximum frequency [Hz].
         fnum (int): Number of frequency grid points.
         lineshape (str): Line shape model.
-        forefactor (str): Line shape forefactor.
+        normalization (str): Line shape normalization factor.
         verbosity (int): Set ARTS verbosity (``0`` prevents all output).
 
     Returns:
@@ -84,13 +84,21 @@ def calculate_absxsec(
     ws.ArrayOfIndexSet(ws.abs_species_active, [0])
 
     # Line catalogue: Perrin or HITRAN
-    ws.abs_linesReadFromSplitArtscat(
-        ws.abs_species, "hitran/hitran_split_artscat5/", 0.9 * fmin, 1.1 * fmax
+    ws.ReadSplitARTSCAT(
+        abs_species=ws.abs_species,
+        basename="hitran/hitran_split_artscat5/",
+        fmin=0.9 * fmin,
+        fmax=1.1 * fmax,
+        globalquantumnumbers="",
+        localquantumnumbers="",
+        ignore_missing=0,
     )
     ws.abs_lines_per_speciesCreateFromLines()
 
     # Set the lineshape function for all calculated tags
-    ws.abs_lineshapeDefine(shape=lineshape, forefactor=forefactor, cutoff=-1.0)
+    ws.abs_linesSetLineShapeType(ws.abs_lines, lineshape)
+    ws.abs_linesSetCutoff(ws.abs_lines, "None", 0.0)
+    ws.abs_linesSetNormalization(ws.abs_lines, normalization)
 
     # Atmospheric settings
     ws.AtmosphereSet1D()
@@ -99,7 +107,7 @@ def calculate_absxsec(
     ws.NumericSet(ws.rtp_pressure, float(pressure))  # [Pa]
     ws.NumericSet(ws.rtp_temperature, float(temperature))  # [K]
     ws.VectorSet(ws.rtp_vmr, np.array([1.0]))  # [VMR]
-    ws.VectorSet(ws.rtp_nlte, np.array([]))
+    ws.Touch(ws.abs_nlte)
 
     ws.AbsInputFromRteScalars()
 
@@ -110,6 +118,7 @@ def calculate_absxsec(
     ws.isotopologue_ratiosInitFromBuiltin()
 
     # Calculate absorption cross sections
+    ws.lbl_checkedCalc()
     ws.abs_xsec_agenda_checkedCalc()
     ws.abs_xsec_per_speciesInit()
     ws.abs_xsec_per_speciesAddLines()

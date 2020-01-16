@@ -102,15 +102,18 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=2):
     )
 
     # Read a line file and a matching small frequency grid
-    ws.abs_linesReadFromSplitArtscat(
-        ws.abs_species, "hitran/hitran_split_artscat5/", 0.9 * fmin, 1.1 * fmax
+    ws.ReadSplitARTSCAT(
+        abs_species=ws.abs_species,
+        basename="hitran/hitran_split_artscat5/",
+        fmin=0.9 * fmin,
+        fmax=1.1 * fmax,
+        globalquantumnumbers="",
+        localquantumnumbers="",
+        ignore_missing=0,
     )
 
     # Sort the line file according to species
     ws.abs_lines_per_speciesCreateFromLines()
-
-    # Set the lineshape function for all calculated tags
-    ws.abs_lineshapeDefine(shape="Voigt_Kuntz6", forefactor="VVH", cutoff=750e9)
 
     # Weakly reflecting surface
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.0)
@@ -145,6 +148,7 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=2):
 
     # Perform RT calculations
     ws.abs_xsec_agenda_checkedCalc()
+    ws.lbl_checkedCalc()
     ws.propmat_clearsky_agenda_checkedCalc()
     ws.atmfields_checkedCalc(bad_partition_functions_ok=1)
     ws.atmgeom_checkedCalc()
@@ -157,8 +161,10 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=2):
 
     # calculate intensity field
     ws.Tensor3Create("trans_field")
-    ws.doit_i_fieldClearskyPlaneParallel(trans_field=ws.trans_field, use_parallel_iy=1)
-    ws.spectral_irradiance_fieldFromiyField()
+    ws.spectral_radiance_fieldClearskyPlaneParallel(
+        trans_field=ws.trans_field, use_parallel_iy=1
+    )
+    ws.spectral_irradiance_fieldFromSpectralRadianceField()
 
     olr = ws.spectral_irradiance_field.value[:, -1, 0, 0, 1].copy()
 

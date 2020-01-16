@@ -217,8 +217,14 @@ def calc_jacobians(
     ws.abs_speciesSet(species=list(abs_species))
 
     # Read a line file and a matching small frequency grid
-    ws.abs_linesReadFromSplitArtscat(
-        ws.abs_species, "hitran/hitran_split_artscat5/", 0.9 * fmin, 1.1 * fmax
+    ws.ReadSplitARTSCAT(
+        abs_species=ws.abs_species,
+        basename="hitran/hitran_split_artscat5/",
+        fmin=0.9 * fmin,
+        fmax=1.1 * fmax,
+        globalquantumnumbers="",
+        localquantumnumbers="",
+        ignore_missing=0,
     )
 
     # Sort the line file according to species
@@ -274,6 +280,7 @@ def calc_jacobians(
 
     # Perform RT calculations
     ws.abs_xsec_agenda_checkedCalc()
+    ws.lbl_checkedCalc()
     ws.propmat_clearsky_agenda_checkedCalc()
     ws.atmfields_checkedCalc()
     ws.atmgeom_checkedCalc()
