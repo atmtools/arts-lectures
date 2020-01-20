@@ -142,7 +142,7 @@ def scattering(ice_water_path=2.0, num_viewing_angles=37, verbosity=2):
 
     # Read Catalog (needed for O3):
     ws.abs_linesReadFromSplitArtscat(
-        basename="spectroscopy/Perrin_artscat34/",
+        basename="spectroscopy/Perrin/",
         fmin=0.9 * ws.f_grid.value.min(),
         fmax=1.1 * ws.f_grid.value.max(),
     )
