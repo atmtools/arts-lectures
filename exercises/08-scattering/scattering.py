@@ -59,12 +59,16 @@ def argclosest(array, value, retvalue=False):
     return (idx, array[idx]) if retvalue else idx
 
 
-def scattering(ice_water_path=2.0, num_viewing_angles=37, verbosity=2):
+def scattering(
+    ice_water_path=2.0, num_viewing_angles=37, phase="ice", radius=1.5e2, verbosity=2
+):
     """Perform a radiative transfer simulation with a simple cloud.
 
     Parameters:
         ice_water_path (float): Integrated ice water in cloud box [kg/m^2].
         num_viewing_angles (int): Number of zenith viewing angles.
+        phase (str): Hydrometeor phase "ice" or "liquid".
+        radius (float): Particle radius.
         verbosity (int): Reporting levels between 0 (only error messages)
                     and 3 (everything).
 
@@ -162,13 +166,16 @@ def scattering(ice_water_path=2.0, num_viewing_angles=37, verbosity=2):
     )
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.0)
 
-    # Specification of cloud
+    # Extract particle mass from scattering meta data.
+    scat_data_xml = f"scattering/H2O_{phase}/MieSphere_R{radius:.5e}um.xml"
+    ws.ScatSpeciesScatAndMetaRead(scat_data_files=[scat_data_xml])
+    particle_mass = ws.scat_meta.value[0][0].mass
+
+    # Load scattering data and PND field.
     ws.ScatSpeciesInit()
     ws.ScatElementsPndAndScatAdd(
-        scat_data_files=["scattering/H2O_ice/MieSphere_R1.50000e+02um.xml"],
-        pnd_field_files=["./input/pndfield_input.xml"],
+        scat_data_files=[scat_data_xml], pnd_field_files=["./input/pndfield_input.xml"]
     )
-
     ws.scat_dataCalc()
     ws.scat_data_checkedCalc()
 
@@ -185,8 +192,7 @@ def scattering(ice_water_path=2.0, num_viewing_angles=37, verbosity=2):
     ws.pnd_fieldCalcFrompnd_field_raw()
 
     # Calculate the initial ice water path (IWP).
-    mass = 1.295954e-8  # Mass of the scattering particle
-    iwp0 = np.trapz(mass * ws.pnd_field.value[0, :, 0, 0], z)
+    iwp0 = np.trapz(particle_mass * ws.pnd_field.value[0, :, 0, 0], z)
 
     # Scale the PND field to get the desired IWP.
     ws.Tensor4Scale(ws.pnd_field, ws.pnd_field, ice_water_path / iwp0)
