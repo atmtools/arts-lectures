@@ -136,11 +136,14 @@ def forward_model(f_grid, atm_fields_compact, verbosity=2):
     )
 
     # Read a line file and a matching small frequency grid
-    ws.abs_linesReadFromSplitArtscat(
-        ws.abs_species,
-        "hitran/hitran_split_artscat5/",
-        0.9 * f_grid.min(),
-        1.1 * f_grid.max(),
+    ws.ReadSplitARTSCAT(
+        abs_species=ws.abs_species,
+        basename="hitran/hitran_split_artscat5/",
+        fmin=0.9 * f_grid.min(),
+        fmax=1.1 * f_grid.max(),
+        globalquantumnumbers="",
+        localquantumnumbers="",
+        ignore_missing=0,
     )
 
     # Sort the line file according to species
@@ -195,6 +198,7 @@ def forward_model(f_grid, atm_fields_compact, verbosity=2):
 
     # Perform RT calculations
     ws.abs_xsec_agenda_checkedCalc()
+    ws.lbl_checkedCalc()
     ws.propmat_clearsky_agenda_checkedCalc()
     ws.atmfields_checkedCalc()
     ws.atmgeom_checkedCalc()

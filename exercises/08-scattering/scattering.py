@@ -145,15 +145,20 @@ def scattering(
     ws.atmfields_checkedCalc(bad_partition_functions_ok=1)
 
     # Read Catalog (needed for O3):
-    ws.abs_linesReadFromSplitArtscat(
-        basename="spectroscopy/Perrin/",
+    ws.ReadSplitARTSCAT(
+        abs_species=ws.abs_species,
+        basename="hitran/hitran_split_artscat5/",
         fmin=0.9 * ws.f_grid.value.min(),
         fmax=1.1 * ws.f_grid.value.max(),
+        globalquantumnumbers="",
+        localquantumnumbers="",
+        ignore_missing=0,
     )
     ws.abs_lines_per_speciesCreateFromLines()
 
     ws.abs_lookupSetup()
     ws.abs_xsec_agenda_checkedCalc()
+    ws.lbl_checkedCalc()
 
     ws.abs_lookupCalc()
 
@@ -225,27 +230,27 @@ def scattering(
         ws.DoitScatteringDataPrepare()
         # Perform iterations: 1. scattering integral. 2. RT calculations with
         # fixed scattering integral field, 3. convergence test
-        ws.doit_i_field_monoIterate(accelerated=1)
+        ws.cloudbox_field_monoIterate(accelerated=1)
 
     ws.Copy(ws.doit_mono_agenda, doit_mono_agenda)
 
     # Scattering calculation
     ws.DoitInit()
     ws.DoitGetIncoming(rigorous=0)
-    ws.doit_i_fieldSetClearsky()
+    ws.cloudbox_fieldSetClearsky()
     ws.DoitCalc()
 
-    ifield = np.squeeze(ws.doit_i_field.value.squeeze())
+    ifield = np.squeeze(ws.cloudbox_field.value.squeeze())
     ifield = ty.physics.radiance2planckTb(ws.f_grid.value, ifield)
 
     # Clear-sky
     ws.Tensor4Scale(ws.pnd_field, ws.pnd_field, 0.0)
     ws.DoitCalc()
 
-    ifield_clear = np.squeeze(ws.doit_i_field.value.squeeze())
+    ifield_clear = np.squeeze(ws.cloudbox_field.value.squeeze())
     ifield_clear = ty.physics.radiance2planckTb(ws.f_grid.value, ifield_clear)
 
-    return p, ws.scat_za_grid.value.copy(), ifield, ifield_clear
+    return p, ws.za_grid.value.copy(), ifield, ifield_clear
 
 
 if __name__ == "__main__":
