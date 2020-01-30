@@ -67,7 +67,7 @@ priori} covariance matrix \texttt{S\_xa} in a suitable way. What do
 the covariance matrices mean?
 \item Implement the function \texttt{retrieve()} according to the OEM solution:
 \begin{equation}
-\hat{\mathbf{x}}=\mathbf{x}_{a}+\left(\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\mathbf{K}+\mathbf{S}_{xa}^{-1}\right)\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\left(\mathbf{y}_{measure}-\mathbf{y}_{a}\right)
+\hat{\mathbf{x}}=\mathbf{x}_{a}+\left(\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\mathbf{K}+\mathbf{S}_{xa}^{-1}\right)^{-1}\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\left(\mathbf{y}_{measure}-\mathbf{y}_{a}\right)
 \end{equation}
  with $\mathbf{x}_{a}$ the a priori profile, $\mathbf{K}$ the Jacobian,
 $\mathbf{S}_{y}$ the measurement covariance matrix, $\mathbf{S}_{xa}$
@@ -87,7 +87,7 @@ add it to the previous plot. Dicuss the results.
 \item Implement the function \texttt{averaging\_kernel\_matrix() }to calculate
 the same-named matrix:
 \begin{equation}
-\mathbf{A}=\left(\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\mathbf{K}+\mathbf{S}_{xa}^{-1}\right)\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\mathbf{K}
+\mathbf{A}=\left(\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\mathbf{K}+\mathbf{S}_{xa}^{-1}\right)^{-1}\mathbf{K}^{T}\mathbf{S}_{y}^{-1}\mathbf{K}
 \end{equation}
 \item Plot the kernels (columns) of $\mathbf{A}$ as function of height
 \texttt{z} and interpret the results.
