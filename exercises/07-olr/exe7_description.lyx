@@ -165,7 +165,7 @@ atmfield.scale(...)
 \family typewriter
 atmfield.add(...)
 \family default
- to change the atmosheric data:
+ to change the atmospheric data:
 \end_layout
 
 \begin_deeper
