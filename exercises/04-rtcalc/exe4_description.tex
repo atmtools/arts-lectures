@@ -1,0 +1,81 @@
+%% LyX 2.3.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[american]{article}
+\usepackage{lmodern}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=1cm,bmargin=4cm,lmargin=3cm,rmargin=3cm}
+\usepackage{color}
+\usepackage{amstext}
+\usepackage[authoryear]{natbib}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\lstset{basicstyle={\footnotesize\bfseries\ttfamily},
+breaklines=true,
+commentstyle={\itshape\color{OliveGreen}},
+keywordstyle={\bfseries\color{blue}},
+showstringspaces=true,
+stringstyle={\bfseries\color{RoyalPurple}}}
+\begin{document}
+\title{Advanced radiation and remote sensing }
+\author{Lukas Kluft, Manfred Brath, Stefan Bühler}
+\maketitle
+
+\subsection*{Exercise No. 4 -- Atmospheric Brightness Temperature Spectra}
+\begin{enumerate}
+\item Run the Python script rtcalc.py to calculate the spectrum of atmospheric
+zenith opacity in the microwave spectral range for a midlatitude-summer
+atmosphere over a wet land surface. 
+
+Consider the zenith opacity spectrum to answer the following questions:
+\begin{itemize}
+\item The spectrum includes four spectral lines. To which species do these
+lines belong? Play around with the absorption species selection in
+the Python script.
+\item We speak of window regions where the zenith opacity is below 1. Where
+are they?
+\end{itemize}
+\item Brightness temperature is a unit for intensity. It is the temperature
+that a blackbody should have to give the same intensity as measured.
+Mathematically, the transformation between intensity in SI units and
+intensity in brightness temperature is done with the Planck formula.
+ARTS is capable to perform simulation in units of brightness temperature.
+Uncomment the code part for the second task. Investigate the brightness
+temperature spectra for different hypothetical sensors:
+\begin{enumerate}
+\item A ground-based sensor looking in the zenith direction.
+\item A sensor on an airplane ($z=10\,\text{km}$) looking in the zenith
+direction.
+\end{enumerate}
+Consider both opacity and brightness temperatures to answer the following
+questions: 
+\begin{itemize}
+\item In plot (a), why do the lines near 60 GHz and near 180 GHz appear
+flat on top? 
+\item In plot (b), why is the line at 180 GHz smaller than before? 
+\item Describe the difference between plots (a) and (b). What happens to
+the lines, what happens to the background? Can you explain what you
+see? 
+\end{itemize}
+\item Make the same calculation as in task 2 for a satellite sensor ($z=800\,\text{km}$)
+looking nadir (straight down).
+
+Answer following questions: 
+\begin{itemize}
+\item Explain the brightness temperature simulated in the window regions. 
+\item Why does the line at 22 GHz look different from the others? 
+\item Investigate the the $\text{O}_{2}$ line at $120\,\text{GHz}$. Perform
+an ARTS simulation focused around that frequency. Why does the shape
+close to the center of the $\text{O}_{2}$ line at $120\,\text{GHz}$
+looks so differently compared to the $183\,\text{GHz}$. 
+\end{itemize}
+\end{enumerate}
+
+\end{document}
