@@ -1,6 +1,6 @@
 # Variables
 TC = latexmk
-TFLAGS = -e "$$pdflatex=q/pdflatex -interaction=nonstopmode/" -pdf
+TFLAGS = -e "$$pdflatex=q/pdflatex -interaction=nonstopmode/" -pdf -bibtex
 
 TARGETS = AdvRaRe_script_print.pdf AdvRaRe_script_screen.pdf
 
