@@ -93,12 +93,13 @@ def calculate_absxsec(
         localquantumnumbers="",
         ignore_missing=0,
     )
-    ws.abs_lines_per_speciesCreateFromLines()
 
     # Set the lineshape function for all calculated tags
     ws.abs_linesSetLineShapeType(ws.abs_lines, lineshape)
     ws.abs_linesSetCutoff(ws.abs_lines, "None", 0.0)
     ws.abs_linesSetNormalization(ws.abs_lines, normalization)
+
+    ws.abs_lines_per_speciesCreateFromLines()
 
     # Atmospheric settings
     ws.AtmosphereSet1D()
