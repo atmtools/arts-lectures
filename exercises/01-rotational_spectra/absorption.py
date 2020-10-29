@@ -4,7 +4,7 @@ import re
 import matplotlib.pyplot as plt
 import numpy as np
 import typhon as ty
-import typhon.arts.workspace
+import pyarts
 from typhon.plots import styles
 
 
@@ -67,7 +67,7 @@ def calculate_absxsec(
         ndarray, ndarray: Frequency grid [Hz], Abs. cross sections [m^2]
     """
     # Create ARTS workspace and load default settings
-    ws = ty.arts.workspace.Workspace(verbosity=0)
+    ws = pyarts.workspace.Workspace(verbosity=0)
     ws.execute_controlfile("general/general.arts")
     ws.execute_controlfile("general/continua.arts")
     ws.execute_controlfile("general/agendas.arts")
