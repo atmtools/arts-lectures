@@ -17,3 +17,4 @@ script/AdvRaRe_script_screen.toc
 **/results
 **/plots
 .ipynb_checkpoints
+__pycache__
