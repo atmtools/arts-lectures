@@ -6,7 +6,7 @@ _Atmospheric Radiative Transfer Simulator_ ([ARTS][arts]).
 The exercises make use of the ARTS Python API.
 
 Students attending the course at Universität Hamburg can use the DKRZ
-JupyterHub as explained [below][arts-uhh].
+JupyterHub as explained [here][arts-uhh].
 
 [arts]: http://radiativetransfer.org/
 [arts-uhh]: https://collaboration.cen.uni-hamburg.de/display/RaRe/ARTS+Lecture
