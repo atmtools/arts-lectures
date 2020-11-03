@@ -1,0 +1,60 @@
+\documentclass[american]{article}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=1cm,bmargin=4cm,lmargin=3cm,rmargin=3cm}
+\usepackage{amstext}
+\usepackage[authoryear]{natbib}
+\usepackage{babel}
+\begin{document}
+
+\title{Advanced radiation and remote sensing }
+
+\author{Manfred Brath, Oliver Lemke, Stefan Bühler}
+\maketitle
+
+\subsection*{Exercise No. 1 -- Calculation of absorption coefficients }
+\begin{enumerate}
+\item Calculate the absorption cross sections in the microwave spectral
+range for the following molecules:
+\begin{itemize}
+\item $\text{HCl}$
+\item $\text{ClO}$
+\item $\text{CO}$
+\item $\text{N}_{2}\text{O}$
+\item $\text{O}_{3}$
+\end{itemize}
+Unless otherwise specified use the parameter setting as given in the
+Jupyter (IPython) notebook "absorption.ipynb"\,.\\
+Questions and tasks:
+\begin{enumerate}
+\item Estimate the rotational constant $B$ (in $\text{GHz}$) for $\text{HCl}$
+and for $\text{CO}$. 
+\item Why is $B$ larger for $\text{HCl}$ than for $\text{CO}$? 
+\item Do you have any idea why $\text{N}_{2}\text{O}$ behaves like a diatomic
+molecule -- and $\text{O}_{3}$ not?
+\item Calculate the reduced mass (in atomic mass units $\text{u}$) of the
+different molecules from the masses of the individual atoms. (For
+the diatomic molecules this is trivial. For $\text{N}_{2}\text{O}$,
+The appropriate mass can be found by careful thinking. Ignore
+$\text{O}_{3}$.) 
+\item Calculate the bond length (in pm) of the various molecules (except
+$\text{O}_{3}$) from the reduced mass and the rotational constant.
+Verify your result with Google. Again $\text{N}_{2}\text{O}$ needs
+some extra thinking. 
+\item Play with different temperatures. How does the rotational spectrum
+change? Can you explain the changes? 
+\end{enumerate}
+\item Investigate some other molecules! 
+\item Show for a diatomic molecule that the moment of inertia is given by
+\begin{equation}
+I=\mu r_{0}^{2}
+\end{equation}
+ where $\mu$ is the reduced mass, defined as
+\begin{equation}
+\mu=\frac{m_{1}m_{2}}{m_{1}+m_{2}}
+\end{equation}
+\end{enumerate}
+
+\end{document}
