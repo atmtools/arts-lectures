@@ -8,32 +8,6 @@ import pyarts
 from typhon.plots import styles
 
 
-def main():
-    # Define parameters
-    species = "N2O"
-    temperature = 300
-    pressure = 800e2
-
-    # Call ARTS to calculate absorption cross sections
-    freq, abs_xsec = calculate_absxsec(species, pressure, temperature)
-
-    # Plot the results.
-    plt.style.use(styles("typhon"))
-
-    fig, ax = plt.subplots()
-    ax.plot(freq / 1e9, abs_xsec)
-    ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
-    ax.set_ylim(bottom=0)
-    ax.set_xlabel("Frequency [GHz]")
-    ax.set_ylabel(r"Abs. cross section [$\sf m^2$]")
-    ax.set_title(f"{tag2tex(species)} p:{pressure/100} hPa T:{temperature:0.0f} K")
-
-    fig.savefig(  # Save figure.
-        f"plots/plot_xsec_{species}_{pressure:.0f}Pa_{temperature:.0f}K.pdf"
-    )
-    plt.show()  # Open an interactive figure
-
-
 def tag2tex(tag):
     """Replace all numbers in a species tag with LaTeX subscripts."""
     return re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag)
@@ -48,7 +22,7 @@ def calculate_absxsec(
     fnum=10_000,
     lineshape="LP",
     normalization="RQ",
-    verbosity=2,
+    verbosity=2
 ):
     """Calculate absorption cross sections.
 
@@ -83,23 +57,19 @@ def calculate_absxsec(
     ws.abs_speciesSet(species=[species])
     ws.ArrayOfIndexSet(ws.abs_species_active, [0])
 
-    # Line catalogue: Perrin or HITRAN
-    ws.ReadSplitARTSCAT(
-        abs_species=ws.abs_species,
-        basename="hitran/hitran_split_artscat5/",
-        fmin=0.9 * fmin,
-        fmax=1.1 * fmax,
-        globalquantumnumbers="",
-        localquantumnumbers="",
-        ignore_missing=0,
+    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
+       basename="spectroscopy/Hitran/"
     )
 
-    # Set the lineshape function for all calculated tags
-    ws.abs_linesSetLineShapeType(ws.abs_lines, lineshape)
-    ws.abs_linesSetCutoff(ws.abs_lines, "None", 0.0)
-    ws.abs_linesSetNormalization(ws.abs_lines, normalization)
+    ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
+    ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
+    ws.abs_lines_per_speciesSetNormalization(option=normalization)
 
-    ws.abs_lines_per_speciesCreateFromLines()
+    # Create a frequency grid
+    ws.VectorNLinSpace(ws.f_grid, fnum, fmin, fmax)
+
+    # Throw away lines outside f_grid
+    ws.abs_lines_per_speciesCompact()
 
     # Atmospheric settings
     ws.AtmosphereSet1D()
@@ -112,9 +82,6 @@ def calculate_absxsec(
 
     ws.AbsInputFromRteScalars()
 
-    # Create a frequency grid
-    ws.VectorNLinSpace(ws.f_grid, fnum, fmin, fmax)
-
     # isotop
     ws.isotopologue_ratiosInitFromBuiltin()
 
@@ -125,7 +92,3 @@ def calculate_absxsec(
     ws.abs_xsec_per_speciesAddLines()
 
     return ws.f_grid.value.copy(), ws.abs_xsec_per_species.value.copy()[0]
-
-
-if __name__ == "__main__":
-    main()
