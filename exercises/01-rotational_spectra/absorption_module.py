@@ -62,8 +62,14 @@ def calculate_absxsec(
     )
 
     ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
-    ws.abs_lines_per_speciesSetCutoff(option="None", value=0.0)
+    ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
     ws.abs_lines_per_speciesSetNormalization(option=normalization)
+
+    # Create a frequency grid
+    ws.VectorNLinSpace(ws.f_grid, fnum, fmin, fmax)
+
+    # Throw away lines outside f_grid
+    ws.abs_lines_per_speciesCompact()
 
     # Atmospheric settings
     ws.AtmosphereSet1D()
@@ -75,9 +81,6 @@ def calculate_absxsec(
     ws.Touch(ws.abs_nlte)
 
     ws.AbsInputFromRteScalars()
-
-    # Create a frequency grid
-    ws.VectorNLinSpace(ws.f_grid, fnum, fmin, fmax)
 
     # isotop
     ws.isotopologue_ratiosInitFromBuiltin()
