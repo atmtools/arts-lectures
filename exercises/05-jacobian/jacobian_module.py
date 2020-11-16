@@ -3,47 +3,10 @@ import re
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pyarts
 import typhon as ty
-import typhon.arts.workspace
 from matplotlib.transforms import blended_transform_factory
 from typhon.arts import xml
-
-
-def main():
-    # select frequency
-    highlight_frequency = None  # Hz
-
-    # Calculate Jacobians (ARTS)
-    jacobian_quantity = "H2O"
-    calc_jacobians(jacobian_quantity=jacobian_quantity)
-
-    # read in everything
-    freq = xml.load("results/f_grid.xml")
-    tau = xml.load("results/optical_thickness.xml")
-    bt = xml.load("results/y.xml")
-    jac = xml.load("results/jacobian.xml")
-    alt = xml.load("results/z_field.xml").ravel()
-    jac /= np.gradient(alt / 1000)  # normalize by layer thickness in km
-
-    ty.plots.styles.use()
-
-    if highlight_frequency is None:
-        fig, (ax0, ax1) = plt.subplots(ncols=2)
-        plot_brightness_temperature(freq, bt, ax=ax0)
-        plot_opacity(freq, tau, ax=ax1)
-        freq_ind = None
-    else:
-        fig, ((ax0, ax1), (ax2, ax3)) = plt.subplots(2, 2)
-        plot_brightness_temperature(freq, bt, where=highlight_frequency, ax=ax0)
-        plot_opacity(freq, tau, where=highlight_frequency, ax=ax1)
-        freq_ind = argclosest(freq, highlight_frequency)
-        plot_jacobian(
-            alt, jac[freq_ind, :], jacobian_quantity=jacobian_quantity, ax=ax2
-        )
-        plot_opacity_profile(alt, tau[:, freq_ind], ax=ax3)
-    fig.tight_layout()
-    fig.savefig(f"plots/jacobians-{freq_ind}.pdf")
-    plt.show()
 
 
 def argclosest(array, value):
@@ -163,7 +126,7 @@ def calc_jacobians(
     jacobian_quantity="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=2
 ):
     """Calculate jacobians for a given species and frequency range."""
-    ws = ty.arts.workspace.Workspace(verbosity=0)
+    ws = pyarts.workspace.Workspace(verbosity=0)
     ws.execute_controlfile("general/general.arts")
     ws.execute_controlfile("general/continua.arts")
     ws.execute_controlfile("general/agendas.arts")
@@ -174,7 +137,7 @@ def calc_jacobians(
     ws.Copy(ws.abs_xsec_agenda, ws.abs_xsec_agenda__noCIA)
 
     # Modified emission agenda to store internally calculated optical thickness.
-    @ty.arts.workspace.arts_agenda
+    @pyarts.workspace.arts_agenda
     def iy_main_agenda__EmissionOpacity(ws):
         ws.ppathCalc()
         ws.iyEmissionStandard()
@@ -216,19 +179,23 @@ def calc_jacobians(
 
     ws.abs_speciesSet(species=list(abs_species))
 
-    # Read a line file and a matching small frequency grid
-    ws.ReadSplitARTSCAT(
-        abs_species=ws.abs_species,
-        basename="hitran/hitran_split_artscat5/",
-        fmin=0.9 * fmin,
-        fmax=1.1 * fmax,
-        globalquantumnumbers="",
-        localquantumnumbers="",
-        ignore_missing=0,
-    )
+    # Create a frequency grid
+    ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
 
-    # Sort the line file according to species
-    ws.abs_lines_per_speciesCreateFromLines()
+    # Read a line file and a matching small frequency grid
+    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
+       basename="spectroscopy/Hitran/"
+    )
+    
+    # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
+    ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
+    # ws.abs_lines_per_speciesSetNormalization(option=normalization)
+    
+    # Create a frequency grid
+    ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
+
+    # Throw away lines outside f_grid
+    ws.abs_lines_per_speciesCompact()
 
     # Atmospheric scenario
     ws.AtmRawRead(basename="planets/Earth/Fascod/midlatitude-summer/midlatitude-summer")
@@ -239,9 +206,6 @@ def calc_jacobians(
         ws.surface_rtprop_agenda,
         ws.surface_rtprop_agenda__Specular_NoPol_ReflFix_SurfTFromt_surface,
     )
-
-    # Create a frequency grid
-    ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
 
     # We select here to use Planck brightness temperatures
     ws.StringSet(ws.iy_unit, "PlanckBT")
@@ -294,7 +258,3 @@ def calc_jacobians(
     ws.WriteXML("ascii", ws.jacobian, "results/jacobian.xml")
     ws.WriteXML("ascii", ws.z_field, "results/z_field.xml")
     ws.WriteXML("ascii", ws.y, "results/y.xml")
-
-
-if __name__ == "__main__":
-    main()
