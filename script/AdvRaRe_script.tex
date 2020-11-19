@@ -490,13 +490,13 @@ will use the terms \emph{vibration} and \emph{oscillation} as synonyms here.
 
 \subsection{Classical harmonic oscillator}
 We start off by looking at a harmonic oscillator in classical
-mechanics (see Figure \ref{Vibration_parabol}). We can picture a
-diatomic molecule as two atoms (point masses), connected by a
-spring. The simplest possible assumption on the restoring force $f$, if
-the molecule is stretched or compressed, is 
+mechanics. We can picture a diatomic molecule as two atoms (point
+masses), connected by a spring. The simplest possible assumption on
+the restoring force $f$, if the molecule is stretched or compressed,
+is
 \begin{equation}
 \label{eq:hooke}
-f = -k (r-r_{eq}) \qquad (\text{Hooke's law})
+f(r) = -k (r-r_{eq}) \qquad (\text{Hooke's law})
 \end{equation}
 at the point $r$ from the equilibrium point $r_{eq}$ with a spring
 constant $k$. 
@@ -528,16 +528,28 @@ faster oscillation, whereas a larger (reduced) mass leads to a slower
 oscillation. Both agrees well with intuition.
 
 The energy that is contained in the vibration will depend on the
-oscillation amplitude $\Delta r_{\mathrm{max}} = \max(r-r_{eq})$. At
+oscillation amplitude $\Delta r_{\mathrm{max}} = r_{\mathrm{max}}-r_{eq}$. At
 the turning points (most stretched or compressed positions), there is
 only potential (=spring) energy, and no kinetic energy. Because of
 energy conservation, the total energy of the vibration stays on this
-same value, only for example then the oscillation goes through
+same value, only for example when the oscillation goes through
 $r=r_{eq}$, all is in the form of kinetic energy. So, we can calculate
 the energy contained in the vibration as
 \begin{equation}
-E = \frac{1}{2}k (r-r_{eq})^2 = \frac{1}{2} k {\Delta r}^2 \quad .
+E = \int_{r_{eq}}^{r_{\mathrm{max}}} f(r)dr = \frac{1}{2}k (r_{\mathrm{max}} - r_{eq})^2 = \frac{1}{2} k {\Delta r_{\mathrm{max}}}^2 \quad .
 \end{equation}
+
+The energy curve has the form of a parabola (see Figure
+\ref{Vibration_parabol}). Classically, the harmonic oscillator has
+exactly one characteristic frequency (the $\tilde{\omega}$ defined
+above) but can have any amplitude of vibration, hence any energy.
+However, experiments show that molecules can vibrate only in discrete
+energy steps. (This can not be explained classically.)
+
+Besides the fundamental vibration frequency there can be vibrational
+overtones, as in the case of a vibrating string. Classically these overtones have
+integer multiples of the fundamental frequency.
+
 
 
 \subsection{Quantum mechanical harmonic oscillator} 
@@ -577,7 +589,7 @@ vibrational levels are equidistant.
 The frequency of the observed spectral line corresponds to the energy
 difference $\tilde{\nu}$ between adjacent levels. Since all the levels
 are equidistant, all the possible `pure' vibrational transitions would
-map to a single spectral line at frequency $\tilde{\nu}$. Put
+map to a single spectral line at frequency $\tilde{\nu}$. But
 typically such `pure' transitions are not allowed, only transitions
 that also involve changes in the rotational state.
 
