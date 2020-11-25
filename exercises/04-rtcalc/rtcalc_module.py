@@ -19,7 +19,7 @@ def run_arts(
     fmin=10e9,
     fmax=250e9,
     fnum=1_000,
-    verbosity=2,
+    verbosity=0,
 ):
     """Perform a radiative transfer simulation.
 

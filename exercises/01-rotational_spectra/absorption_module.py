@@ -22,7 +22,7 @@ def calculate_absxsec(
     fnum=10_000,
     lineshape="LP",
     normalization="RQ",
-    verbosity=2
+    verbosity=0
 ):
     """Calculate absorption cross sections.
 
