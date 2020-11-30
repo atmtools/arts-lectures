@@ -79,7 +79,7 @@ def run_arts(
 
     # Read a line file and a matching small frequency grid
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
-       basename="spectroscopy/Hitran/"
+       basename="spectroscopy/cat/"
     )
 
     # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)

@@ -58,7 +58,7 @@ def calculate_absxsec(
     ws.ArrayOfIndexSet(ws.abs_species_active, [0])
 
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
-       basename="spectroscopy/Hitran/"
+       basename="spectroscopy/cat/"
     )
 
     ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
