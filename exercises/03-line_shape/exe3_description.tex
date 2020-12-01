@@ -1,0 +1,76 @@
+\documentclass[american]{article}
+\usepackage{lmodern}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=1cm,bmargin=4cm,lmargin=3cm,rmargin=3cm}
+\usepackage{color}
+\usepackage[authoryear]{natbib}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\lstset{basicstyle={\footnotesize\bfseries\ttfamily},
+breaklines=true,
+commentstyle={\itshape\color{OliveGreen}},
+keywordstyle={\bfseries\color{blue}},
+showstringspaces=true,
+stringstyle={\bfseries\color{RoyalPurple}}}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+\title{Advanced radiation and remote sensing }
+\author{Manfred Brath, Oliver Lemke, Stefan Bühler}
+\maketitle
+
+\subsection*{Exercise No. 3 -- Line shape}
+
+You can reuse the python script from the first exercise as a starting
+point for this exercise. First, copy the python script from the first
+exercise into the directory of exercise no. 3:
+
+\begin{lstlisting}
+$ cd ~/arts-lectures/exercises/03-line_shape/ 
+$ cp ../01-rotational_spectra/absorption.ipynb line_shape.ipynb
+$ cp ../01-rotational_spectra/absorption_module.py .
+\end{lstlisting}
+\medskip{}
+The ``calculate\_absxsec'' function within your ipython notebook calculates
+absorption cross sections and uses several keyword arguments as inputs,
+among other lineshape and normalization, see also the function definition 
+in ``absorption\_module.py" or the contextual help. 
+Please use ``VP'' (Voigt-Function) as line shape and ``VVH''  (van Vleck-Huber) as normalization:\\
+
+\begin{enumerate}
+\item Choose an individual line of for example water vapor and perform calculations
+over a restricted frequency range for a number of different pressures.
+Keep the temperature constant.
+\begin{itemize}
+\item How does the shape of the spectral lines change?
+\end{itemize}
+By now we investigated absorption in terms of the absorption cross-section
+$\sigma$. Another widely used unit is the absorption coeffiction
+$\alpha$. It takes the number concentration $n$ of the absorber
+into account:
+\begin{equation}
+\alpha=n\cdot\sigma
+\end{equation}
+
+\begin{itemize}
+\item How does the absorption coefficient in the line centre change, if
+pressure is changed?
+\end{itemize}
+\item The full-width at half maximum (FWHM) is a measure of the line width.
+Typhon provides the function \emph{typhon.spectroscopy.linewidth()}
+to calculate the FWHM for a given absorption spectrum. 
+\begin{itemize}
+\item Make a plot of this as a function of altitude (pressure) for a microwave
+line and an infrared absorption line.
+\end{itemize}
+\end{enumerate}
+
+\end{document}
