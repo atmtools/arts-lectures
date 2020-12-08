@@ -33,18 +33,17 @@ def calculate_absxsec(
         fnum (int): Number of frequency grid points.
         lineshape (str): Line shape model.
         normalization (str): Line shape normalization factor.
-        ws (arts-workspace): Cached ARTS workspace.  If set to ``None`` caching
+        ws (workspace): Cached ARTS workspace.  If set to ``None`` caching
                                 is not used.
         verbosity (int): Set ARTS verbosity (``0`` prevents all output).
 
     Returns:
-        ndarray, ndarray: Frequency grid [Hz], Abs. cross sections [m^2]
+        ndarray, ndarray, workspace: Frequency grid [Hz], Abs. cross sections [m^2],  ARTS workspace
     """
     # Create ARTS workspace and load default settings
     reload = False
 
-    if ws != None:
-
+    if ws is not None:
         # check if species fits to cached species
         species_cache = ws.abs_species.value[0][0].split('-')[0]
 
@@ -85,9 +84,6 @@ def calculate_absxsec(
 
         ws.Copy(ws.abs_species_cache, ws.abs_species)
         ws.Copy(ws.abs_lines_per_species_cache, ws.abs_lines_per_species)
-
-
-
 
     ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
     ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
