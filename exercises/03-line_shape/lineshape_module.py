@@ -2,6 +2,7 @@
 import re
 
 import numpy as np
+import scipy as sp
 import pyarts
 
 
@@ -9,6 +10,90 @@ def tag2tex(tag):
     """Replace all numbers in a species tag with LaTeX subscripts."""
     return re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag)
 
+
+def linewidth(f, a):
+    """Calculate the full-width at half maximum (FWHM) of an absorption line.
+
+        Parameters:
+            f (ndarray): Frequency grid.
+            a (ndarray): Line properties
+                (e.g. absorption coefficients or cross-sections).
+
+        Returns:
+            float: Linewidth.
+
+        Examples:
+            >>> f = np.linspace(0, np.pi, 100)
+            >>> a = np.sin(f)**2
+            >>> linewidth(f, a)
+            1.571048056449009
+    """
+
+    idx = np.argmax(a)
+
+    if idx < 3 or idx > len(a) - 3:
+        raise RuntimeError('Maximum is located too near at the edge.\n' +
+                           'Could not found any peak. \n' +
+                           'Please adjust the frequency range.')
+
+    s = sp.interpolate.UnivariateSpline(f, a - np.max(a) / 2, s=0)
+
+    zeros = s.roots()
+    sidx = np.argsort((zeros - f[idx]) ** 2)
+
+    if zeros.size == 2:
+
+        logic = zeros[sidx] > f[idx]
+
+        if np.sum(logic) == 1:
+
+            fwhm = abs(np.diff(zeros[sidx])[0])
+
+        else:
+
+            print('I only found one half maxima.\n'
+                  + 'You should adjust the frequency range to have more reliable results.\n')
+
+            fwhm = abs(zeros[sidx[0]] - f[idx]) * 2
+
+
+    elif zeros.size == 1:
+
+        fwhm = abs(zeros[0] - f[idx]) * 2
+
+        print('I only found one half maxima.\n'
+              + 'You should adjust the frequency range to have more reliable results.\n')
+
+    elif zeros.size > 2:
+
+        sidx = sidx[0:2]
+
+        logic = zeros[sidx] > f[idx]
+
+        print('It seems, that there are more than one peak'
+              + ' within the frequency range.\n'
+              + 'I stick to the maximum peak.\n'
+              + 'But I would suggest to adjust the frequevncy range. \n')
+
+        if np.sum(logic) == 1:
+
+            fwhm = abs(np.diff(zeros[sidx])[0])
+
+        else:
+
+            print('I only found one half maxima.\n'
+                  + 'You should adjust the frequency range to have more reliable results.\n')
+
+            fwhm = abs(zeros[sidx[0]] - f[idx]) * 2
+
+
+
+    elif zeros.size == 0:
+
+        raise RuntimeError('Could not found any peak. :( \n' +
+                           'Probably, frequency range is too small.\n')
+
+    return fwhm
 
 def calculate_absxsec(
     species="N2O",
