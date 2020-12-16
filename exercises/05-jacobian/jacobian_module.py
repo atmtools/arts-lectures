@@ -98,11 +98,10 @@ def plot_opacity(
 
 
 def plot_jacobian(
-    height, jacobian, jacobian_quantity, plotsize=SUBPLOT_WIDTH, aspect=ASPECT_RATIO
-):
+    height, jacobian, jacobian_quantity, plotsize=SUBPLOT_WIDTH, aspect=ASPECT_RATIO):
     p = figure(
-        y_axis_type="log",
-        y_range=(0.4, 70),
+        y_axis_type="linear",
+        y_range=(0.4, 20),
         tooltips=[("x", "$x"), ("value", "@y")],
         width=plotsize,
         aspect_ratio=aspect,
@@ -138,9 +137,9 @@ def plot_jacobian(
 def plot_opacity_profile(height, opacity, plotsize=SUBPLOT_WIDTH, aspect=ASPECT_RATIO):
     p = figure(
         x_axis_type="log",
-        y_axis_type="log",
+        y_axis_type="linear",
         x_range=(1e-8, 1e2),
-        y_range=(0.4, 70),
+        y_range=(0.4, 20),
         tooltips=[("x", "$x"), ("value", "@y")],
         width=plotsize,
         aspect_ratio=aspect,
@@ -177,7 +176,7 @@ def plot_opacity_profile(height, opacity, plotsize=SUBPLOT_WIDTH, aspect=ASPECT_
         vline = Span(location=1, dimension="height", line_color="grey", line_width=0.8)
         p.renderers.extend([vline])
 
-        return p
+    return p
 
 
 def calc_jacobians(

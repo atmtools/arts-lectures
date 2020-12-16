@@ -67,8 +67,8 @@ def plot_jacobian(height, jacobian, jacobian_quantity, ax=None):
     if ax is None:
         ax = plt.gca()
 
-    ax.semilogy(jacobian, height / 1000.0)
-    ax.set_ylim(0.4, 70)
+    ax.plot(jacobian, height / 1000.0)
+    ax.set_ylim(0.4, 20)
     unit = "K/K/km" if jacobian_quantity == "T" else "K/1/km"
     ax.set_xlabel(f"{tag2tex(jacobian_quantity)} Jacobian [{unit}]")
     ax.set_ylabel("$z$ [km]")
@@ -93,11 +93,11 @@ def plot_opacity_profile(height, opacity, ax=None):
     if ax is None:
         ax = plt.gca()
 
-    ax.loglog(opacity, height[::-1] / 1000.0)
+    ax.semilogx(opacity, height[::-1] / 1000.0)
     ax.set_xlim(1e-8, 1e2)
     ax.set_xticks(10.0 ** np.arange(-8, 4, 2))
     ax.set_xlabel(r"Opacity $\tau(z, z_\mathrm{TOA})$")
-    ax.set_ylim(0.4, 70)
+    ax.set_ylim(0.4, 20)
     ax.set_ylabel("$z$ [km]")
 
     try:
@@ -186,11 +186,11 @@ def calc_jacobians(
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
        basename="spectroscopy/Hitran/"
     )
-    
+
     # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
     ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
     # ws.abs_lines_per_speciesSetNormalization(option=normalization)
-    
+
     # Create a frequency grid
     ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
 
