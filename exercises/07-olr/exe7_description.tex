@@ -25,12 +25,12 @@ showstringspaces=true,
 stringstyle={\bfseries\color{RoyalPurple}}}
 \begin{document}
 \title{Advanced radiation and remote sensing }
-\author{Lukas Kluft, Manfred Brath, Stefan Bühler}
+\author{Manfred Brath, Oliver Lemke, Stefan Bühler}
 \maketitle
 
 \subsection*{Exercise No. 7 -- Outgoing Longwave Radiation (OLR)}
 \begin{enumerate}
-\item Run ARTS on the Python script olr.py. This will calculate the spectrum
+\item Run ARTS on the Jupyter notebook olr.ipynb . This will calculate the spectrum
 of outgoing longwave radiation for a midlatitude-summer atmosphere.
 Our calculation trades accuracy for computational efficiency. For
 example, we use only water vapor and carbon dioxide as absorbers.
@@ -53,8 +53,8 @@ in the $\text{CO}_{2}$ band originate?
 \item Use the plot to explain the atmospheric greenhouse effect.
 \end{enumerate}
 \item Investigate how the OLR changes for different atmospheric conditions
-by modifying the input data. Use the \texttt{atmfield.scale(...)}
-and \texttt{atmfield.add(...)} to change the atmospheric data:
+by modifying the input data. Use \texttt{atmfield.scale(...)}
+and \texttt{atmfield.set(...)} to change the atmospheric data:
 \begin{itemize}
 \item Add $1\,$$\,\text{K}$ to the temperature.
 \item Increase the $\text{CO}_{2}$ conentration by a factor of $2$.
