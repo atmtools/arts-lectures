@@ -25,20 +25,20 @@ showstringspaces=true,
 stringstyle={\bfseries\color{RoyalPurple}}}
 \begin{document}
 \title{Advanced radiation and remote sensing }
-\author{Lukas Kluft, Manfred Brath, Stefan Bühler}
+\author{Manfred Brath, Oliver Lemke, Stefan Bühler}
 \maketitle
 
 \subsection*{Exercise No. 8 -- Scattering}
 \begin{enumerate}
-\item Run the Python script scattering.py. This will simulate the radiation
-field at a frequency of $229\,\text{GHz}$ for an atmosphere with
-an ice cloud as well for clear-sky. Since this is a one-dimensional
-simulation (vertical dimension only), the calculated radiation fields
-have two dimensions: altitude (pressure) and zenith angle. The python
-script will plot the two radiation fields in the atmosphere at a zenith
-angle of $180{^\circ}$. Here, the zenith angle describes the viewing
-direction. This means that you are looking at the upward directed
-radiation. The unit is brightness temperature. 
+\item Run the Jupyter notebook \texttt{scattering.ipynb}.
+This will simulate the radiation field at a frequency of $229\,\text{GHz}$ 
+for an atmosphere with an ice cloud as well for clear-sky. Since this 
+is a one-dimensional simulation (vertical dimension only), the calculated 
+radiation fields have two dimensions: altitude (pressure) and zenith angle. 
+The  Jupyter notebook will plot the two radiation fields in the atmosphere at 
+a zenith angle of $180{^\circ}$. Here, the zenith angle describes the viewing
+direction. This means that you are looking at the upward directed radiation. 
+The unit is brightness temperature. 
 \begin{enumerate}
 \item Describe the difference between cloudy and clear-sky radiation. 
 \item Guess where the ice cloud is located in the atmosphere based on the
@@ -46,17 +46,17 @@ two radiation fields?
 \item Explain the difference between cloudy and clear-sky radiation.
 \end{enumerate}
 \item Change the zenith angle (\texttt{zenith\_angle}) from $180{^\circ}$
-to $0{^\circ}$ and rerun the Python script.
+to $0{^\circ}$ and rerun the corresponding cell within the notebook.
 \begin{enumerate}
 \item Describe and explain the difference.
 \item Why is the brightness temperature at the top of the atmosphere so
 low?
 \end{enumerate}
 \item Now you will look at the radiation fields as a function of zenith
-angle (viewing direction) at a fixed pressure level. In the Python
-script, change the variable \texttt{pressure\_level} from \texttt{None}
+angle (viewing direction) at a fixed pressure level. In the Jupyter
+notebook, change the variable \texttt{pressure\_level} from \texttt{None}
 to a pressure level in $\left[\text{Pa}\right]$, which is within
-the ice cloud and rerun the script. 
+the ice cloud and rerun the corresponding cell within the notebook. 
 \begin{enumerate}
 \item Explain the shape of the radiation field without the cloud. 
 \item How does the radiation field with the cloud differ? 

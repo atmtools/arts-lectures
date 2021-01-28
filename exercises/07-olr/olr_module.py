@@ -1,6 +1,7 @@
 """Simulate and plot Earth's outgoing longwave radiation (OLR)."""
 import numpy as np
 import pyarts.workspace
+from typhon import physics as phys
 
 
 def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=0):
@@ -129,3 +130,40 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=0):
     olr = ws.spectral_irradiance_field.value[:, -1, 0, 0, 1].copy()
 
     return ws.f_grid.value.copy(), olr
+
+
+
+def Change_T_with_RH_const(atmfield,DeltaT=0.):
+    """Change the temperature everywhere in the atmosphere by a value of DeltaT
+       but without changing the relative humidity. This results in a changed
+       volume mixing ratio of water vapor.
+
+    Parameters:
+        atmfield (GriddedField4): Atmosphere field.
+        DeltaT (float): Temperature change [K].
+
+    Returns:
+        GriddedField4: Atmosphere field
+    """
+
+    #water vapor
+    vmr = atmfield.get("abs_species-H2O")
+
+    #Temperature
+    T = atmfield.get("T")
+
+    #Reshape pressure p, so that p has the same dimensions
+    p = atmfield.grids[1].reshape(T.shape)
+
+    #Calculate relative humidity
+    rh = phys.vmr2relative_humidity(vmr, p, T)
+
+    #Calculate water vapor volume mixing ratio for changed temperature
+    vmr = phys.relative_humidity2vmr(rh, p, T+DeltaT)
+
+    #update atmosphere field
+    atmfield.set("T", T+DeltaT)
+    atmfield.set("abs_species-H2O", vmr)
+
+    return atmfield
+

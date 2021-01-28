@@ -1,5 +1,3 @@
-%% LyX 2.3.3 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
 \documentclass[american]{article}
 \usepackage{lmodern}
 \usepackage[latin9]{inputenc}
@@ -18,7 +16,7 @@
 \usepackage{babel}
 \usepackage{listings}
 \lstset{basicstyle={\footnotesize\bfseries\ttfamily},
-breaklines=true,
+%	breaklines=true,
 commentstyle={\itshape\color{OliveGreen}},
 keywordstyle={\bfseries\color{blue}},
 showstringspaces=true,
@@ -53,21 +51,21 @@ in the $\text{CO}_{2}$ band originate?
 \item Use the plot to explain the atmospheric greenhouse effect.
 \end{enumerate}
 \item Investigate how the OLR changes for different atmospheric conditions
-by modifying the input data. Use \texttt{atmfield.scale(...)}
-and \texttt{atmfield.set(...)} to change the atmospheric data:
+by modifying the input data. Use \texttt{atmfield.scale(...)},
+\texttt{atmfield.set(...)} and \texttt{Change\_T\_with\_RH\_const(...)} to change the atmospheric data:
 \begin{itemize}
 \item Add $1\,$$\,\text{K}$ to the temperature.
+\item Add $1\,$$\,\text{K}$ to the temperature but hold relative humidity constant.
 \item Increase the $\text{CO}_{2}$ conentration by a factor of $2$.
 \item Increase the $\text{H}_{2}\text{O}$ conentration by a factor of $1.2$.
 \end{itemize}
 \begin{enumerate}
 \item Change it, and calculate and plot the spectrum for each change. 
-\item Compare the spectra for humidity and carbon dioxide changes. Where
-do the changes occur?
+\item Compare the spectra of the changed atmosphere with the unchanged OLR spectrum. Where
+do the changes occur? Explain the differnt effects of the changed atmospheres.
 \item Compare the OLR numbers, which is the more potent greenhouse gas,
 $\text{CO}_{2}$ or $\text{H}_{2}\text{O}$?
-\item What is the effect of the temperature change? Explain.
 \end{enumerate}
 \end{enumerate}
-
+	
 \end{document}
