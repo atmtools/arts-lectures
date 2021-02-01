@@ -1,0 +1,76 @@
+\documentclass[american]{article}
+\usepackage{lmodern}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=1cm,bmargin=4cm,lmargin=3cm,rmargin=3cm}
+\usepackage{color}
+\usepackage{amstext}
+\usepackage[authoryear]{natbib}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\lstset{basicstyle={\footnotesize\bfseries\ttfamily},
+%	breaklines=true,
+commentstyle={\itshape\color{OliveGreen}},
+keywordstyle={\bfseries\color{blue}},
+showstringspaces=true,
+stringstyle={\bfseries\color{RoyalPurple}}}
+\begin{document}
+\title{Advanced radiation and remote sensing }
+\author{Manfred Brath, Oliver Lemke, Stefan Bühler}
+\maketitle
+
+\subsection*{Exercise No. 9 -- Heating rate}
+
+The heating rate denotes the change of atmospheric temperature with time due
+to gain or loss of energy. Here, we consider only the gain or loss due to
+radiation.
+The heating rate including only radiation is 
+\begin{equation}
+\frac{\partial T\left(z\right)}{\partial t}=-\frac{1}{\rho\left( z \right) c_p }\frac{\partial}{\partial z}F_{net}\left( z \right)
+\end{equation}
+with $ \rho\left( z \right)$ the density of dry air\footnote{To keep it simple, we assume dry air. 
+In reality the air is not dry. Nonetheless, the differnces are small.}, $ c_p = 1.0035\, \text{J}\, \text{kg}^{-1} \text{K}^{-1}$ the specific heat 
+capacity of dry air and $ F_{net}$ the net radiation flux. 
+The net radiation flux is 
+\begin{equation}
+F_{net}=F_{up}-F_{down}
+\end{equation}
+with $F_{up}$ and $F_{down}$ the up- and downward radiation flux (irradiance), respectively. 
+The density of dry air is 
+\begin{equation}
+\rho  =\frac{p}{R_s\,T}
+\end{equation}
+with pressure $ p $, temperature  $ T $ and the specific gas constant 
+$R_s = 287.058\, \text{J}\,\text{kg}^{-1} \text{K}^{-1}$.
+
+\begin{enumerate}
+\item Run the Jupyter notebook heating\_rates.ipynb. This will calculate 
+the upward and downward radiation fluxes. Calculate the 
+net flux and plot upward, downward and net flux together in one figure against altitude.
+Explain the plot.
+\item Implement the function \texttt{calc\_heatingrates(...)}. Use the function to calculate 
+the heating rate. Plot the heating rate against altitude and explain the plot. How would a 
+heating rate look like in thermal equilibrium?
+
+\item Uncomment the line with the function call \texttt{calc\_spectral\_irradiance} and
+calculate the spectral upward, downward and net flux. 
+
+\item Use the function \texttt{integrate\_spectral\_irradiance(...)} to integrate the spectral
+irradiance over three continuing bands:
+\begin{enumerate}
+\item the far infrared
+\item the $ \text{CO}_2 $-band
+\item the window-region and above.
+\end{enumerate}
+Calculate the heating rate for each band and plot them together with the total heating rate from Task 2.
+Compare the band heating rates with the total heating rate and explain differences.
+\end{enumerate}
+	
+\end{document}
