@@ -194,7 +194,7 @@ def integrate_spectral_irradiance(f,spectral_flux, fmin=-np.inf, fmax=np.inf ):
         ndarray irradiance [Wm^-2].
     """
 
-    logic=np.logical_and(fmin < f, f < fmax)
+    logic=np.logical_and(fmin <= f, f < fmax)
 
     flux=np.trapz(spectral_flux[logic,:], f[logic], axis=0)
 
