@@ -184,12 +184,10 @@ def calculate_absxsec(
     ws.AtmosphereSet1D()
 
     # Setting the pressure, temperature and vmr
-    ws.NumericSet(ws.rtp_pressure, float(pressure))  # [Pa]
-    ws.NumericSet(ws.rtp_temperature, float(temperature))  # [K]
-    ws.VectorSet(ws.rtp_vmr, np.array([1.0]))  # [VMR]
+    ws.VectorSetConstant(ws.abs_p, 1, float(pressure))  # [Pa]
+    ws.VectorSetConstant(ws.abs_t, 1, float(temperature))  # [K]
+    ws.MatrixSetConstant(ws.abs_vmrs, 1, 1, 1.0)  # [VMR]
     ws.Touch(ws.abs_nlte)
-
-    ws.AbsInputFromRteScalars()
 
     # isotop
     ws.isotopologue_ratiosInitFromBuiltin()
