@@ -71,7 +71,7 @@ def calc_spectral_irradiance(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=97e1
 
     # Read line catalog
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
-       basename="spectroscopy/cat/"
+       basename="spectroscopy/Artscat/"
     )
 
     # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
