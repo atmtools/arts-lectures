@@ -66,7 +66,7 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=0):
 
     # Read line catalog
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
-       basename="spectroscopy/cat/"
+       basename="spectroscopy/Artscat/"
     )
 
     # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)

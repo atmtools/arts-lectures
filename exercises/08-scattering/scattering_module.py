@@ -103,7 +103,7 @@ def scattering(
 
     # Read Catalog (needed for O3):
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
-       basename="spectroscopy/cat/"
+       basename="spectroscopy/Artscat/"
     )
     
     # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
