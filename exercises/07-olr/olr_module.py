@@ -1,47 +1,10 @@
 """Simulate and plot Earth's outgoing longwave radiation (OLR)."""
-import matplotlib.pyplot as plt
 import numpy as np
-import typhon as ty
-import typhon.arts.workspace
+import pyarts.workspace
+from typhon import physics as phys
 
 
-ty.plots.styles.use()
-
-
-def main():
-    # Read input atmosphere
-    atmfield = ty.arts.xml.load("input/midlatitude-summer.xml")
-
-    # Scale the CO2 concentration
-    atmfield.scale("abs_species-CO2", 1)
-    atmfield.add("T", 0)
-
-    # Calculate the outgoing-longwave radiation
-    f, olr = calc_olr(atmfield)
-
-    # Plotting.
-    wn = ty.physics.frequency2wavenumber(f) / 100  # Hz -> cm^-1
-
-    temps = [225, 250, 275, atmfield.get("T", keep_dims=False)[0]]
-    temp_colors = typhon.plots.cmap2rgba("temperature", len(temps))
-
-    fig, ax = plt.subplots()
-    for t, color in sorted(zip(temps, temp_colors)):
-        ax.plot(
-            wn, np.pi * typhon.physics.planck(f, t), label=f"{t:3.1f} K", color=color
-        )
-    ax.plot(wn, olr, color="C0", label="Radiance")
-    ax.legend()
-    ax.set_title(rf"OLR={np.trapz(olr, f):3.2f} $\sf Wm^{{-2}}$")
-    ax.set_xlim(wn.min(), wn.max())
-    ax.set_xlabel(r"Wavenumber [$\sf cm^{-1}$]")
-    ax.set_ylabel(r"Irradiance [$\sf Wm^{-2}Hz^{-1}$]")
-    ax.set_ylim(bottom=0)
-    fig.savefig("plots/olr.pdf")
-    plt.show()
-
-
-def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=2):
+def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=0):
     """Calculate the outgoing-longwave radiation for a given atmosphere.
 
     Parameters:
@@ -56,7 +19,7 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=2):
     Returns:
         ndarray, ndarray: Frequency grid [Hz], OLR [Wm^-2]
     """
-    ws = ty.arts.workspace.Workspace(verbosity=0)
+    ws = pyarts.workspace.Workspace(verbosity=0)
     ws.execute_controlfile("general/general.arts")
     ws.execute_controlfile("general/continua.arts")
     ws.execute_controlfile("general/agendas.arts")
@@ -101,19 +64,20 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=2):
         ]
     )
 
-    # Read a line file and a matching small frequency grid
-    ws.ReadSplitARTSCAT(
-        abs_species=ws.abs_species,
-        basename="hitran/hitran_split_artscat5/",
-        fmin=0.9 * fmin,
-        fmax=1.1 * fmax,
-        globalquantumnumbers="",
-        localquantumnumbers="",
-        ignore_missing=0,
+    # Read line catalog
+    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
+       basename="spectroscopy/Artscat/"
     )
 
-    # Sort the line file according to species
-    ws.abs_lines_per_speciesCreateFromLines()
+    # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
+    ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
+    # ws.abs_lines_per_speciesSetNormalization(option=normalization)
+
+    # Create a frequency grid
+    ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
+
+    # Throw away lines outside f_grid
+    ws.abs_lines_per_speciesCompact()
 
     # Weakly reflecting surface
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.0)
@@ -121,9 +85,6 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=2):
         ws.surface_rtprop_agenda,
         ws.surface_rtprop_agenda__Specular_NoPol_ReflFix_SurfTFromt_surface,
     )
-
-    # Create a frequency grid
-    ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
 
     # No sensor properties
     ws.sensorOff()
@@ -162,7 +123,7 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=2):
     # calculate intensity field
     ws.Tensor3Create("trans_field")
     ws.spectral_radiance_fieldClearskyPlaneParallel(
-        trans_field=ws.trans_field, use_parallel_iy=1
+        trans_field=ws.trans_field, use_parallel_za=0
     )
     ws.spectral_irradiance_fieldFromSpectralRadianceField()
 
@@ -171,5 +132,38 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=2):
     return ws.f_grid.value.copy(), olr
 
 
-if __name__ == "__main__":
-    main()
+
+def Change_T_with_RH_const(atmfield,DeltaT=0.):
+    """Change the temperature everywhere in the atmosphere by a value of DeltaT
+       but without changing the relative humidity. This results in a changed
+       volume mixing ratio of water vapor.
+
+    Parameters:
+        atmfield (GriddedField4): Atmosphere field.
+        DeltaT (float): Temperature change [K].
+
+    Returns:
+        GriddedField4: Atmosphere field
+    """
+
+    #water vapor
+    vmr = atmfield.get("abs_species-H2O")
+
+    #Temperature
+    T = atmfield.get("T")
+
+    #Reshape pressure p, so that p has the same dimensions
+    p = atmfield.grids[1].reshape(T.shape)
+
+    #Calculate relative humidity
+    rh = phys.vmr2relative_humidity(vmr, p, T)
+
+    #Calculate water vapor volume mixing ratio for changed temperature
+    vmr = phys.relative_humidity2vmr(rh, p, T+DeltaT)
+
+    #update atmosphere field
+    atmfield.set("T", T+DeltaT)
+    atmfield.set("abs_species-H2O", vmr)
+
+    return atmfield
+

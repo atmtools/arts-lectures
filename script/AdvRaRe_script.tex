@@ -103,93 +103,9 @@ Banwell and E.\ M.\ McCash (Mc Graw Hill Verlag).
 
 \section{Practical information}
 
-This section can be also be found online on our webpage at
-\url{https://www.mi.uni-hamburg.de/en/arbeitsgruppen/strahlung-und-fernerkundung/intern/howtos/arts-lecture.html}.
-
-\subsection*{Getting started}
-
-The material needed for the course is distributed via a subversion repository.
-Subversion is a version control system and can be used via the command line
-client \verb|svn|.
-
-These steps have to be done only once:
-
-\begin{verbatim}
-cd ~
-svn co https://arts.mi.uni-hamburg.de/svn/rt/arts-lectures/trunk arts-lectures
-\end{verbatim}
-
-\subsection*{Setting up the environment
-(do this once in every new terminal)}
-\label{sec:setup-env}
-
-
-Every time you open a new terminal, you need to source the course environment.
-If you know that your default shell (\verb|echo $SHELL|) is bash and not tcsh,
-you can skip the first command:
-
-\begin{verbatim}
-bash --login
-source ~/arts-lectures/bin/arts-init.bash
-\end{verbatim}
-
-You can check if the ARTS model is found by running:
-
-\begin{verbatim}
-arts --version
-Updating the lecture package
-\end{verbatim}
-
-Use the \verb|svn update| command to ensure that you have the latest version
-of the lecture files:
-
-\begin{verbatim}
-cd ~/arts-lectures
-svn update
-\end{verbatim}
-
-\subsection*{Getting the lecture notes}
-
-Change to the directory \texttt{script/} and run make:
-
-\begin{verbatim}
-cd ~/arts-lectures/script
-make
-\end{verbatim}
-
-This will generate two PDF files, one optimised for viewing on the screen, one
-optimised for printing.
-
-\subsection*{Running the exercises}
-
-Don't forget to run the \verb|source| command from the subsection
-\hyperref[sec:setup-env]{`Setting up the environment'} above. You need to do
-this every time you open a new terminal.
-
-Change to the directory of the exercise and run arts for the exercise
-controlfile. This example runs the first exercise:
-
-\begin{verbatim}
-cd ~/arts-lectures/exercises/01-rotational_spectra
-arts absorption.arts
-\end{verbatim}
-
-This will run the ARTS program on the exercise controlfile. ARTS writes
-several output files that can be found in the \texttt{results/} directory.
-
-To plot the results you can use the Python script in the exercise directory,
-which you can run by typing:
-
-\begin{verbatim}
-python plot_xsec.py
-\end{verbatim}
-
-This script will write the plots as PDF files in the \texttt{plots/}
-subdirectory. You can use Evince to display the plots:
-
-\begin{verbatim}
-evince plots/plot_xsec_N2O_800hPa_300K.pdf
-\end{verbatim}
+Instructions on running the exercises on the DKRZ JupyterHub can be
+found online on our webpage at
+\url{https://collaboration.cen.uni-hamburg.de/display/RaRe/ARTS+Lecture}
 
 \section{Absorption coefficients and absorption cross-sections}
 \label{sec:absorption}
@@ -492,16 +408,21 @@ mass:
 
 \subsection{Quantum mechanics: discrete energy levels}
 
-In Quantum mechanics, you can express energy levels by using the Hamiltonian function (total energy)
+In quantum mechanics, only discrete energy levels for rotation are
+allowed, and these turn out to be:
 \begin{equation}
-\mathcal{H}=\frac{J^2}{2I} \quad ,
+E_\mathcal{J} = \frac{\hbar^2}{2I} \mathcal{J}(\mathcal{J}+1), \qquad
+\text{with} \quad \mathcal{J} = 0, 1, 2, ... \quad ,
 \end{equation}
-which leads to a discrete number of allowed energy solutions:
-\begin{equation}
-E_\mathcal{J} = \frac{\hbar^2}{2I} \mathcal{J}(\mathcal{J}+1), \qquad \text{with} \quad \mathcal{J} = 0, 1, 2, ...
-\end{equation}
-$\hbar$ = $h/2\pi$ is the Planck constant and $\mathcal{J}$ the
-rotational quantum number. The fraction in the above equation is
+where $\hbar$ = $h/2\pi$ is the reduced Planck constant and $\mathcal{J}$ the
+rotational quantum number. Note the similarity to the classical
+expression for the total energy ($E_r={J^2}/{(2I)}$) which we have
+worked out above. The moment of inertia plays exactly the same role in
+both expressions. The classical $J^2$ is replaced by the $\hbar^2
+\mathcal{J}(\mathcal{J}+1)$ expression, so the rotational quantum
+number $\mathcal{J}$ roughly corresponds to the classical angular momentum.
+
+The fraction in the above equation is
 called the \textbf{rotational constant} 
 \begin{equation}
   B = \frac{\hbar^2}{2I} \quad  ,
@@ -569,13 +490,13 @@ will use the terms \emph{vibration} and \emph{oscillation} as synonyms here.
 
 \subsection{Classical harmonic oscillator}
 We start off by looking at a harmonic oscillator in classical
-mechanics (see Figure \ref{Vibration_parabol}). We can picture a
-diatomic molecule as two atoms (point masses), connected by a
-spring. The simplest possible assumption on the restoring force $f$, if
-the molecule is stretched or compressed, is 
+mechanics. We can picture a diatomic molecule as two atoms (point
+masses), connected by a spring. The simplest possible assumption on
+the restoring force $f$, if the molecule is stretched or compressed,
+is
 \begin{equation}
 \label{eq:hooke}
-f = -k (r-r_{eq}) \qquad (\text{Hooke's law})
+f(r) = -k (r-r_{eq}) \qquad (\text{Hooke's law})
 \end{equation}
 at the point $r$ from the equilibrium point $r_{eq}$ with a spring
 constant $k$. 
@@ -607,16 +528,28 @@ faster oscillation, whereas a larger (reduced) mass leads to a slower
 oscillation. Both agrees well with intuition.
 
 The energy that is contained in the vibration will depend on the
-oscillation amplitude $\Delta r_{\mathrm{max}} = \max(r-r_{eq})$. At
+oscillation amplitude $\Delta r_{\mathrm{max}} = r_{\mathrm{max}}-r_{eq}$. At
 the turning points (most stretched or compressed positions), there is
 only potential (=spring) energy, and no kinetic energy. Because of
 energy conservation, the total energy of the vibration stays on this
-same value, only for example then the oscillation goes through
+same value, only for example when the oscillation goes through
 $r=r_{eq}$, all is in the form of kinetic energy. So, we can calculate
 the energy contained in the vibration as
 \begin{equation}
-E = \frac{1}{2}k (r-r_{eq})^2 = \frac{1}{2} k {\Delta r}^2 \quad .
+E = \int_{r_{eq}}^{r_{\mathrm{max}}} f(r)dr = \frac{1}{2}k (r_{\mathrm{max}} - r_{eq})^2 = \frac{1}{2} k {\Delta r_{\mathrm{max}}}^2 \quad .
 \end{equation}
+
+The energy curve has the form of a parabola (see Figure
+\ref{Vibration_parabol}). Classically, the harmonic oscillator has
+exactly one characteristic frequency (the $\tilde{\omega}$ defined
+above) but can have any amplitude of vibration, hence any energy.
+However, experiments show that molecules can vibrate only in discrete
+energy steps. (This can not be explained classically.)
+
+Besides the fundamental vibration frequency there can be vibrational
+overtones, as in the case of a vibrating string. Classically these overtones have
+integer multiples of the fundamental frequency.
+
 
 
 \subsection{Quantum mechanical harmonic oscillator} 
@@ -656,7 +589,7 @@ vibrational levels are equidistant.
 The frequency of the observed spectral line corresponds to the energy
 difference $\tilde{\nu}$ between adjacent levels. Since all the levels
 are equidistant, all the possible `pure' vibrational transitions would
-map to a single spectral line at frequency $\tilde{\nu}$. Put
+map to a single spectral line at frequency $\tilde{\nu}$. But
 typically such `pure' transitions are not allowed, only transitions
 that also involve changes in the rotational state.
 

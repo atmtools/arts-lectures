@@ -30,23 +30,25 @@ stringstyle={\bfseries\color{RoyalPurple}}}
 
 \title{Advanced radiation and remote sensing }
 
-\author{Lukas Kluft, Manfred Brath, Stefan Bühler}
+\author{Manfred Brath, Oliver Lemke, Stefan Bühler}
 \maketitle
 
 \subsection*{Exercise No. 2 -- Vibration}
 
-You can reuse the python script from the first exercise to answer
-the questions on vibrational spectra. First, copy the python script
-from the last exercise into the directory of exercise no. 2:\\
+You can reuse the Jupyter Notebook from the first exercise to answer
+the questions on vibrational spectra. First, copy the Jupyter Notebook and
+the python module from the last exercise into the directory of exercise no. 2:\\
 
 \begin{lstlisting}
 $ cd ~/arts-lectures/exercises/02-vibrational_spectra/ 
-$ cp ../01-rotational_spectra/absorption.py vibration.py
+$ cp ../01-rotational_spectra/absorption.ipynb vibration.ipynb
+$ cp ../01-rotational_spectra/absorption_module.py .
+
 \end{lstlisting}
 \medskip{}
 Next, you have to adjust the frequency limits. For plotting in the
 infrared range, it is common to use wavenumber in $\left[\text{cm}^{-1}\right]$
-instead of frequency. Adapt the plotting part of your python script
+instead of frequency. Adapt the plotting part of your Jupyter notebook
 accordingly. 
 \begin{enumerate}
 \item Find the fundamental band of $\text{CO}$ and plot its spectrum. 

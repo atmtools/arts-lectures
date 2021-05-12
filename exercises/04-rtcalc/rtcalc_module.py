@@ -4,48 +4,7 @@ import re
 import matplotlib.pyplot as plt
 import numpy as np
 import typhon as ty
-import typhon.arts.workspace
-
-
-ty.plots.styles.use()
-
-
-HIGHLIGHT_FREQS = (22.3, 60.0, 118.8, 183.0)
-
-
-def main():
-    # Parameters
-    species = ["N2", "O2", "H2O"]
-    height = 0.0
-    zenith_angle = 0.0
-
-    freq, bt, od = run_arts(species, zenith_angle, height)
-
-    # Plot the zenith opacity with logarithmic scale on y axis
-    fig, ax = plt.subplots()
-    ax.semilogy(freq / 1e9, od)
-    ax.axhline(1, linewidth=0.8, color="#b0b0b0", zorder=0)
-    ax.grid(True, axis="x")
-    ax.set_xticks(HIGHLIGHT_FREQS)
-    ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
-    ax.set_xlabel("Frequency [GHz]")
-    ax.set_ylabel("Zenith opacity")
-    ax.set_title(f"{', '.join(tags2tex(species))}")
-    fig.savefig(f"plots/opacity_{'+'.join(species)}.pdf")
-
-    # # Plot the brithtness temperature
-    # fig, ax = plt.subplots()
-    # ax.plot(freq / 1e9, bt)
-    # ax.grid(True)
-    # ax.set_xticks(HIGHLIGHT_FREQS)
-    # ax.set_xlim(freq.min() / 1e9, freq.max() / 1e9)
-    # ax.set_xlabel("Frequency [GHz]")
-    # ax.set_ylabel("Brightness temperature [K]")
-    # ax.set_title(f"{', '.join(tags2tex(species))}, {height / 1e3} km, {zenith_angle}°")
-    # fig.savefig(
-    #     f"plots/brightness_temperature_{'+'.join(species)}_{height / 1e3:.0f}km_{zenith_angle:.0f}deg.pdf"
-    # )
-    plt.show()
+import pyarts.workspace
 
 
 def tags2tex(tags):
@@ -60,7 +19,7 @@ def run_arts(
     fmin=10e9,
     fmax=250e9,
     fnum=1_000,
-    verbosity=2,
+    verbosity=0,
 ):
     """Perform a radiative transfer simulation.
 
@@ -76,7 +35,7 @@ def run_arts(
         ndarray, ndarray, ndarray:
           Frequency grid [Hz], Brightness temperature [K], Optical depth [1]
     """
-    ws = ty.arts.workspace.Workspace(verbosity=0)
+    ws = pyarts.workspace.Workspace(verbosity=0)
     ws.execute_controlfile("general/general.arts")
     ws.execute_controlfile("general/continua.arts")
     ws.execute_controlfile("general/agendas.arts")
@@ -119,18 +78,19 @@ def run_arts(
     ws.abs_speciesSet(species=species)
 
     # Read a line file and a matching small frequency grid
-    ws.ReadSplitARTSCAT(
-        abs_species=ws.abs_species,
-        basename="hitran/hitran_split_artscat5/",
-        fmin=0.9 * fmin,
-        fmax=1.1 * fmax,
-        globalquantumnumbers="",
-        localquantumnumbers="",
-        ignore_missing=0,
+    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
+       basename="spectroscopy/Artscat/"
     )
 
-    # Sort the line file according to species
-    ws.abs_lines_per_speciesCreateFromLines()
+    # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
+    ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
+    # ws.abs_lines_per_speciesSetNormalization(option=normalization)
+    
+    # Create a frequency grid
+    ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
+
+    # Throw away lines outside f_grid
+    ws.abs_lines_per_speciesCompact()
 
     # Atmospheric scenario
     ws.AtmRawRead(basename="planets/Earth/Fascod/midlatitude-summer/midlatitude-summer")
@@ -141,9 +101,6 @@ def run_arts(
         ws.surface_rtprop_agenda,
         ws.surface_rtprop_agenda__Specular_NoPol_ReflFix_SurfTFromt_surface,
     )
-
-    # Create a frequency grid
-    ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
 
     # No sensor properties
     ws.sensorOff()
@@ -175,7 +132,3 @@ def run_arts(
     ws.yCalc()
 
     return (ws.f_grid.value.copy(), ws.y.value.copy(), ws.y_aux.value[0].copy())
-
-
-if __name__ == "__main__":
-    main()

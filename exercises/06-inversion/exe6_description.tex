@@ -1,5 +1,3 @@
-%% LyX 2.3.3 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
 \documentclass[american]{article}
 \usepackage{lmodern}
 \usepackage[latin9]{inputenc}
@@ -25,7 +23,7 @@ showstringspaces=true,
 stringstyle={\bfseries\color{RoyalPurple}}}
 \begin{document}
 \title{Advanced radiation and remote sensing }
-\author{Lukas Kluft, Manfred Brath, Stefan Bühler}
+\author{Manfred Brath, Oliver Lemke,  Stefan Bühler}
 \maketitle
 
 \subsection*{Exercise No. 6 -- Inversion theory: Optimal Estimation Method (OEM)}
@@ -50,11 +48,11 @@ need more advanced retrieval approaches like an iterative OEM.
 \end{figure}
 
 \begin{enumerate}
-\item Run the Python script \texttt{oem.py} and plot the observed brightness
+\item Run the Jupyter Notebook \texttt{oem.ipynb} and plot the observed brightness
 temperature spectrum \texttt{y\_measurement} as function of frequency
 \texttt{f\_grid}.
-\item Uncomment the line with the function call \texttt{forward\_model()}
-and rerun the script to simulate the brightness temperature spectrum
+\item Uncomment the function call \texttt{forward\_model()} in the 6th cell from top
+and run the cell to simulate the brightness temperature spectrum
 \texttt{y} and the water vapor Jacobian \texttt{K} for the \emph{a
 priori} state.
 \begin{enumerate}
