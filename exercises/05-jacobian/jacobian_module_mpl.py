@@ -6,7 +6,7 @@ import numpy as np
 import pyarts
 import typhon as ty
 from matplotlib.transforms import blended_transform_factory
-from typhon.arts import xml
+from pyarts import xml
 
 
 def argclosest(array, value):
