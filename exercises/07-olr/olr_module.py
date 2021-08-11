@@ -111,7 +111,7 @@ def calc_olr(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=75e12, verbosity=0):
     ws.abs_xsec_agenda_checkedCalc()
     ws.lbl_checkedCalc()
     ws.propmat_clearsky_agenda_checkedCalc()
-    ws.atmfields_checkedCalc(bad_partition_functions_ok=1)
+    ws.atmfields_checkedCalc()
     ws.atmgeom_checkedCalc()
     ws.cloudbox_checkedCalc()
     ws.sensor_checkedCalc()

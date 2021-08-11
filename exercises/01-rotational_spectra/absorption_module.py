@@ -73,20 +73,24 @@ def calculate_absxsec(
 
     # Atmospheric settings
     ws.AtmosphereSet1D()
+    ws.stokes_dim = 1
 
     # Setting the pressure, temperature and vmr
-    ws.VectorSetConstant(ws.abs_p, 1, float(pressure))  # [Pa]
-    ws.VectorSetConstant(ws.abs_t, 1, float(temperature))  # [K]
-    ws.MatrixSetConstant(ws.abs_vmrs, 1, 1, 1.0)  # [VMR]
-    ws.Touch(ws.abs_nlte)
+    ws.rtp_pressure = float(pressure)  # [Pa]
+    ws.rtp_temperature = float(temperature)  # [K]
+    ws.rtp_vmr = np.array([1.0])  # [VMR]
+    ws.Touch(ws.rtp_nlte)
 
     # isotop
     ws.isotopologue_ratiosInitFromBuiltin()
 
     # Calculate absorption cross sections
+    ws.propmat_clearsky_agenda_checked = 1
     ws.lbl_checkedCalc()
-    ws.abs_xsec_agenda_checkedCalc()
-    ws.abs_xsec_per_speciesInit()
-    ws.abs_xsec_per_speciesAddLines()
+    ws.propmat_clearskyInit()
+    ws.propmat_clearskyAddLines()
 
-    return ws.f_grid.value.copy(), ws.abs_xsec_per_species.value.copy()[0]
+    # Convert abs coeff to cross sections on return
+    number_density = pressure / (ty.constants.boltzmann * temperature)
+    return (ws.f_grid.value.copy(),
+            ws.propmat_clearsky.value.data.data[0, 0, :, 0].copy() / number_density)
