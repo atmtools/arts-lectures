@@ -8,7 +8,7 @@ import typhon as ty
 
 from bokeh.plotting import figure
 from bokeh.models import Span, Label, BasicTickFormatter
-from typhon.arts import xml
+from pyarts import xml
 
 ASPECT_RATIO = 3 / 2
 SUBPLOT_WIDTH = 400

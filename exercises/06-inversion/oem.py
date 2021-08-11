@@ -2,8 +2,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import typhon as ty
-import typhon.arts.workspace
-from typhon.arts import xml
+from pyarts.workspace import Workspace
+from pyarts import xml
 from scipy.linalg import inv
 
 
@@ -87,7 +87,7 @@ def forward_model(f_grid, atm_fields_compact, verbosity=2):
     Returns:
         ndarray, ndarray: Frequency grid [Hz], Jacobian [K/1]
     """
-    ws = ty.arts.workspace.Workspace(verbosity=0)
+    ws = Workspace(verbosity=0)
     ws.execute_controlfile("general/general.arts")
     ws.execute_controlfile("general/continua.arts")
     ws.execute_controlfile("general/agendas.arts")
@@ -136,18 +136,13 @@ def forward_model(f_grid, atm_fields_compact, verbosity=2):
     )
 
     # Read a line file and a matching small frequency grid
-    ws.ReadSplitARTSCAT(
-        abs_species=ws.abs_species,
-        basename="hitran/hitran_split_artscat5/",
-        fmin=0.9 * f_grid.min(),
-        fmax=1.1 * f_grid.max(),
-        globalquantumnumbers="",
-        localquantumnumbers="",
-        ignore_missing=0,
+    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
+       basename="spectroscopy/Artscat/"
     )
 
-    # Sort the line file according to species
-    ws.abs_lines_per_speciesCreateFromLines()
+    # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
+    ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
+    # ws.abs_lines_per_speciesSetNormalization(option=normalization)
 
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.4)
 

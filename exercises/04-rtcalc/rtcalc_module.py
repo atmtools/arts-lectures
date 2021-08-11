@@ -131,4 +131,4 @@ def run_arts(
     ws.sensor_checkedCalc()
     ws.yCalc()
 
-    return (ws.f_grid.value.copy(), ws.y.value.copy(), ws.y_aux.value[0].copy())
+    return (ws.f_grid.value.copy(), ws.y.value.copy(), ws.y_aux.value[0].data.copy())

@@ -64,7 +64,7 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0):
     )
 
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
-       basename="spectroscopy/Hitran/"
+       basename="spectroscopy/Artscat/"
     )
 
     # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)

@@ -99,7 +99,7 @@ def scattering(
     )
 
     ws.AtmFieldsAndParticleBulkPropFieldFromCompact()
-    ws.atmfields_checkedCalc(bad_partition_functions_ok=1)
+    ws.atmfields_checkedCalc()
 
     # Read Catalog (needed for O3):
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
@@ -128,7 +128,7 @@ def scattering(
     # Extract particle mass from scattering meta data.
     scat_data_xml = f"scattering/H2O_{phase}/MieSphere_R{radius:.5e}um.xml"
     ws.ScatSpeciesScatAndMetaRead(scat_data_files=[scat_data_xml])
-    particle_mass = ws.scat_meta.value[0][0].mass
+    particle_mass = float(ws.scat_meta.value[0][0].mass)
 
     # Load scattering data and PND field.
     ws.ScatSpeciesInit()
