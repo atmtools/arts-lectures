@@ -18,3 +18,4 @@ script/AdvRaRe_script_screen.toc
 **/plots
 .ipynb_checkpoints
 __pycache__
+.vscode/settings.json
