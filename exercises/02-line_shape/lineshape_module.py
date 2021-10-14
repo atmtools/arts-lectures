@@ -142,7 +142,8 @@ def calculate_absxsec(
 
     if ws is not None:
         # check if species fits to cached species
-        species_cache = ws.abs_species.value[0][0].split('-')[0]
+        temp = str(ws.abs_species.value.data[0][0])
+        species_cache = temp.split('-')[0]
 
         if species == species_cache:
             ws.Copy(ws.abs_species, ws.abs_species_cache)
