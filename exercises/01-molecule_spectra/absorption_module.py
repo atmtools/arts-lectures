@@ -34,7 +34,18 @@ def calculate_absxsec(
         fmax (float): Maximum frequency [Hz].
         fnum (int): Number of frequency grid points.
         lineshape (str): Line shape model.
+                            Available options:
+    	                    DP   	 - 	 Doppler profile,
+	                        LP   	 - 	 Lorentz profile,
+	                        VP   	 - 	 Voigt profile,
+	                        SDVP 	 - 	 Speed-dependent Voigt profile,
+	                        HTP  	 - 	 Hartman-Tran profile.
         normalization (str): Line shape normalization factor.
+                            Available options:
+                            VVH  	 - 	 Van Vleck and Huber,
+                            VVW  	 - 	 Van Vleck and Weisskopf,
+                            RQ   	 - 	 Rosenkranz quadratic,
+                            None 	 - 	 No extra normalization.  
         verbosity (int): Set ARTS verbosity (``0`` prevents all output).
 
     Returns:

@@ -118,7 +118,18 @@ def calculate_absxsec(
         fmax (float): Maximum frequency [Hz].
         fnum (int): Number of frequency grid points.
         lineshape (str): Line shape model.
+                            Available options:
+    	                    DP   	 - 	 Doppler profile,
+	                        LP   	 - 	 Lorentz profile,
+	                        VP   	 - 	 Voigt profile,
+	                        SDVP 	 - 	 Speed-dependent Voigt profile,
+	                        HTP  	 - 	 Hartman-Tran profile.
         normalization (str): Line shape normalization factor.
+                            Available options:
+                            VVH  	 - 	 Van Vleck and Huber,
+                            VVW  	 - 	 Van Vleck and Weisskopf,
+                            RQ   	 - 	 Rosenkranz quadratic,
+                            None 	 - 	 No extra normalization.                        
         ws (workspace): Cached ARTS workspace.  If set to ``None`` caching
                                 is not used.
         verbosity (int): Set ARTS verbosity (``0`` prevents all output).
@@ -131,7 +142,8 @@ def calculate_absxsec(
 
     if ws is not None:
         # check if species fits to cached species
-        species_cache = ws.abs_species.value[0][0].split('-')[0]
+        temp = str(ws.abs_species.value.data[0][0])
+        species_cache = temp.split('-')[0]
 
         if species == species_cache:
             ws.Copy(ws.abs_species, ws.abs_species_cache)
