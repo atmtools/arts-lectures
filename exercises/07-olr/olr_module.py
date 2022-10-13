@@ -1,5 +1,4 @@
 """Simulate and plot Earth's outgoing longwave radiation (OLR)."""
-import numpy as np
 import pyarts.workspace
 from typhon import physics as phys
 
