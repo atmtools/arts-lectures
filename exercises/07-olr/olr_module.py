@@ -4,7 +4,7 @@ import pyarts.workspace
 from typhon import physics as phys
 
 
-def calc_olr(atmfield, nstreams=10, fnum=300, fmin=1.0, fmax=75e12, verbosity=0):
+def calc_olr(atmfield, nstreams=10, fnum=300, fmin=1.0, fmax=75e12, species='default', verbosity=0):
     """Calculate the outgoing-longwave radiation for a given atmosphere.
 
     Parameters:
@@ -13,6 +13,7 @@ def calc_olr(atmfield, nstreams=10, fnum=300, fmin=1.0, fmax=75e12, verbosity=0)
         fnum (int): Number of points in frequency grid.
         fmin (float): Lower frequency limit [Hz].
         fmax (float): Upper frequency limit [Hz].
+        species (List of strings): List fo absorption species. Defaults to "default"
         verbosity (int): Reporting levels between 0 (only error messages)
             and 3 (everything).
 
@@ -37,12 +38,16 @@ def calc_olr(atmfield, nstreams=10, fnum=300, fmin=1.0, fmax=75e12, verbosity=0)
     ws.cloudboxOff()
 
     # Definition of species
-    ws.abs_speciesSet(
-        species=[
-            "H2O,H2O-SelfContCKDMT252, H2O-ForeignContCKDMT252",
-            "CO2, CO2-CKDMT252",
-        ]
-    )
+    if species=='default':
+        ws.abs_speciesSet(
+            species=[
+                "H2O,H2O-SelfContCKDMT252, H2O-ForeignContCKDMT252",
+                "CO2, CO2-CKDMT252",
+            ]
+        )
+    else:
+        ws.abs_speciesSet(species=species)
+        
 
     # Read line catalog
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
@@ -52,10 +57,8 @@ def calc_olr(atmfield, nstreams=10, fnum=300, fmin=1.0, fmax=75e12, verbosity=0)
     # Read cross section data
     ws.ReadXsecData(basename="lines/")
 
-
     # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
-    ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
-    
+    ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)    
     
     # Create a frequency grid
     ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
