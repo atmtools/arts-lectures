@@ -3,7 +3,13 @@ import pyarts.workspace
 from typhon import physics as phys
 
 
-def calc_olr(atmfield, nstreams=10, fnum=300, fmin=1.0, fmax=75e12, species='default', verbosity=0):
+def calc_olr(atmfield,
+             nstreams=10,
+             fnum=300,
+             fmin=1.0,
+             fmax=75e12,
+             species='default',
+             verbosity=0):
     """Calculate the outgoing-longwave radiation for a given atmosphere.
 
     Parameters:
@@ -37,28 +43,22 @@ def calc_olr(atmfield, nstreams=10, fnum=300, fmin=1.0, fmax=75e12, species='def
     ws.cloudboxOff()
 
     # Definition of species
-    if species=='default':
-        ws.abs_speciesSet(
-            species=[
-                "H2O,H2O-SelfContCKDMT252, H2O-ForeignContCKDMT252",
-                "CO2, CO2-CKDMT252",
-            ]
-        )
+    if species == 'default':
+        ws.abs_speciesSet(species=[
+            "H2O, H2O-SelfContCKDMT350, H2O-ForeignContCKDMT350",
+            "CO2, CO2-CKDMT252",
+        ])
     else:
         ws.abs_speciesSet(species=species)
-        
 
     # Read line catalog
-    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
-       basename="lines/"
-    )
+    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
 
     # Read cross section data
     ws.ReadXsecData(basename="lines/")
 
-    # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
-    ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)    
-    
+    ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
+
     # Create a frequency grid
     ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
 
@@ -70,7 +70,7 @@ def calc_olr(atmfield, nstreams=10, fnum=300, fmin=1.0, fmax=75e12, species='def
 
     # Weakly reflecting surface
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.0)
-    
+
     # Atmosphere and surface
     ws.atm_fields_compact = atmfield
     ws.AtmosphereSet1D()
@@ -91,13 +91,12 @@ def calc_olr(atmfield, nstreams=10, fnum=300, fmin=1.0, fmax=75e12, species='def
     ws.Touch(ws.scat_data)
     ws.pnd_fieldZero()
 
-
     # No sensor properties
     ws.sensorOff()
 
     # No jacobian calculations
     ws.jacobianOff()
-   
+
     # Check model atmosphere
     ws.scat_data_checkedCalc()
     ws.atmfields_checkedCalc()
@@ -113,8 +112,7 @@ def calc_olr(atmfield, nstreams=10, fnum=300, fmin=1.0, fmax=75e12, species='def
     return ws.f_grid.value[:], olr
 
 
-
-def Change_T_with_RH_const(atmfield,DeltaT=0.):
+def Change_T_with_RH_const(atmfield, DeltaT=0.):
     """Change the temperature everywhere in the atmosphere by a value of DeltaT
        but without changing the relative humidity. This results in a changed
        volume mixing ratio of water vapor.
@@ -127,24 +125,23 @@ def Change_T_with_RH_const(atmfield,DeltaT=0.):
         GriddedField4: Atmosphere field
     """
 
-    #water vapor
+    # water vapor
     vmr = atmfield.get("abs_species-H2O")
 
-    #Temperature
+    # Temperature
     T = atmfield.get("T")
 
-    #Reshape pressure p, so that p has the same dimensions
+    # Reshape pressure p, so that p has the same dimensions
     p = atmfield.grids[1][:].reshape(T.shape)
 
-    #Calculate relative humidity
+    # Calculate relative humidity
     rh = phys.vmr2relative_humidity(vmr, p, T)
 
-    #Calculate water vapor volume mixing ratio for changed temperature
-    vmr = phys.relative_humidity2vmr(rh, p, T+DeltaT)
+    # Calculate water vapor volume mixing ratio for changed temperature
+    vmr = phys.relative_humidity2vmr(rh, p, T + DeltaT)
 
-    #update atmosphere field
-    atmfield.set("T", T+DeltaT)
+    # update atmosphere field
+    atmfield.set("T", T + DeltaT)
     atmfield.set("abs_species-H2O", vmr)
 
     return atmfield
-

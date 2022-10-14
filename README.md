@@ -7,8 +7,11 @@ The exercises make use of the ARTS Python API.
 
 Required ARTS version pre-release 2.5.6
 
-Students attending the course at Universität Hamburg use VDI system of cen [here][vdi-cen].
+Matching catalogs are [available here][cats].
+
+Students attending the course at Universität Hamburg use VDI system of CEN [here][vdi-cen].
 
 [arts]: http://radiativetransfer.org/
 [vdi-cen]: https://www.cen.uni-hamburg.de/facilities/cen-it/vdi.html
-[typhon-github]: https://github.com/atmtools/typhon
+[typhon-github]: https://github.com/atmtools/typhon/
+[cats]: https://www.radiativetransfer.org/misc/download/unstable/
