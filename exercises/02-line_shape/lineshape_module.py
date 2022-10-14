@@ -2,9 +2,8 @@
 import re
 
 import numpy as np
-import scipy as sp
-import typhon as ty
 import pyarts
+import scipy as sp
 
 
 def tag2tex(tag):
@@ -40,7 +39,7 @@ def linewidth(f, a):
     s = sp.interpolate.UnivariateSpline(f, a - np.max(a) / 2, s=0)
 
     zeros = s.roots()
-    sidx = np.argsort((zeros - f[idx]) ** 2)
+    sidx = np.argsort((zeros - f[idx])**2)
 
     if zeros.size == 2:
 
@@ -52,18 +51,21 @@ def linewidth(f, a):
 
         else:
 
-            print('I only found one half maxima.\n'
-                  + 'You should adjust the frequency range to have more reliable results.\n')
+            print(
+                'I only found one half maxima.\n' +
+                'You should adjust the frequency range to have more reliable results.\n'
+            )
 
             fwhm = abs(zeros[sidx[0]] - f[idx]) * 2
-
 
     elif zeros.size == 1:
 
         fwhm = abs(zeros[0] - f[idx]) * 2
 
-        print('I only found one half maxima.\n'
-              + 'You should adjust the frequency range to have more reliable results.\n')
+        print(
+            'I only found one half maxima.\n' +
+            'You should adjust the frequency range to have more reliable results.\n'
+        )
 
     elif zeros.size > 2:
 
@@ -71,10 +73,10 @@ def linewidth(f, a):
 
         logic = zeros[sidx] > f[idx]
 
-        print('It seems, that there are more than one peak'
-              + ' within the frequency range.\n'
-              + 'I stick to the maximum peak.\n'
-              + 'But I would suggest to adjust the frequevncy range. \n')
+        print('It seems, that there are more than one peak' +
+              ' within the frequency range.\n' +
+              'I stick to the maximum peak.\n' +
+              'But I would suggest to adjust the frequevncy range. \n')
 
         if np.sum(logic) == 1:
 
@@ -82,12 +84,12 @@ def linewidth(f, a):
 
         else:
 
-            print('I only found one half maxima.\n'
-                  + 'You should adjust the frequency range to have more reliable results.\n')
+            print(
+                'I only found one half maxima.\n' +
+                'You should adjust the frequency range to have more reliable results.\n'
+            )
 
             fwhm = abs(zeros[sidx[0]] - f[idx]) * 2
-
-
 
     elif zeros.size == 0:
 
@@ -95,6 +97,7 @@ def linewidth(f, a):
                            'Probably, frequency range is too small.\n')
 
     return fwhm
+
 
 def calculate_absxsec(species="N2O",
                       pressure=800e2,
@@ -209,5 +212,4 @@ def calculate_absxsec(species="N2O",
 
     return (ws.f_grid.value.value.copy(),
             ws.propmat_clearsky.value.data.value[0, 0, :, 0].copy() /
-            number_density,
-            ws)
+            number_density, ws)
