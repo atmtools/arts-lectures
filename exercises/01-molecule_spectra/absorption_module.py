@@ -1,10 +1,8 @@
 """Calculate and plot absorption cross sections."""
 import re
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pyarts
-from typhon.plots import styles
 
 
 def tag2tex(tag):
