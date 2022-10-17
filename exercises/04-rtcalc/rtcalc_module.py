@@ -5,6 +5,8 @@ import numpy as np
 import pyarts.workspace
 
 
+if pyarts.version != "2.5.6":
+    raise RuntimeError("Requires 2.5.6: Remove dirty lm+cutoff workaround before updating")
 def tags2tex(tags):
     """Replace all numbers in every species tag with LaTeX subscripts."""
     return [re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag) for tag in tags]
