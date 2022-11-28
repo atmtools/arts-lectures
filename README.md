@@ -5,9 +5,18 @@ _Atmospheric Radiative Transfer Simulator_ ([ARTS][arts]).
 
 The exercises make use of the ARTS Python API.
 
-Required ARTS version pre-release 2.5.6
+Required ARTS version is pre-release 2.5.6
 
 Matching catalogs are [available here][cats].
+
+The `environment.yml` file can be used to setup a [conda environment][conda]
+with all necessary packages including PyARTS:
+
+```
+mamba env create -f environment.yml
+mamba activate arts-lectures
+jupyter-lab exercises
+```
 
 Students attending the course at Universität Hamburg use VDI system of CEN [here][vdi-cen].
 
@@ -15,3 +24,4 @@ Students attending the course at Universität Hamburg use VDI system of CEN [her
 [vdi-cen]: https://www.cen.uni-hamburg.de/facilities/cen-it/vdi.html
 [typhon-github]: https://github.com/atmtools/typhon/
 [cats]: https://www.radiativetransfer.org/misc/download/unstable/
+[conda]: https://github.com/conda-forge/miniforge
