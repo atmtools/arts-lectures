@@ -8,6 +8,10 @@ import typhon as ty
 from matplotlib.transforms import blended_transform_factory
 from pyarts import xml
 
+if pyarts.version != "2.5.6":
+    raise RuntimeError(
+        "Requires 2.5.6: Remove dirty lm+cutoff workaround before updating")
+
 
 def argclosest(array, value):
     """Returns the index in ``array`` which is closest to ``value``."""
@@ -30,9 +34,10 @@ def plot_brightness_temperature(frequency, y, where=None, ax=None):
 
     if where is not None:
         freq_ind = argclosest(frequency, where)
-        l, = ax.plot(
-            frequency[freq_ind] / 1e9, y[freq_ind], marker="o", color="tab:red"
-        )
+        l, = ax.plot(frequency[freq_ind] / 1e9,
+                     y[freq_ind],
+                     marker="o",
+                     color="tab:red")
         ax.text(
             0.05,
             0.9,
@@ -83,7 +88,10 @@ def plot_jacobian(height, jacobian, jacobian_quantity, ax=None):
         ha="right",
         va="bottom",
         color=lh.get_color(),
-        bbox={"color": "white", "alpha": 0.5},
+        bbox={
+            "color": "white",
+            "alpha": 0.5
+        },
         zorder=2,
         transform=trans,
     )
@@ -95,7 +103,7 @@ def plot_opacity_profile(height, opacity, ax=None):
 
     ax.semilogx(opacity, height[::-1] / 1000.0)
     ax.set_xlim(1e-8, 1e2)
-    ax.set_xticks(10.0 ** np.arange(-8, 4, 2))
+    ax.set_xticks(10.0**np.arange(-8, 4, 2))
     ax.set_xlabel(r"Opacity $\tau(z, z_\mathrm{TOA})$")
     ax.set_ylim(0.4, 20)
     ax.set_ylabel("$z$ [km]")
@@ -115,26 +123,27 @@ def plot_opacity_profile(height, opacity, ax=None):
             va="bottom",
             size="small",
             color=lh.get_color(),
-            bbox={"color": "white", "alpha": 0.5},
+            bbox={
+                "color": "white",
+                "alpha": 0.5
+            },
             zorder=2,
             transform=trans,
         )
         ax.axvline(1, color="ty:darkgrey", linewidth=0.8, zorder=-1)
 
 
-def calc_jacobians(
-    jacobian_quantity="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=0
-):
+def calc_jacobians(jacobian_quantity="H2O",
+                   fmin=150e9,
+                   fmax=200e9,
+                   fnum=200,
+                   verbosity=0):
     """Calculate jacobians for a given species and frequency range."""
     ws = pyarts.workspace.Workspace(verbosity=0)
-    ws.execute_controlfile("general/general.arts")
-    ws.execute_controlfile("general/continua.arts")
-    ws.execute_controlfile("general/agendas.arts")
-    ws.execute_controlfile("general/planet_earth.arts")
+    ws.LegacyContinuaInit()
+    ws.water_p_eq_agendaSet()
+    ws.PlanetSet(option="Earth")
     ws.verbositySetScreen(ws.verbosity, verbosity)
-
-    # Agenda for scalar gas absorption calculation
-    ws.Copy(ws.abs_xsec_agenda, ws.abs_xsec_agenda__noCIA)
 
     # Modified emission agenda to store internally calculated optical thickness.
     @pyarts.workspace.arts_agenda
@@ -142,25 +151,23 @@ def calc_jacobians(
         ws.ppathCalc()
         ws.iyEmissionStandard()
         ws.ppvar_optical_depthFromPpvar_trans_cumulat()
+        ws.Touch(ws.geo_pos)
         ws.WriteXML("ascii", ws.ppvar_optical_depth, "results/optical_thickness.xml")
         ws.WriteXML("ascii", ws.ppvar_p, "results/ppvar_p.xml")
 
-    ws.Copy(ws.iy_main_agenda, iy_main_agenda__EmissionOpacity)
+    ws.iy_main_agenda = iy_main_agenda__EmissionOpacity
 
     # cosmic background radiation
-    ws.Copy(ws.iy_space_agenda, ws.iy_space_agenda__CosmicBackground)
+    ws.iy_space_agendaSet(option="CosmicBackground")
 
     # standard surface agenda (i.e., make use of surface_rtprop_agenda)
-    ws.Copy(ws.iy_surface_agenda, ws.iy_surface_agenda__UseSurfaceRtprop)
-
-    # on-the-fly absorption
-    ws.Copy(ws.propmat_clearsky_agenda, ws.propmat_clearsky_agenda__OnTheFly)
+    ws.iy_surface_agendaSet(option="UseSurfaceRtprop")
 
     # sensor-only path
-    ws.Copy(ws.ppath_agenda, ws.ppath_agenda__FollowSensorLosPath)
+    ws.ppath_agendaSet(option="FollowSensorLosPath")
 
     # no refraction
-    ws.Copy(ws.ppath_step_agenda, ws.ppath_step_agenda__GeometricPath)
+    ws.ppath_step_agendaSet(option="GeometricPath")
 
     # Number of Stokes components to be computed
     ws.IndexSet(ws.stokes_dim, 1)
@@ -183,13 +190,13 @@ def calc_jacobians(
     ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
 
     # Read a line file and a matching small frequency grid
-    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
-       basename="spectroscopy/Hitran/"
-    )
+    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
 
-    # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
-    ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
-    # ws.abs_lines_per_speciesSetNormalization(option=normalization)
+    # FIXME OLE: Cutoff requires line mixing for O2 to be turned off, but
+    # abs_lines_per_speciesTurnOffLineMixing is not yet available in 2.5.6.
+    # Workaround is forcing lbl_checked to true
+    ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
+    ws.lbl_checked = 1
 
     # Create a frequency grid
     ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
@@ -202,10 +209,7 @@ def calc_jacobians(
 
     # Non reflecting surface
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.4)
-    ws.Copy(
-        ws.surface_rtprop_agenda,
-        ws.surface_rtprop_agenda__Specular_NoPol_ReflFix_SurfTFromt_surface,
-    )
+    ws.surface_rtprop_agendaSet(option="Specular_NoPol_ReflFix_SurfTFromt_surface")
 
     # We select here to use Planck brightness temperatures
     ws.StringSet(ws.iy_unit, "PlanckBT")
@@ -243,8 +247,9 @@ def calc_jacobians(
     ws.cloudboxOff()
 
     # Perform RT calculations
-    ws.abs_xsec_agenda_checkedCalc()
-    ws.lbl_checkedCalc()
+    ws.propmat_clearsky_agendaAuto()
+    # FIXME OLE: Commented out for linemixing + cutoff workaround
+    # ws.lbl_checkedCalc()
     ws.propmat_clearsky_agenda_checkedCalc()
     ws.atmfields_checkedCalc()
     ws.atmgeom_checkedCalc()
