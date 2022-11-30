@@ -1,4 +1,9 @@
+**/plots
+**/results
 .DS_Store
+.ipynb_checkpoints
+.vscode/settings.json
+__pycache__
 script/AdvRaRe_script_print.aux
 script/AdvRaRe_script_print.fdb_latexmk
 script/AdvRaRe_script_print.fls
@@ -14,8 +19,4 @@ script/AdvRaRe_script_screen.log
 script/AdvRaRe_script_screen.out
 script/AdvRaRe_script_screen.pdf
 script/AdvRaRe_script_screen.toc
-**/results
-**/plots
-.ipynb_checkpoints
-__pycache__
-.vscode/settings.json
+test/*.pdf
