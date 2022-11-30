@@ -14,6 +14,7 @@ script/AdvRaRe_script_screen.log
 script/AdvRaRe_script_screen.out
 script/AdvRaRe_script_screen.pdf
 script/AdvRaRe_script_screen.toc
+test/*.pdf
 **/results
 **/plots
 .ipynb_checkpoints
