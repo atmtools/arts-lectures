@@ -83,7 +83,6 @@ def scattering(ice_water_path=2.0,
 
     """
     ws = pyarts.workspace.Workspace(verbosity=0)
-    ws.LegacyContinuaInit()
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
 
@@ -121,7 +120,7 @@ def scattering(ice_water_path=2.0,
 
     # Set absorption species
     ws.abs_speciesSet(
-        species=["H2O-PWR98", "O3", "O2-PWR93", "N2-SelfContStandardType"])
+        species=["H2O-PWR98", "O3", "O2-PWR98", "N2-SelfContStandardType"])
 
     # Read atmospheric data
     ws.ReadXML(ws.batch_atm_fields_compact,

@@ -8,10 +8,6 @@ import typhon as ty
 from matplotlib.transforms import blended_transform_factory
 from pyarts import xml
 
-if pyarts.version != "2.5.6":
-    raise RuntimeError(
-        "Requires 2.5.6: Remove dirty lm+cutoff workaround before updating")
-
 
 def argclosest(array, value):
     """Returns the index in ``array`` which is closest to ``value``."""
@@ -140,7 +136,6 @@ def calc_jacobians(jacobian_quantity="H2O",
                    verbosity=0):
     """Calculate jacobians for a given species and frequency range."""
     ws = pyarts.workspace.Workspace(verbosity=0)
-    ws.LegacyContinuaInit()
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
     ws.verbositySetScreen(ws.verbosity, verbosity)
@@ -152,7 +147,8 @@ def calc_jacobians(jacobian_quantity="H2O",
         ws.iyEmissionStandard()
         ws.ppvar_optical_depthFromPpvar_trans_cumulat()
         ws.Touch(ws.geo_pos)
-        ws.WriteXML("ascii", ws.ppvar_optical_depth, "results/optical_thickness.xml")
+        ws.WriteXML("ascii", ws.ppvar_optical_depth,
+                    "results/optical_thickness.xml")
         ws.WriteXML("ascii", ws.ppvar_p, "results/ppvar_p.xml")
 
     ws.iy_main_agenda = iy_main_agenda__EmissionOpacity
@@ -192,11 +188,8 @@ def calc_jacobians(jacobian_quantity="H2O",
     # Read a line file and a matching small frequency grid
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
 
-    # FIXME OLE: Cutoff requires line mixing for O2 to be turned off, but
-    # abs_lines_per_speciesTurnOffLineMixing is not yet available in 2.5.6.
-    # Workaround is forcing lbl_checked to true
     ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
-    ws.lbl_checked = 1
+    ws.abs_lines_per_speciesTurnOffLineMixing()
 
     # Create a frequency grid
     ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
@@ -205,11 +198,13 @@ def calc_jacobians(jacobian_quantity="H2O",
     ws.abs_lines_per_speciesCompact()
 
     # Atmospheric scenario
-    ws.AtmRawRead(basename="planets/Earth/Fascod/midlatitude-summer/midlatitude-summer")
+    ws.AtmRawRead(
+        basename="planets/Earth/Fascod/midlatitude-summer/midlatitude-summer")
 
     # Non reflecting surface
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.4)
-    ws.surface_rtprop_agendaSet(option="Specular_NoPol_ReflFix_SurfTFromt_surface")
+    ws.surface_rtprop_agendaSet(
+        option="Specular_NoPol_ReflFix_SurfTFromt_surface")
 
     # We select here to use Planck brightness temperatures
     ws.StringSet(ws.iy_unit, "PlanckBT")
@@ -248,8 +243,7 @@ def calc_jacobians(jacobian_quantity="H2O",
 
     # Perform RT calculations
     ws.propmat_clearsky_agendaAuto()
-    # FIXME OLE: Commented out for linemixing + cutoff workaround
-    # ws.lbl_checkedCalc()
+    ws.lbl_checkedCalc()
     ws.propmat_clearsky_agenda_checkedCalc()
     ws.atmfields_checkedCalc()
     ws.atmgeom_checkedCalc()

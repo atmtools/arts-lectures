@@ -5,8 +5,6 @@ import numpy as np
 import pyarts.workspace
 
 
-if pyarts.version != "2.5.6":
-    raise RuntimeError("Requires 2.5.6: Remove dirty lm+cutoff workaround before updating")
 def tags2tex(tags):
     """Replace all numbers in every species tag with LaTeX subscripts."""
     return [re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag) for tag in tags]
@@ -36,7 +34,6 @@ def run_arts(
           Frequency grid [Hz], Brightness temperature [K], Optical depth [1]
     """
     ws = pyarts.workspace.Workspace(verbosity=0)
-    ws.LegacyContinuaInit()
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
     ws.iy_main_agendaSet(option="Emission")
@@ -64,12 +61,8 @@ def run_arts(
     # Read a line file and a matching small frequency grid
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
 
-    # FIXME OLE: Cutoff requires line mixing for O2 to be turned off, but
-    # abs_lines_per_speciesTurnOffLineMixing is not yet available in 2.5.6.
-    # Workaround is forcing lbl_checked to true
     ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
-    ws.lbl_checked = 1
-    # ws.abs_lines_per_speciesTurnOffLineMixing()
+    ws.abs_lines_per_speciesTurnOffLineMixing()
 
     # Create a frequency grid
     ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
@@ -107,8 +100,7 @@ def run_arts(
 
     # Perform RT calculations
     ws.propmat_clearsky_agendaAuto()
-    # FIXME OLE: Commented out for linemixing + cutoff workaround
-    # ws.lbl_checkedCalc()
+    ws.lbl_checkedCalc()
     ws.propmat_clearsky_agenda_checkedCalc()
     ws.atmfields_checkedCalc()
     ws.atmgeom_checkedCalc()

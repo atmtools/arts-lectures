@@ -26,7 +26,6 @@ def calc_olr(atmfield,
         ndarray, ndarray: Frequency grid [Hz], OLR [Wm^-2]
     """
     ws = pyarts.workspace.Workspace(verbosity=0)
-    ws.LegacyContinuaInit()
     ws.water_p_eq_agendaSet()
     ws.gas_scattering_agendaSet()
     ws.PlanetSet(option="Earth")
@@ -45,7 +44,7 @@ def calc_olr(atmfield,
     # Definition of species
     if species == 'default':
         ws.abs_speciesSet(species=[
-            "H2O, H2O-SelfContCKDMT350, H2O-ForeignContCKDMT350",
+            "H2O, H2O-SelfContCKDMT400, H2O-ForeignContCKDMT400",
             "CO2, CO2-CKDMT252",
         ])
     else:
@@ -53,6 +52,9 @@ def calc_olr(atmfield,
 
     # Read line catalog
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
+
+    # Load CKDMT400 model data
+    ws.ReadXML(ws.predefined_model_data, "model/mt_ckd_4.0/H2O.xml")
 
     # Read cross section data
     ws.ReadXsecData(basename="lines/")
