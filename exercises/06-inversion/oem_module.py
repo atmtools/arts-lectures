@@ -16,7 +16,6 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0):
         ndarray, ndarray: Frequency grid [Hz], Jacobian [K/1]
     """
     ws = pyarts.workspace.Workspace(verbosity=0)
-    ws.LegacyContinuaInit()
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
     ws.verbositySetScreen(ws.verbosity, verbosity)
@@ -47,12 +46,15 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0):
 
     # Definition of absorption species
     ws.abs_speciesSet(species=[
-        "H2O, H2O-SelfContCKDMT252, H2O-ForeignContCKDMT252",
+        "H2O, H2O-SelfContCKDMT400, H2O-ForeignContCKDMT400",
         "O2-TRE05",
         "N2, N2-CIAfunCKDMT252, N2-CIArotCKDMT252",
     ])
 
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
+
+    # Load CKDMT400 model data
+    ws.ReadXML(ws.predefined_model_data, "model/mt_ckd_4.0/H2O.xml")
 
     # ws.abs_lines_per_speciesLineShapeType(option=lineshape)
     ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
@@ -97,7 +99,7 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0):
         g1=ws.p_grid,
         g2=ws.lat_grid,
         g3=ws.lon_grid,
-        species="H2O, H2O-SelfContCKDMT252, H2O-ForeignContCKDMT252",
+        species="H2O, H2O-SelfContCKDMT400, H2O-ForeignContCKDMT400",
         unit="vmr",
     )
     ws.jacobianClose()

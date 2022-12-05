@@ -29,7 +29,6 @@ def calc_spectral_irradiance(atmfield,
         spectral upward irradiance [Wm^-2 Hz^-1].
     """
     ws = pyarts.workspace.Workspace(verbosity=0)
-    ws.LegacyContinuaInit()
     ws.water_p_eq_agendaSet()
     ws.gas_scattering_agendaSet()
     ws.PlanetSet(option="Earth")
@@ -61,12 +60,15 @@ def calc_spectral_irradiance(atmfield,
 
     # Definition of species
     ws.abs_speciesSet(species=[
-        "H2O,H2O-SelfContCKDMT252, H2O-ForeignContCKDMT252",
+        "H2O, H2O-SelfContCKDMT400, H2O-ForeignContCKDMT400",
         "CO2, CO2-CKDMT252"
     ])
 
     # Read line catalog
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
+
+    # Load CKDMT400 model data
+    ws.ReadXML(ws.predefined_model_data, "model/mt_ckd_4.0/H2O.xml")
 
     # ws.abs_lines_per_speciesLineShapeType(option=lineshape)
     ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)

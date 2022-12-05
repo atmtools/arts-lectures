@@ -54,7 +54,6 @@ def calculate_absxsec(species="N2O",
     """
     # Create ARTS workspace and load default settings
     ws = pyarts.workspace.Workspace(verbosity=0)
-    ws.LegacyContinuaInit()
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
 
@@ -96,7 +95,7 @@ def calculate_absxsec(species="N2O",
     ws.propmat_clearsky_agenda_checked = 1
     ws.propmat_clearskyInit()
     ws.propmat_clearskyAddLines()
-    ws.propmat_clearskyAddConts()
+    ws.propmat_clearskyAddPredefined()
 
     # Convert abs coeff to cross sections on return
     number_density = pressure * vmr / (pyarts.arts.constant.k * temperature)
