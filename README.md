@@ -18,7 +18,7 @@ mamba activate arts-lectures
 jupyter-lab exercises
 ```
 
-Students attending the course at Universität Hamburg use VDI system of CEN [here][vdi-cen].
+Students attending the course at Universität Hamburg use the [VDI system of CEN][vdi-cen].
 
 [arts]: http://radiativetransfer.org/
 [vdi-cen]: https://www.cen.uni-hamburg.de/facilities/cen-it/vdi.html
