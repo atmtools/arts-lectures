@@ -1,0 +1,12 @@
+name: arts-lectures
+channels:
+  - rttools
+  - conda-forge
+  - defaults
+dependencies:
+  - ipympl
+  - jupyterlab
+  - pyarts=2.5.8
+  - python=3.10
+  - typhon
+

@@ -5,13 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pyarts
 import typhon as ty
-
-from bokeh.plotting import figure
-from bokeh.models import Span, Label, BasicTickFormatter
+from matplotlib.transforms import blended_transform_factory
 from pyarts import xml
-
-ASPECT_RATIO = 3 / 2
-SUBPLOT_WIDTH = 400
 
 
 def argclosest(array, value):
@@ -24,134 +19,90 @@ def tag2tex(tag):
     return re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag)
 
 
-def plot_brightness_temperature(
-    frequency, y, where=None, plotsize=SUBPLOT_WIDTH, aspect=ASPECT_RATIO
-):
-    p = figure(
-        x_range=(frequency.min() / 1e9, frequency.max() / 1e9),
-        tooltips=[("x", "$x"), ("value", "@y")],
-        width=plotsize,
-        aspect_ratio=aspect,
-    )
+def plot_brightness_temperature(frequency, y, where=None, ax=None):
+    if ax is None:
+        ax = plt.gca()
 
-    p.line(frequency / 1e9, y, line_width=2)
-    p.xaxis.axis_label = "Frequency / GHz"
-    p.yaxis.axis_label = "T_B / K"
-    p.xgrid.visible = p.ygrid.visible = False
-    p.xaxis.minor_tick_line_color = p.yaxis.minor_tick_line_color = None
+    ax.plot(frequency / 1e9, y)
+    ax.set_xlim(frequency.min() / 1e9, frequency.max() / 1e9)
+    ax.set_xlabel("Frequency [GHz]")
+    ax.set_ylabel(r"$T\mathrm{_B}$ [K]")
 
     if where is not None:
         freq_ind = argclosest(frequency, where)
-        p.circle(
-            x=[frequency[freq_ind] / 1e9],
-            y=[y[freq_ind]],
-            size=10,
-            color=["red"],
-            fill_alpha=0.8,
+        l, = ax.plot(frequency[freq_ind] / 1e9,
+                     y[freq_ind],
+                     marker="o",
+                     color="tab:red")
+        ax.text(
+            0.05,
+            0.9,
+            f"{frequency[freq_ind]/1e9:.2f} GHz",
+            size="small",
+            color=l.get_color(),
+            transform=ax.transAxes,
         )
-        label = Label(
-            x=frequency[freq_ind] / 1e9,
-            y=y[freq_ind],
-            y_offset=3,
-            text=f"{frequency[freq_ind]/1e9:.2f} GHz",
-            text_align="center",
-            render_mode="css",
-            text_color="red",
-        )
-        p.add_layout(label)
-
-    return p
 
 
-def plot_opacity(
-    frequency, opacity, where=None, plotsize=SUBPLOT_WIDTH, aspect=ASPECT_RATIO
-):
-    p = figure(
-        y_axis_type="log",
-        x_range=(frequency.min() / 1e9, frequency.max() / 1e9),
-        y_range=(0.4, 70),
-        tooltips=[("x", "$x"), ("value", "@y")],
-        width=plotsize,
-        aspect_ratio=aspect,
-    )
+def plot_opacity(frequency, opacity, where=None, ax=None):
+    if ax is None:
+        ax = plt.gca()
 
-    p.line(frequency / 1e9, opacity[-1, :], line_width=2)
-    hline = Span(location=1, dimension="width", line_color="gray", line_width=0.8)
-    p.renderers.extend([hline])
-
-    p.xaxis.axis_label = "Frequency / GHz"
-    p.yaxis.axis_label = "Zenith Opacity"
-    p.xgrid.visible = p.ygrid.visible = False
-    p.xaxis.minor_tick_line_color = p.yaxis.minor_tick_line_color = None
+    ax.semilogy(frequency / 1e9, opacity[-1, :])
+    ax.set_xlim(frequency.min() / 1e9, frequency.max() / 1e9)
+    ax.axhline(1, color="ty:darkgrey", linewidth=0.8, zorder=-1)
+    ax.set_xlabel("Frequency [GHz]")
+    ax.set_ylabel("Zenith Opacity")
 
     if where is not None:
         freq_ind = argclosest(frequency, where)
-        p.circle(
-            x=[frequency[freq_ind] / 1e9],
-            y=[opacity[-1, freq_ind]],
-            size=10,
-            color=["red"],
-            fill_alpha=0.8,
+        ax.plot(
+            frequency[freq_ind] / 1e9,
+            opacity[-1, freq_ind],
+            marker="o",
+            color="tab:red",
         )
 
-    return p
 
+def plot_jacobian(height, jacobian, jacobian_quantity, ax=None):
+    if ax is None:
+        ax = plt.gca()
 
-def plot_jacobian(
-    height, jacobian, jacobian_quantity, plotsize=SUBPLOT_WIDTH, aspect=ASPECT_RATIO):
-    p = figure(
-        y_axis_type="linear",
-        y_range=(0.4, 20),
-        tooltips=[("x", "$x"), ("value", "@y")],
-        width=plotsize,
-        aspect_ratio=aspect,
-    )
-
-    l = p.line(jacobian, height / 1000.0, line_width=2)
-
+    ax.plot(jacobian, height / 1000.0)
+    ax.set_ylim(0.4, 20)
     unit = "K/K/km" if jacobian_quantity == "T" else "K/1/km"
-    p.xaxis.axis_label = f"{jacobian_quantity} Jacobian / {unit}"
-    p.yaxis.axis_label = "z / km"
-    p.xgrid.visible = p.ygrid.visible = False
-    p.xaxis.minor_tick_line_color = p.yaxis.minor_tick_line_color = None
-
+    ax.set_xlabel(f"{tag2tex(jacobian_quantity)} Jacobian [{unit}]")
+    ax.set_ylabel("$z$ [km]")
     jac_peak = height[np.abs(jacobian).argmax()] / 1000.0
-    hline = Span(
-        location=jac_peak, dimension="width", line_color="black", line_width=1.5
-    )
-    p.renderers.extend([hline])
-
-    label = Label(
-        x=5,
-        y=jac_peak,
-        x_units="screen",
-        text=f"{jac_peak:.2f} km",
-        text_color="black",
-        render_mode="css",
-    )
-    p.add_layout(label)
-
-    return p
-
-
-def plot_opacity_profile(height, opacity, plotsize=SUBPLOT_WIDTH, aspect=ASPECT_RATIO):
-    p = figure(
-        x_axis_type="log",
-        y_axis_type="linear",
-        x_range=(1e-8, 1e2),
-        y_range=(0.4, 20),
-        tooltips=[("x", "$x"), ("value", "@y")],
-        width=plotsize,
-        aspect_ratio=aspect,
+    trans = blended_transform_factory(ax.transAxes, ax.transData)
+    lh = ax.axhline(jac_peak, color="ty:jetblack", zorder=3)
+    ax.text(
+        1,
+        jac_peak,
+        f"{jac_peak:.2f} km",
+        size="small",
+        ha="right",
+        va="bottom",
+        color=lh.get_color(),
+        bbox={
+            "color": "white",
+            "alpha": 0.5
+        },
+        zorder=2,
+        transform=trans,
     )
 
-    p.line(opacity, height[::-1] / 1000.0, line_width=2)
 
-    p.xaxis.ticker = 10.0 ** np.arange(-8, 4, 2)
-    p.xaxis.axis_label = r"Opacity 𝜏(z, z_TOA)"
-    p.yaxis.axis_label = "z / km"
-    p.xgrid.visible = p.ygrid.visible = False
-    p.xaxis.minor_tick_line_color = p.yaxis.minor_tick_line_color = None
+def plot_opacity_profile(height, opacity, ax=None):
+    if ax is None:
+        ax = plt.gca()
+
+    ax.semilogx(opacity, height[::-1] / 1000.0)
+    ax.set_xlim(1e-8, 1e2)
+    ax.set_xticks(10.0**np.arange(-8, 4, 2))
+    ax.set_xlabel(r"Opacity $\tau(z, z_\mathrm{TOA})$")
+    ax.set_ylim(0.4, 20)
+    ax.set_ylabel("$z$ [km]")
 
     try:
         tau1 = height[::-1][np.where(opacity >= 1)[0][0]]
@@ -159,39 +110,35 @@ def plot_opacity_profile(height, opacity, plotsize=SUBPLOT_WIDTH, aspect=ASPECT_
         pass
     else:
         tau1 /= 1000
-        hline = Span(
-            location=tau1, dimension="width", line_color="black", line_width=1.5
+        trans = blended_transform_factory(ax.transAxes, ax.transData)
+        lh = ax.axhline(tau1, color="ty:jetblack", zorder=3)
+        ax.text(
+            0.05,
+            tau1,
+            f"{tau1:.2f} km",
+            va="bottom",
+            size="small",
+            color=lh.get_color(),
+            bbox={
+                "color": "white",
+                "alpha": 0.5
+            },
+            zorder=2,
+            transform=trans,
         )
-        p.renderers.extend([hline])
-        label = Label(
-            x=5,
-            y=tau1,
-            x_units="screen",
-            text=f"{tau1:.2f} km",
-            text_color="black",
-            render_mode="css",
-        )
-        p.add_layout(label)
-
-        vline = Span(location=1, dimension="height", line_color="grey", line_width=0.8)
-        p.renderers.extend([vline])
-
-    return p
+        ax.axvline(1, color="ty:darkgrey", linewidth=0.8, zorder=-1)
 
 
-def calc_jacobians(
-    jacobian_quantity="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=0
-):
+def calc_jacobians(jacobian_quantity="H2O",
+                   fmin=150e9,
+                   fmax=200e9,
+                   fnum=200,
+                   verbosity=0):
     """Calculate jacobians for a given species and frequency range."""
     ws = pyarts.workspace.Workspace(verbosity=0)
-    ws.execute_controlfile("general/general.arts")
-    ws.execute_controlfile("general/continua.arts")
-    ws.execute_controlfile("general/agendas.arts")
-    ws.execute_controlfile("general/planet_earth.arts")
+    ws.water_p_eq_agendaSet()
+    ws.PlanetSet(option="Earth")
     ws.verbositySetScreen(ws.verbosity, verbosity)
-
-    # Agenda for scalar gas absorption calculation
-    ws.Copy(ws.abs_xsec_agenda, ws.abs_xsec_agenda__noCIA)
 
     # Modified emission agenda to store internally calculated optical thickness.
     @pyarts.workspace.arts_agenda
@@ -199,25 +146,24 @@ def calc_jacobians(
         ws.ppathCalc()
         ws.iyEmissionStandard()
         ws.ppvar_optical_depthFromPpvar_trans_cumulat()
-        ws.WriteXML("ascii", ws.ppvar_optical_depth, "results/optical_thickness.xml")
+        ws.Touch(ws.geo_pos)
+        ws.WriteXML("ascii", ws.ppvar_optical_depth,
+                    "results/optical_thickness.xml")
         ws.WriteXML("ascii", ws.ppvar_p, "results/ppvar_p.xml")
 
-    ws.Copy(ws.iy_main_agenda, iy_main_agenda__EmissionOpacity)
+    ws.iy_main_agenda = iy_main_agenda__EmissionOpacity
 
     # cosmic background radiation
-    ws.Copy(ws.iy_space_agenda, ws.iy_space_agenda__CosmicBackground)
+    ws.iy_space_agendaSet(option="CosmicBackground")
 
     # standard surface agenda (i.e., make use of surface_rtprop_agenda)
-    ws.Copy(ws.iy_surface_agenda, ws.iy_surface_agenda__UseSurfaceRtprop)
-
-    # on-the-fly absorption
-    ws.Copy(ws.propmat_clearsky_agenda, ws.propmat_clearsky_agenda__OnTheFly)
+    ws.iy_surface_agendaSet(option="UseSurfaceRtprop")
 
     # sensor-only path
-    ws.Copy(ws.ppath_agenda, ws.ppath_agenda__FollowSensorLosPath)
+    ws.ppath_agendaSet(option="FollowSensorLosPath")
 
     # no refraction
-    ws.Copy(ws.ppath_step_agenda, ws.ppath_step_agenda__GeometricPath)
+    ws.ppath_step_agendaSet(option="GeometricPath")
 
     # Number of Stokes components to be computed
     ws.IndexSet(ws.stokes_dim, 1)
@@ -240,11 +186,10 @@ def calc_jacobians(
     ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
 
     # Read a line file and a matching small frequency grid
-    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="spectroscopy/Hitran/")
+    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
 
-    # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
-    ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
-    # ws.abs_lines_per_speciesSetNormalization(option=normalization)
+    ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
+    ws.abs_lines_per_speciesTurnOffLineMixing()
 
     # Create a frequency grid
     ws.VectorNLinSpace(ws.f_grid, int(fnum), float(fmin), float(fmax))
@@ -253,14 +198,13 @@ def calc_jacobians(
     ws.abs_lines_per_speciesCompact()
 
     # Atmospheric scenario
-    ws.AtmRawRead(basename="planets/Earth/Fascod/midlatitude-summer/midlatitude-summer")
+    ws.AtmRawRead(
+        basename="planets/Earth/Fascod/midlatitude-summer/midlatitude-summer")
 
     # Non reflecting surface
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.4)
-    ws.Copy(
-        ws.surface_rtprop_agenda,
-        ws.surface_rtprop_agenda__Specular_NoPol_ReflFix_SurfTFromt_surface,
-    )
+    ws.surface_rtprop_agendaSet(
+        option="Specular_NoPol_ReflFix_SurfTFromt_surface")
 
     # We select here to use Planck brightness temperatures
     ws.StringSet(ws.iy_unit, "PlanckBT")
@@ -298,7 +242,7 @@ def calc_jacobians(
     ws.cloudboxOff()
 
     # Perform RT calculations
-    ws.abs_xsec_agenda_checkedCalc()
+    ws.propmat_clearsky_agendaAuto()
     ws.lbl_checkedCalc()
     ws.propmat_clearsky_agenda_checkedCalc()
     ws.atmfields_checkedCalc()

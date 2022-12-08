@@ -3,10 +3,8 @@
 Based on a script by Jakob Doerr.
 """
 import numpy as np
-import matplotlib.pyplot as plt
 import typhon as ty
-import pyarts.workspace
-from matplotlib.ticker import StrMethodFormatter
+import pyarts
 
 
 def argclosest(array, value, retvalue=False):
@@ -16,9 +14,56 @@ def argclosest(array, value, retvalue=False):
     return (idx, array[idx]) if retvalue else idx
 
 
-def scattering(
-    ice_water_path=2.0, num_viewing_angles=19, phase="ice", radius=1.5e2, verbosity=0
-):
+def setup_doit_agendas(ws):
+    # Calculation of the phase matrix
+    @pyarts.workspace.arts_agenda(ws=ws, set_agenda=True)
+    def pha_mat_spt_agenda(ws):
+        # Optimized option:
+        ws.pha_mat_sptFromDataDOITOpt()
+        # Alternative option:
+        # ws.pha_mat_sptFromMonoData
+
+    @pyarts.workspace.arts_agenda(ws=ws, set_agenda=True)
+    def doit_scat_field_agenda(ws):
+        ws.doit_scat_fieldCalcLimb()
+        # Alternative: use the same za grids in RT part and scattering integral part
+        # ws.doit_scat_fieldCalc()
+
+    @pyarts.workspace.arts_agenda(ws=ws, set_agenda=True)
+    def doit_rte_agenda(ws):
+        # Sequential update for 1D
+        ws.cloudbox_fieldUpdateSeq1D()
+
+    @pyarts.workspace.arts_agenda(ws=ws, set_agenda=True)
+    def spt_calc_agenda(ws):
+        ws.opt_prop_sptFromMonoData()
+
+    @pyarts.workspace.arts_agenda(ws=ws, set_agenda=True)
+    def doit_conv_test_agenda(ws):
+        ws.doit_conv_flagAbsBT(epsilon=np.array([0.01]),
+                               max_iterations=100,
+                               nonconv_return_nan=1)
+        ws.Print(ws.doit_iteration_counter, 0)
+
+    ws.doit_conv_test_agenda = doit_conv_test_agenda
+
+    @pyarts.workspace.arts_agenda(ws=ws, set_agenda=True)
+    def doit_mono_agenda(ws):
+        # Prepare scattering data for DOIT calculation (Optimized method):
+        ws.Ignore(ws.f_grid)
+        ws.DoitScatteringDataPrepare()
+        # Perform iterations: 1. scattering integral. 2. RT calculations with
+        # fixed scattering integral field, 3. convergence test
+        ws.cloudbox_field_monoIterate(accelerated=1)
+
+    ws.iy_cloudbox_agendaSet(option="LinInterpField")
+
+
+def scattering(ice_water_path=2.0,
+               num_viewing_angles=19,
+               phase="ice",
+               radius=1.5e2,
+               verbosity=0):
     """Perform a radiative transfer simulation with a simple cloud.
 
     Parameters:
@@ -38,35 +83,27 @@ def scattering(
 
     """
     ws = pyarts.workspace.Workspace(verbosity=0)
-    ws.execute_controlfile("general/general.arts")
-    ws.execute_controlfile("general/continua.arts")
-    ws.execute_controlfile("general/agendas.arts")
-    ws.execute_controlfile("general/agendasDOIT.arts")
-    ws.execute_controlfile("general/planet_earth.arts")
+    ws.water_p_eq_agendaSet()
+    ws.PlanetSet(option="Earth")
+
     ws.verbositySetScreen(ws.verbosity, verbosity)
 
     # Agenda settings
 
-    # Agenda for scalar gas absorption calculation
-    ws.Copy(ws.abs_xsec_agenda, ws.abs_xsec_agenda__noCIA)
-
     # (standard) emission calculation
-    ws.Copy(ws.iy_main_agenda, ws.iy_main_agenda__Emission)
+    ws.iy_main_agendaSet(option="Emission")
 
     # cosmic background radiation
-    ws.Copy(ws.iy_space_agenda, ws.iy_space_agenda__CosmicBackground)
+    ws.iy_space_agendaSet(option="CosmicBackground")
 
     # standard surface agenda (i.e., make use of surface_rtprop_agenda)
-    ws.Copy(ws.iy_surface_agenda, ws.iy_surface_agenda__UseSurfaceRtprop)
+    ws.iy_surface_agendaSet(option="UseSurfaceRtprop")
 
     # sensor-only path
-    ws.Copy(ws.ppath_agenda, ws.ppath_agenda__FollowSensorLosPath)
+    ws.ppath_agendaSet(option="FollowSensorLosPath")
 
     # no refraction
-    ws.Copy(ws.ppath_step_agenda, ws.ppath_step_agenda__GeometricPath)
-
-    # absorption from LUT
-    ws.Copy(ws.propmat_clearsky_agenda, ws.propmat_clearsky_agenda__LookUpTable)
+    ws.ppath_step_agendaSet(option="GeometricPath")
 
     ws.VectorSet(ws.f_grid, np.array([229.0e9]))  # Define f_grid
 
@@ -83,35 +120,35 @@ def scattering(
 
     # Set absorption species
     ws.abs_speciesSet(
-        species=["H2O-PWR98", "O3", "O2-PWR93", "N2-SelfContStandardType"]
-    )
+        species=["H2O-PWR98", "O3", "O2-PWR98", "N2-SelfContStandardType"])
 
     # Read atmospheric data
-    ws.ReadXML(ws.batch_atm_fields_compact, "testdata/chevallierl91_all_extract.xml")
+    ws.ReadXML(ws.batch_atm_fields_compact,
+               "input/chevallierl91_all_extract.xml")
     ws.Extract(ws.atm_fields_compact, ws.batch_atm_fields_compact, 1)
 
     # Add constant profiles for O2 and N2
-    ws.atm_fields_compactAddConstant(
-        name="abs_species-O2", value=0.2095, condensibles=["abs_species-H2O"]
-    )
-    ws.atm_fields_compactAddConstant(
-        name="abs_species-N2", value=0.7808, condensibles=["abs_species-H2O"]
-    )
+    ws.atm_fields_compactAddConstant(name="abs_species-O2",
+                                     value=0.2095,
+                                     condensibles=["abs_species-H2O"])
+    ws.atm_fields_compactAddConstant(name="abs_species-N2",
+                                     value=0.7808,
+                                     condensibles=["abs_species-H2O"])
 
     ws.AtmFieldsAndParticleBulkPropFieldFromCompact()
     ws.atmfields_checkedCalc()
 
     # Read Catalog (needed for O3):
-    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(
-       basename="spectroscopy/Artscat/"
-    )
-    
-    # ws.abs_lines_per_speciesSetLineShapeType(option=lineshape)
-    ws.abs_lines_per_speciesSetCutoff(option="ByLine", value=750e9)
-    # ws.abs_lines_per_speciesSetNormalization(option=normalization)
+    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
+
+    # ws.abs_lines_per_speciesLineShapeType(option=lineshape)
+    ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
+    # ws.abs_lines_per_speciesNormalization(option=normalization)
+
+    # absorption from LUT
+    ws.propmat_clearsky_agendaAuto()
 
     ws.abs_lookupSetup()
-    ws.abs_xsec_agenda_checkedCalc()
     ws.lbl_checkedCalc()
 
     ws.abs_lookupCalc()
@@ -119,34 +156,36 @@ def scattering(
     ws.propmat_clearsky_agenda_checkedCalc()
 
     # Set surface reflectivity (= 1 - emissivity)
-    ws.Copy(
-        ws.surface_rtprop_agenda,
-        ws.surface_rtprop_agenda__Specular_NoPol_ReflFix_SurfTFromt_surface,
-    )
+    ws.surface_rtprop_agendaSet(
+        option="Specular_NoPol_ReflFix_SurfTFromt_surface")
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.0)
 
     # Extract particle mass from scattering meta data.
-    scat_data_xml = f"scattering/H2O_{phase}/MieSphere_R{radius:.5e}um.xml"
-    ws.ScatSpeciesScatAndMetaRead(scat_data_files=[scat_data_xml])
-    particle_mass = float(ws.scat_meta.value[0][0].mass)
+    scat_xml = f"scattering/H2O_{phase}/MieSphere_R{radius:.5e}um"
+    scat_meta = pyarts.arts.ScatteringMetaData()
+    scat_meta.readxml(scat_xml + ".meta")
+    particle_mass = float(scat_meta.mass)
 
     # Load scattering data and PND field.
     ws.ScatSpeciesInit()
     ws.ScatElementsPndAndScatAdd(
-        scat_data_files=[scat_data_xml], pnd_field_files=["./input/pndfield_input.xml"]
-    )
+        scat_data_files=[scat_xml],
+        pnd_field_files=["./input/pndfield_input.xml"])
     ws.scat_dataCalc()
     ws.scat_data_checkedCalc()
 
     # Set the extent of the cloud box.
-    ws.cloudboxSetManually(
-        p1=101300.0, p2=1000.0, lat1=0.0, lat2=0.0, lon1=0.0, lon2=0.0
-    )
+    ws.cloudboxSetManually(p1=101300.0,
+                           p2=1000.0,
+                           lat1=0.0,
+                           lat2=0.0,
+                           lon1=0.0,
+                           lon2=0.0)
 
     # Trim pressure grid to match cloudbox.
     bottom, top = ws.cloudbox_limits.value
-    p = ws.p_grid.value[bottom : top + 1].copy()
-    z = ws.z_field.value[bottom : top + 1, 0, 0].copy()
+    p = ws.p_grid.value[bottom:top + 1].copy()
+    z = ws.z_field.value[bottom:top + 1, 0, 0].copy()
 
     ws.pnd_fieldCalcFrompnd_field_raw()
 
@@ -154,7 +193,7 @@ def scattering(
     iwp0 = np.trapz(particle_mass * ws.pnd_field.value[0, :, 0, 0], z)
 
     # Scale the PND field to get the desired IWP.
-    ws.Tensor4Scale(ws.pnd_field, ws.pnd_field, ice_water_path / iwp0)
+    ws.Tensor4Multiply(ws.pnd_field, ws.pnd_field, ice_water_path / iwp0)
 
     # Get case-specific surface properties from corresponding atmospheric fields
     ws.Extract(ws.z_surface, ws.z_field, 0)
@@ -164,29 +203,16 @@ def scattering(
     ws.atmgeom_checkedCalc()
     ws.cloudbox_checkedCalc()
 
-    @pyarts.workspace.arts_agenda
-    def doit_conv_test_agenda(ws):
-        ws.doit_conv_flagAbsBT(
-            epsilon=np.array([0.01]), max_iterations=100, nonconv_return_nan=1
-        )
-        ws.Print(ws.doit_iteration_counter, 0)
-
-    ws.Copy(ws.doit_conv_test_agenda, doit_conv_test_agenda)
+    setup_doit_agendas(ws)
 
     ws.doit_za_interpSet(interp_method="linear")
 
-    ws.DOAngularGridsSet(N_za_grid=num_viewing_angles, N_aa_grid=37, za_grid_opt_file="")
+    ws.DOAngularGridsSet(N_za_grid=num_viewing_angles,
+                         N_aa_grid=37,
+                         za_grid_opt_file="")
 
-    @pyarts.workspace.arts_agenda
-    def doit_mono_agenda(ws):
-        # Prepare scattering data for DOIT calculation (Optimized method):
-        ws.Ignore(ws.f_grid)
-        ws.DoitScatteringDataPrepare()
-        # Perform iterations: 1. scattering integral. 2. RT calculations with
-        # fixed scattering integral field, 3. convergence test
-        ws.cloudbox_field_monoIterate(accelerated=1)
-
-    ws.Copy(ws.doit_mono_agenda, doit_mono_agenda)
+    # Use lookup table for absorption calculation
+    ws.propmat_clearsky_agendaAuto(use_abs_lookup=1)
 
     # Scattering calculation
     ws.DoitInit()
@@ -194,14 +220,14 @@ def scattering(
     ws.cloudbox_fieldSetClearsky()
     ws.DoitCalc()
 
-    ifield = np.squeeze(ws.cloudbox_field.value.squeeze())
+    ifield = np.squeeze(ws.cloudbox_field.value[:].squeeze())
     ifield = ty.physics.radiance2planckTb(ws.f_grid.value, ifield)
 
     # Clear-sky
-    ws.Tensor4Scale(ws.pnd_field, ws.pnd_field, 0.0)
+    ws.Tensor4Multiply(ws.pnd_field, ws.pnd_field, 0.0)
     ws.DoitCalc()
 
-    ifield_clear = np.squeeze(ws.cloudbox_field.value.squeeze())
+    ifield_clear = np.squeeze(ws.cloudbox_field.value[:].squeeze())
     ifield_clear = ty.physics.radiance2planckTb(ws.f_grid.value, ifield_clear)
 
-    return p, ws.za_grid.value.copy(), ifield, ifield_clear
+    return p, ws.za_grid.value[:].copy(), ifield, ifield_clear
