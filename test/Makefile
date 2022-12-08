@@ -33,7 +33,7 @@ $(foreach i,$(ILIST), \
 		$(word $(i),$(SOURCES)))))
 
 $(TARGETS):
-	$(CONVERT) $<
+	TEXINPUTS=$(PWD)/$(dir $<): $(CONVERT) $<
 
 clean:
 	rm -f $(TARGETS)
