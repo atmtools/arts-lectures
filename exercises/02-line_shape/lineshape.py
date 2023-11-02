@@ -207,8 +207,28 @@ def calculate_absxsec(species="N2O",
     ws.propmat_clearskyAddPredefined()
 
     # Convert abs coeff to cross sections on return
-    number_density = pressure * vmr / (pyarts.arts.constant.k * temperature)
+    number_density = pressure * vmr / (pyarts.arts.constants.k * temperature)
 
     return (ws.f_grid.value.value.copy(),
             ws.propmat_clearsky.value.data.value[0, 0, :, 0].copy() /
             number_density, ws)
+
+
+#%%  Run module as script
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+
+    species = "H2O"
+    temperature = 300 #[K]
+    pressure = 101325 #[Pa]
+    cache = None  # cache for ARTS workspace
+
+    # Call ARTS to calculate absorption cross sections
+    freq, abs_xsec, cache = calculate_absxsec(species, pressure, temperature, ws=cache)
+
+    fig, ax = plt.subplots()
+    ax.plot(freq, abs_xsec)
+    ax.set_ylim(bottom=0)
+    ax.set_xlabel("Frequency [GHz]")
+    ax.set_ylabel(r"Abs. cross section [$\sf m^2$]")
+    plt.show()
