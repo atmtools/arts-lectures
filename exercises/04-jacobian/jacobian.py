@@ -1,12 +1,12 @@
+#%% Import modules and define functions
 """Calculate and plot clear-sky Jacobians."""
 import re
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pyarts
-import typhon as ty
 from matplotlib.transforms import blended_transform_factory
-from pyarts import xml
+
 
 
 def argclosest(array, value):
@@ -50,7 +50,7 @@ def plot_opacity(frequency, opacity, where=None, ax=None):
 
     ax.semilogy(frequency / 1e9, opacity[-1, :])
     ax.set_xlim(frequency.min() / 1e9, frequency.max() / 1e9)
-    ax.axhline(1, color="ty:darkgrey", linewidth=0.8, zorder=-1)
+    ax.axhline(1, color="darkgrey", linewidth=0.8, zorder=-1)
     ax.set_xlabel("Frequency [GHz]")
     ax.set_ylabel("Zenith Opacity")
 
@@ -75,7 +75,7 @@ def plot_jacobian(height, jacobian, jacobian_quantity, ax=None):
     ax.set_ylabel("$z$ [km]")
     jac_peak = height[np.abs(jacobian).argmax()] / 1000.0
     trans = blended_transform_factory(ax.transAxes, ax.transData)
-    lh = ax.axhline(jac_peak, color="ty:jetblack", zorder=3)
+    lh = ax.axhline(jac_peak, color="black", zorder=3)
     ax.text(
         1,
         jac_peak,
@@ -111,7 +111,7 @@ def plot_opacity_profile(height, opacity, ax=None):
     else:
         tau1 /= 1000
         trans = blended_transform_factory(ax.transAxes, ax.transData)
-        lh = ax.axhline(tau1, color="ty:jetblack", zorder=3)
+        lh = ax.axhline(tau1, color="black", zorder=3)
         ax.text(
             0.05,
             tau1,
@@ -126,7 +126,7 @@ def plot_opacity_profile(height, opacity, ax=None):
             zorder=2,
             transform=trans,
         )
-        ax.axvline(1, color="ty:darkgrey", linewidth=0.8, zorder=-1)
+        ax.axvline(1, color="darkgrey", linewidth=0.8, zorder=-1)
 
 
 def calc_jacobians(jacobian_quantity="H2O",
@@ -134,7 +134,18 @@ def calc_jacobians(jacobian_quantity="H2O",
                    fmax=200e9,
                    fnum=200,
                    verbosity=0):
-    """Calculate jacobians for a given species and frequency range."""
+    """Calculate jacobians for a given species and frequency range and 
+       save the result as arts-xml-files.
+
+    Parameters:
+        jacobian_quantity (str): Species tag for which to calculate the
+            jacobian.
+        fmin (float): Minimum frequency [Hz].
+        fmax (float): Maximum frequency [Hz].
+        fnum (int): Number of frequency grid points.
+        verbosity (int): ARTS verbosity level.    
+    
+    """
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
@@ -257,3 +268,23 @@ def calc_jacobians(jacobian_quantity="H2O",
     ws.WriteXML("ascii", ws.jacobian, "results/jacobian.xml")
     ws.WriteXML("ascii", ws.z_field, "results/z_field.xml")
     ws.WriteXML("ascii", ws.y, "results/y.xml")
+
+#%% Calculate and plot Jacobians
+if __name__ == "__main__":
+
+    # Calculate Jacobians (ARTS)
+    jacobian_quantity = "H2O"
+    calc_jacobians(jacobian_quantity=jacobian_quantity)
+
+    # read in data
+    freq = np.array(pyarts.xml.load("results/f_grid.xml"))    
+    jac = np.array(pyarts.xml.load("results/jacobian.xml"))
+    alt = np.array(pyarts.xml.load("results/z_field.xml")).ravel()
+    jac /= np.gradient(alt / 1000)  # normalize by layer thickness in km
+
+    # plot jacobian   
+    highlight_frequency = 180e9  # Hz
+    fig, ax = plt.subplots()
+    freq_ind = argclosest(freq, highlight_frequency)
+    plot_jacobian(
+        alt, jac[freq_ind, :], jacobian_quantity=jacobian_quantity, ax=ax)
