@@ -1,6 +1,6 @@
+#%% Import modules and define functions
 """Calculate and plot zenith opacity and brightness temperatures. """
 import re
-
 import numpy as np
 import pyarts.workspace
 
@@ -110,3 +110,29 @@ def run_arts(
 
     return (ws.f_grid.value[:].copy(), ws.y.value[:].copy(),
             ws.y_aux.value[0][:].copy())
+
+
+#%% Run module as script
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+
+    species = ["N2", "O2", "H2O"]
+    height = 0.0 # m
+    zenith_angle = 0.0  # deg
+
+    # Run the radiative transfer simulation to get the frequency grid,  
+    # brightness temperature and optical depth    
+    freq, bt, od = run_arts(species, zenith_angle, height)
+
+    # Plot the zenith opacity with logarithmic scale on y axis
+    fig, ax = plt.subplots()
+    ax.semilogy(freq, od)               
+    ax.set_xlabel("Frequency [Hz]")
+    ax.set_ylabel("Zenith opacity")
+
+    # Plot the brightness temperature
+    fig, ax = plt.subplots()
+    ax.plot(freq, bt)        
+    ax.set_xlabel("Frequency [GHz]")
+    ax.set_ylabel("Brightness temperature [K]")
+   
