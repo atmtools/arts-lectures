@@ -3,8 +3,25 @@
 Based on a script by Jakob Doerr.
 """
 import numpy as np
-import typhon as ty
 import pyarts
+
+
+'function taken from typhon.physics'
+def radiance2planckTb(f, r):
+    """Convert spectral radiance to Planck brightness temperture.
+
+    Parameters:
+        f (float or ndarray): Frequency [Hz].
+        r (float or ndarray): Spectral radiance [W/(m2*Hz*sr)].
+
+    Returns:
+        float or ndarray: Planck brightness temperature [K].
+    """
+    c = pyarts.arts.constants.c
+    k = pyarts.arts.constants.k
+    h = pyarts.arts.constants.h
+
+    return h / k * f / np.log(np.divide((2 * h / c**2) * f**3, r) + 1)
 
 
 def argclosest(array, value, retvalue=False):
@@ -221,13 +238,13 @@ def scattering(ice_water_path=2.0,
     ws.DoitCalc()
 
     ifield = np.squeeze(ws.cloudbox_field.value[:].squeeze())
-    ifield = ty.physics.radiance2planckTb(ws.f_grid.value, ifield)
+    ifield = radiance2planckTb(ws.f_grid.value, ifield)
 
     # Clear-sky
     ws.Tensor4Multiply(ws.pnd_field, ws.pnd_field, 0.0)
     ws.DoitCalc()
 
     ifield_clear = np.squeeze(ws.cloudbox_field.value[:].squeeze())
-    ifield_clear = ty.physics.radiance2planckTb(ws.f_grid.value, ifield_clear)
+    ifield_clear = radiance2planckTb(ws.f_grid.value, ifield_clear)
 
     return p, ws.za_grid.value[:].copy(), ifield, ifield_clear
