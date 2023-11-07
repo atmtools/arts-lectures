@@ -5,7 +5,7 @@ _Atmospheric Radiative Transfer Simulator_ ([ARTS][arts]).
 
 The exercises make use of the ARTS Python API.
 
-Required ARTS version is pre-release 2.5.8
+Required ARTS version is pre-release 2.5.12
 
 Matching catalogs are [available here][cats].
 
