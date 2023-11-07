@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import colors
 
+
 # %% Helper functions taken from the typhon package
 def cmap2rgba(cmap=None, N=None, interpolate=True):
     """Convert a colormap into a list of RGBA values.
@@ -40,10 +41,10 @@ def cmap2rgba(cmap=None, N=None, interpolate=True):
 
     if interpolate and isinstance(cmap, colors.ListedColormap):
         # `ListedColormap` does not support lookup table interpolation.
-        cmap = colors.LinearSegmentedColormap.from_list('', cmap.colors)
+        cmap = colors.LinearSegmentedColormap.from_list("", cmap.colors)
         return cmap(np.linspace(0, 1, N))
 
-    return plt.get_cmap(cmap.name, lut=nlut)(np.linspace(0, 1, N)) 
+    return plt.get_cmap(cmap.name, lut=nlut)(np.linspace(0, 1, N))
 
 
 def e_eq_water_mk(T):
@@ -78,18 +79,21 @@ def e_eq_water_mk(T):
 
     """
     if np.any(T <= 0):
-        raise ValueError('Temperatures must be larger than 0 Kelvin.')
+        raise ValueError("Temperatures must be larger than 0 Kelvin.")
 
     # Give the natural log of saturation vapor pressure over water in Pa
 
-    e = (54.842763
-         - 6763.22 / T
-         - 4.21 * np.log(T)
-         + 0.000367 * T
-         + np.tanh(0.0415 * (T - 218.8))
-         * (53.878 - 1331.22 / T - 9.44523 * np.log(T) + 0.014025 * T))
+    e = (
+        54.842763
+        - 6763.22 / T
+        - 4.21 * np.log(T)
+        + 0.000367 * T
+        + np.tanh(0.0415 * (T - 218.8))
+        * (53.878 - 1331.22 / T - 9.44523 * np.log(T) + 0.014025 * T)
+    )
 
     return np.exp(e)
+
 
 def relative_humidity2vmr(RH, p, T, e_eq=None):
     r"""Convert relative humidity into water vapor VMR.
@@ -132,6 +136,7 @@ def relative_humidity2vmr(RH, p, T, e_eq=None):
         e_eq = e_eq_water_mk
 
     return RH * e_eq(T) / p
+
 
 def vmr2relative_humidity(vmr, p, T, e_eq=None):
     r"""Convert water vapor VMR into relative humidity.
@@ -228,7 +233,6 @@ def Change_T_with_RH_const(atmfield, DeltaT=0.0):
     atmfield.set("abs_species-H2O", vmr)
 
     return atmfield
-
 
 
 def calc_olr_from_atmfield(

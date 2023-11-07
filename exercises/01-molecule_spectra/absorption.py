@@ -1,4 +1,4 @@
-#%% Import modules and define functions
+# %% Import modules and define functions
 """Calculate and plot absorption cross sections."""
 import re
 
@@ -11,17 +11,19 @@ def tag2tex(tag):
     return re.sub("([a-zA-Z]+)([0-9]+)", r"\1$_{\2}$", tag)
 
 
-def calculate_absxsec(species="N2O",
-                      pressure=800e2,
-                      temperature=300.0,
-                      fmin=10e9,
-                      fmax=2000e9,
-                      fnum=10_000,
-                      lineshape="VP",
-                      normalization="VVH",
-                      verbosity=0,
-                      vmr=0.01,
-                      lines_off=0):
+def calculate_absxsec(
+    species="N2O",
+    pressure=800e2,
+    temperature=300.0,
+    fmin=10e9,
+    fmax=2000e9,
+    fnum=10_000,
+    lineshape="VP",
+    normalization="VVH",
+    verbosity=0,
+    vmr=0.01,
+    lines_off=0,
+):
     """Calculate absorption cross sections.
 
     Parameters:
@@ -65,7 +67,7 @@ def calculate_absxsec(species="N2O",
 
     # Define absorption species
     ws.abs_speciesSet(species=[species])
-    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename='lines/')
+    ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
     ws.abs_lines_per_speciesLineShapeType(option=lineshape)
     ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
     ws.abs_lines_per_speciesNormalization(option=normalization)
@@ -101,31 +103,32 @@ def calculate_absxsec(species="N2O",
     # Convert abs coeff to cross sections on return
     number_density = pressure * vmr / (pyarts.arts.constants.k * temperature)
 
-    return (ws.f_grid.value.value.copy(),
-            ws.propmat_clearsky.value.data.value[0, 0, :, 0].copy() /
-            number_density)
+    return (
+        ws.f_grid.value.value.copy(),
+        ws.propmat_clearsky.value.data.value[0, 0, :, 0].copy() / number_density,
+    )
 
-#%%  Run module as script
+
+# %%  Run module as script
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     # Define parameters
-    species="N2O"
-    pressure=1000e2
-    temperature=300.0
-    fmin=1e12
-    fmax=1e14
-    fnum=10_000
+    species = "N2O"
+    pressure = 1000e2
+    temperature = 300.0
+    fmin = 1e12
+    fmax = 1e14
+    fnum = 10_000
 
     # Calculate absorption cross sections
-    f_grid, absxsec = calculate_absxsec(species,pressure,
-                                        temperature,fmin,fmax,fnum)
+    f_grid, absxsec = calculate_absxsec(
+        species, pressure, temperature, fmin, fmax, fnum
+    )
 
     # Plot absorption cross sections
     fig, ax = plt.subplots()
-    ax.semilogy(f_grid, absxsec)    
+    ax.semilogy(f_grid, absxsec)
     ax.set_xlabel("Frequency [Hz]")
     ax.set_ylabel(r"Abs. cross section [$\sf m^2$]")
     plt.show()
-
-

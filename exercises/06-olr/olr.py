@@ -12,7 +12,7 @@ def calc_olr_from_profiles(
     O2=0.21,
     CO2=400e-6,
     CH4=1.8e-6,
-    O3=0.,
+    O3=0.0,
     surface_altitude=0.0,
     nstreams=10,
     fnum=300,
@@ -20,7 +20,7 @@ def calc_olr_from_profiles(
     fmax=75e12,
     verbosity=0,
 ):
-    '''Calculate the outgoing-longwave radiation for a given atmosphere profiles.
+    """Calculate the outgoing-longwave radiation for a given atmosphere profiles.
 
     Parameters:
 
@@ -43,7 +43,7 @@ def calc_olr_from_profiles(
     Returns:
         ndarray, ndarray: Frequency grid [Hz], OLR [Wm^-2]
 
-    '''
+    """
 
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
@@ -65,7 +65,7 @@ def calc_olr_from_profiles(
             "CH4",
             "O2,O2-CIAfunCKDMT100",
             "N2, N2-CIAfunCKDMT252, N2-CIArotCKDMT252",
-            "O3"
+            "O3",
         ]
     )
 
@@ -96,8 +96,8 @@ def calc_olr_from_profiles(
     # Atmosphere and surface
     ws.Touch(ws.lat_grid)
     ws.Touch(ws.lon_grid)
-    ws.lat_true=np.array([0.])
-    ws.lon_true=np.array([0.])
+    ws.lat_true = np.array([0.0])
+    ws.lon_true = np.array([0.0])
 
     ws.AtmosphereSet1D()
     ws.p_grid = pressure_profile
@@ -114,8 +114,8 @@ def calc_olr_from_profiles(
 
     ws.z_surface = np.array([[surface_altitude]])
     ws.p_hse = 100000
-    ws.z_hse_accuracy=100.
-    ws.z_field = 16e3 * ( 5 - np.log10(pressure_profile[:,np.newaxis,np.newaxis]) )
+    ws.z_hse_accuracy = 100.0
+    ws.z_field = 16e3 * (5 - np.log10(pressure_profile[:, np.newaxis, np.newaxis]))
     ws.atmfields_checkedCalc()
     ws.z_fieldFromHSE()
 
@@ -160,14 +160,14 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     # generate example atmosphere
-    # This atmosphere is not intended to be fully realistic, but to be simply 
+    # This atmosphere is not intended to be fully realistic, but to be simply
     # an example for the calculation of the OLR.
 
-    #set pressure grid
+    # set pressure grid
     pressure_profile = np.linspace(1000e2, 1e2, 80)
 
     # create water vapor profile
-    # Water vapor is simply define by a 1st order 
+    # Water vapor is simply define by a 1st order
     # polynomial in log-log space
     # log h2o = a + b * log pressure
     b = 4
@@ -183,7 +183,9 @@ if __name__ == "__main__":
     b = 100
     a = 200 - b * 4
     temperature_profile = a + b * np.log10(pressure_profile)
-    temperature_profile[pressure_profile < 100e2] = 200  # set temperature to 200 K below 100 hPa
+    temperature_profile[
+        pressure_profile < 100e2
+    ] = 200  # set temperature to 200 K below 100 hPa
 
     # plot atmosphere profiles
     fig, ax = plt.subplots(1, 2)
@@ -197,15 +199,16 @@ if __name__ == "__main__":
     ax[1].set_ylabel("Pressure [hPa]")
     ax[1].invert_yaxis()
 
-
     # %% calulate OLR from atmosphere profiles
-    f_grid, olr = calc_olr_from_profiles(pressure_profile, temperature_profile, H2O_profile)
+    f_grid, olr = calc_olr_from_profiles(
+        pressure_profile, temperature_profile, H2O_profile
+    )
 
     # %% plot OLR
-    fig, ax = plt.subplots()    
-    ax.plot(f_grid/1e12, olr, label="Irradiance")    
+    fig, ax = plt.subplots()
+    ax.plot(f_grid / 1e12, olr, label="Irradiance")
     ax.set_title(rf"OLR={np.trapz(olr, f_grid):3.2f} $\sf Wm^{{-2}}$")
-    ax.set_xlim(f_grid.min()/1e12, f_grid.max()/1e12)
+    ax.set_xlim(f_grid.min() / 1e12, f_grid.max() / 1e12)
     ax.set_xlabel(r"Frequency [$\sf THz$]")
     ax.set_ylabel(r"Irradiance [$\sf Wm^{-2}Hz^{-1}$]")
     ax.set_ylim(bottom=0)

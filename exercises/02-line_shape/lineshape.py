@@ -14,103 +14,103 @@ def tag2tex(tag):
 def linewidth(f, a):
     """Calculate the full-width at half maximum (FWHM) of an absorption line.
 
-        Parameters:
-            f (ndarray): Frequency grid.
-            a (ndarray): Line properties
-                (e.g. absorption coefficients or cross-sections).
+    Parameters:
+        f (ndarray): Frequency grid.
+        a (ndarray): Line properties
+            (e.g. absorption coefficients or cross-sections).
 
-        Returns:
-            float: Linewidth.
+    Returns:
+        float: Linewidth.
 
-        Examples:
-            >>> f = np.linspace(0, np.pi, 100)
-            >>> a = np.sin(f)**2
-            >>> linewidth(f, a)
-            1.571048056449009
+    Examples:
+        >>> f = np.linspace(0, np.pi, 100)
+        >>> a = np.sin(f)**2
+        >>> linewidth(f, a)
+        1.571048056449009
     """
 
     idx = np.argmax(a)
 
     if idx < 3 or idx > len(a) - 3:
-        raise RuntimeError('Maximum is located too near at the edge.\n' +
-                           'Could not found any peak. \n' +
-                           'Please adjust the frequency range.')
+        raise RuntimeError(
+            "Maximum is located too near at the edge.\n"
+            + "Could not found any peak. \n"
+            + "Please adjust the frequency range."
+        )
 
     s = sp.interpolate.UnivariateSpline(f, a - np.max(a) / 2, s=0)
 
     zeros = s.roots()
-    sidx = np.argsort((zeros - f[idx])**2)
+    sidx = np.argsort((zeros - f[idx]) ** 2)
 
     if zeros.size == 2:
-
         logic = zeros[sidx] > f[idx]
 
         if np.sum(logic) == 1:
-
             fwhm = abs(np.diff(zeros[sidx])[0])
 
         else:
-
             print(
-                'I only found one half maxima.\n' +
-                'You should adjust the frequency range to have more reliable results.\n'
+                "I only found one half maxima.\n"
+                + "You should adjust the frequency range to have more reliable results.\n"
             )
 
             fwhm = abs(zeros[sidx[0]] - f[idx]) * 2
 
     elif zeros.size == 1:
-
         fwhm = abs(zeros[0] - f[idx]) * 2
 
         print(
-            'I only found one half maxima.\n' +
-            'You should adjust the frequency range to have more reliable results.\n'
+            "I only found one half maxima.\n"
+            + "You should adjust the frequency range to have more reliable results.\n"
         )
 
     elif zeros.size > 2:
-
         sidx = sidx[0:2]
 
         logic = zeros[sidx] > f[idx]
 
-        print('It seems, that there are more than one peak' +
-              ' within the frequency range.\n' +
-              'I stick to the maximum peak.\n' +
-              'But I would suggest to adjust the frequevncy range. \n')
+        print(
+            "It seems, that there are more than one peak"
+            + " within the frequency range.\n"
+            + "I stick to the maximum peak.\n"
+            + "But I would suggest to adjust the frequevncy range. \n"
+        )
 
         if np.sum(logic) == 1:
-
             fwhm = abs(np.diff(zeros[sidx])[0])
 
         else:
-
             print(
-                'I only found one half maxima.\n' +
-                'You should adjust the frequency range to have more reliable results.\n'
+                "I only found one half maxima.\n"
+                + "You should adjust the frequency range to have more reliable results.\n"
             )
 
             fwhm = abs(zeros[sidx[0]] - f[idx]) * 2
 
     elif zeros.size == 0:
-
-        raise RuntimeError('Could not found any peak. :( \n' +
-                           'Probably, frequency range is too small.\n')
+        raise RuntimeError(
+            "Could not found any peak. :( \n"
+            + "Probably, frequency range is too small.\n"
+        )
 
     return fwhm
 
 
-def calculate_absxsec(species="N2O",
-                      pressure=800e2,
-                      temperature=300.0,
-                      fmin=10e9,
-                      fmax=2000e9,
-                      fnum=10_000,
-                      lineshape="LP",
-                      normalization="RQ",
-                      verbosity=0,
-                      ws=None,
-                      vmr=0.05,
-                      lines_off=0):
+def calculate_absxsec(
+    species="N2O",
+    pressure=800e2,
+    temperature=300.0,
+    fmin=10e9,
+    fmax=2000e9,
+    fnum=10_000,
+    lineshape="LP",
+    normalization="RQ",
+    verbosity=0,
+    ws=None,
+    vmr=0.05,
+    lines_off=0,
+):
     """Calculate absorption cross sections.
 
     Parameters:
@@ -148,17 +148,19 @@ def calculate_absxsec(species="N2O",
     if ws is not None:
         # check if species fits to cached species
         temp = str(ws.abs_species.value.data[0][0])
-        species_cache = temp.split('-')[0]
+        species_cache = temp.split("-")[0]
 
         if species == species_cache:
             ws.Copy(ws.abs_species, ws.abs_species_cache)
             ws.Copy(ws.abs_lines_per_species, ws.abs_lines_per_species_cache)
 
         else:
-            print(f'Cached species:{species_cache} \n'
-                  f'Desired species:{species} \n'
-                  'As the chached and the desired species are different,\n'
-                  'I have to read in the catalog...')
+            print(
+                f"Cached species:{species_cache} \n"
+                f"Desired species:{species} \n"
+                "As the chached and the desired species are different,\n"
+                "I have to read in the catalog..."
+            )
             reload = True
 
     if ws is None or reload:
@@ -173,7 +175,7 @@ def calculate_absxsec(species="N2O",
 
         # Define absorption species
         ws.abs_speciesSet(species=[species])
-        ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename='lines/')
+        ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
     ws.abs_lines_per_speciesLineShapeType(option=lineshape)
     ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
     ws.abs_lines_per_speciesNormalization(option=normalization)
@@ -209,18 +211,20 @@ def calculate_absxsec(species="N2O",
     # Convert abs coeff to cross sections on return
     number_density = pressure * vmr / (pyarts.arts.constants.k * temperature)
 
-    return (ws.f_grid.value.value.copy(),
-            ws.propmat_clearsky.value.data.value[0, 0, :, 0].copy() /
-            number_density, ws)
+    return (
+        ws.f_grid.value.value.copy(),
+        ws.propmat_clearsky.value.data.value[0, 0, :, 0].copy() / number_density,
+        ws,
+    )
 
 
-#%%  Run module as script
+# %%  Run module as script
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     species = "H2O"
-    temperature = 300 #[K]
-    pressure = 101325 #[Pa]
+    temperature = 300  # [K]
+    pressure = 101325  # [Pa]
     cache = None  # cache for ARTS workspace
 
     # Call ARTS to calculate absorption cross sections

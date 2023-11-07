@@ -3,12 +3,9 @@ import numpy as np
 import pyarts.workspace
 
 
-def calc_spectral_irradiance(atmfield,
-                             nstreams=4,
-                             fnum=300,
-                             fmin=1.0,
-                             fmax=97e12,
-                             verbosity=0):
+def calc_spectral_irradiance(
+    atmfield, nstreams=4, fnum=300, fmin=1.0, fmax=97e12, verbosity=0
+):
     """Calculate the spectral downward and upward irradiance for a given atmosphere.
     Irradiandce is defined as positive quantity independent of direction.
 
@@ -41,12 +38,14 @@ def calc_spectral_irradiance(atmfield,
     ws.jacobianOff()
 
     # Definition of species
-    ws.abs_speciesSet(species=[
-        "H2O, H2O-SelfContCKDMT400, H2O-ForeignContCKDMT400",
-        "CO2, CO2-CKDMT252"
-    ])
+    ws.abs_speciesSet(
+        species=[
+            "H2O, H2O-SelfContCKDMT400, H2O-ForeignContCKDMT400",
+            "CO2, CO2-CKDMT252",
+        ]
+    )
 
-        # Read line catalog
+    # Read line catalog
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
 
     # Load CKDMT400 model data
@@ -69,10 +68,8 @@ def calc_spectral_irradiance(atmfield,
 
     # Weakly reflecting surface
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.0)
-    ws.surface_rtprop_agendaSet(
-        option="Specular_NoPol_ReflFix_SurfTFromt_surface")
+    ws.surface_rtprop_agendaSet(option="Specular_NoPol_ReflFix_SurfTFromt_surface")
 
-    
     # Atmosphere and surface
     ws.atm_fields_compact = atmfield
     ws.AtmosphereSet1D()
@@ -102,12 +99,9 @@ def calc_spectral_irradiance(atmfield,
 
     # Perform RT calculations
     ws.spectral_irradiance_fieldDisort(nstreams=nstreams, emission=1)
-    
-    
-    spectral_flux_downward = -ws.spectral_irradiance_field.value[:, :, 0, 0,
-                                                                 0].copy()
-    spectral_flux_upward = ws.spectral_irradiance_field.value[:, :, 0, 0,
-                                                              1].copy()
+
+    spectral_flux_downward = -ws.spectral_irradiance_field.value[:, :, 0, 0, 0].copy()
+    spectral_flux_upward = ws.spectral_irradiance_field.value[:, :, 0, 0, 1].copy()
 
     # spectral_flux_downward[np.isnan(spectral_flux_downward)] = 0.
     # spectral_flux_upward[np.isnan(spectral_flux_upward)] = 0.
@@ -121,12 +115,7 @@ def calc_spectral_irradiance(atmfield,
     return f, z, p, T, spectral_flux_downward, spectral_flux_upward
 
 
-def calc_irradiance(atmfield,
-                    nstreams=2,
-                    fnum=300,
-                    fmin=1.0,
-                    fmax=97e12,
-                    verbosity=0):
+def calc_irradiance(atmfield, nstreams=2, fnum=300, fmin=1.0, fmax=97e12, verbosity=0):
     """Calculate the downward and upward irradiance for a given atmosphere.
     Irradiandce is defined as positive quantity independent of direction.
 
@@ -151,9 +140,10 @@ def calc_irradiance(atmfield,
         fnum=fnum,
         fmin=fmin,
         fmax=fmax,
-        verbosity=verbosity)
+        verbosity=verbosity,
+    )
 
-    #calculate flux
+    # calculate flux
     flux_downward = np.trapz(spectral_flux_downward, f, axis=0)
     flux_upward = np.trapz(spectral_flux_upward, f, axis=0)
 
@@ -178,4 +168,3 @@ def integrate_spectral_irradiance(f, spectral_flux, fmin=-np.inf, fmax=np.inf):
     flux = np.trapz(spectral_flux[logic, :], f[logic], axis=0)
 
     return flux
-
