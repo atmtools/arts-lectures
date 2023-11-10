@@ -159,6 +159,8 @@ def calc_olr_from_profiles(
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
+    pyarts.cat.download.retrieve(verbose=True)
+
     # generate example atmosphere
     # This atmosphere is not intended to be fully realistic, but to be simply
     # an example for the calculation of the OLR.

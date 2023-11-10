@@ -259,6 +259,8 @@ def calc_jacobians(
 
 # %% Calculate and plot Jacobians
 if __name__ == "__main__":
+    pyarts.cat.download.retrieve(verbose=True)
+
     # Calculate Jacobians (ARTS)
     jacobian_quantity = "H2O"
     calc_jacobians(jacobian_quantity=jacobian_quantity)

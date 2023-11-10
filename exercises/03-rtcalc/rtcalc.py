@@ -117,6 +117,8 @@ def run_arts(
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
+    pyarts.cat.download.retrieve(verbose=True)
+
     species = ["N2", "O2", "H2O"]
     height = 0.0  # m
     zenith_angle = 0.0  # deg
