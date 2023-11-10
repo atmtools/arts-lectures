@@ -1,6 +1,7 @@
 # %% Import modules and define functions
 """Calculate and plot clear-sky Jacobians."""
 import re
+from os import makedirs
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -259,6 +260,7 @@ def calc_jacobians(
 
 # %% Calculate and plot Jacobians
 if __name__ == "__main__":
+    makedirs("results", exist_ok=True)
     pyarts.cat.download.retrieve(verbose=True)
 
     # Calculate Jacobians (ARTS)
