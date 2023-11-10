@@ -36,8 +36,7 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0):
     ws.ppath_step_agendaSet(option="GeometricPath")
 
     # Non reflecting surface
-    ws.surface_rtprop_agendaSet(
-        option="Specular_NoPol_ReflFix_SurfTFromt_surface")
+    ws.surface_rtprop_agendaSet(option="Specular_NoPol_ReflFix_SurfTFromt_surface")
 
     # Number of Stokes components to be computed
     ws.IndexSet(ws.stokes_dim, 1)
@@ -45,11 +44,13 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0):
     #########################################################################
 
     # Definition of absorption species
-    ws.abs_speciesSet(species=[
-        "H2O, H2O-SelfContCKDMT400, H2O-ForeignContCKDMT400",
-        "O2-TRE05",
-        "N2, N2-CIAfunCKDMT252, N2-CIArotCKDMT252",
-    ])
+    ws.abs_speciesSet(
+        species=[
+            "H2O, H2O-SelfContCKDMT400, H2O-ForeignContCKDMT400",
+            "O2-TRE05",
+            "N2, N2-CIAfunCKDMT252, N2-CIArotCKDMT252",
+        ]
+    )
 
     ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
 
@@ -79,10 +80,12 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0):
     # Atmosphere and surface
     ws.AtmosphereSet1D()
     ws.atm_fields_compact = atm_fields_compact
-    ws.atm_fields_compactAddConstant(ws.atm_fields_compact, "abs_species-N2",
-                                     0.78, 0, ["abs_species-H2O"])
-    ws.atm_fields_compactAddConstant(ws.atm_fields_compact, "abs_species-O2",
-                                     0.21, 0, ["abs_species-H2O"])
+    ws.atm_fields_compactAddConstant(
+        ws.atm_fields_compact, "abs_species-N2", 0.78, 0, ["abs_species-H2O"]
+    )
+    ws.atm_fields_compactAddConstant(
+        ws.atm_fields_compact, "abs_species-O2", 0.21, 0, ["abs_species-H2O"]
+    )
     ws.AtmFieldsAndParticleBulkPropFieldFromCompact()
 
     ws.Extract(ws.z_surface, ws.z_field, 0)
