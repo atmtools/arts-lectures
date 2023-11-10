@@ -222,6 +222,8 @@ def calculate_absxsec(
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
+    pyarts.cat.download.retrieve(verbose=True)
+
     species = "H2O"
     temperature = 300  # [K]
     pressure = 101325  # [Pa]

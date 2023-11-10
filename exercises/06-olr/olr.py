@@ -159,6 +159,8 @@ def calc_olr_from_profiles(
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
+    pyarts.cat.download.retrieve(verbose=True)
+
     # generate example atmosphere
     # This atmosphere is not intended to be fully realistic, but to be simply
     # an example for the calculation of the OLR.
@@ -212,3 +214,5 @@ if __name__ == "__main__":
     ax.set_xlabel(r"Frequency [$\sf THz$]")
     ax.set_ylabel(r"Irradiance [$\sf Wm^{-2}Hz^{-1}$]")
     ax.set_ylim(bottom=0)
+
+    plt.show()

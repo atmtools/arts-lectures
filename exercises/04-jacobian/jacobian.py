@@ -1,6 +1,7 @@
 # %% Import modules and define functions
 """Calculate and plot clear-sky Jacobians."""
 import re
+from os import makedirs
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -259,6 +260,9 @@ def calc_jacobians(
 
 # %% Calculate and plot Jacobians
 if __name__ == "__main__":
+    makedirs("results", exist_ok=True)
+    pyarts.cat.download.retrieve(verbose=True)
+
     # Calculate Jacobians (ARTS)
     jacobian_quantity = "H2O"
     calc_jacobians(jacobian_quantity=jacobian_quantity)
@@ -274,3 +278,5 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     freq_ind = argclosest(freq, highlight_frequency)
     plot_jacobian(alt, jac[freq_ind, :], jacobian_quantity=jacobian_quantity, ax=ax)
+
+    plt.show()

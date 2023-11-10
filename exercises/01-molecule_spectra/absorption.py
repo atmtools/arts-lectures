@@ -113,6 +113,8 @@ def calculate_absxsec(
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
+    pyarts.cat.download.retrieve(verbose=True)
+
     # Define parameters
     species = "N2O"
     pressure = 1000e2

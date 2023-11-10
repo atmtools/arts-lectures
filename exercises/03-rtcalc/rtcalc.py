@@ -117,6 +117,8 @@ def run_arts(
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
+    pyarts.cat.download.retrieve(verbose=True)
+
     species = ["N2", "O2", "H2O"]
     height = 0.0  # m
     zenith_angle = 0.0  # deg
@@ -136,3 +138,5 @@ if __name__ == "__main__":
     ax.plot(freq, bt)
     ax.set_xlabel("Frequency [GHz]")
     ax.set_ylabel("Brightness temperature [K]")
+
+    plt.show()
