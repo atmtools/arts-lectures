@@ -214,3 +214,5 @@ if __name__ == "__main__":
     ax.set_xlabel(r"Frequency [$\sf THz$]")
     ax.set_ylabel(r"Irradiance [$\sf Wm^{-2}Hz^{-1}$]")
     ax.set_ylim(bottom=0)
+
+    plt.show()

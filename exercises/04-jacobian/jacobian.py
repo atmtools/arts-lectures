@@ -278,3 +278,5 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     freq_ind = argclosest(freq, highlight_frequency)
     plot_jacobian(alt, jac[freq_ind, :], jacobian_quantity=jacobian_quantity, ax=ax)
+
+    plt.show()

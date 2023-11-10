@@ -138,3 +138,5 @@ if __name__ == "__main__":
     ax.plot(freq, bt)
     ax.set_xlabel("Frequency [GHz]")
     ax.set_ylabel("Brightness temperature [K]")
+
+    plt.show()
