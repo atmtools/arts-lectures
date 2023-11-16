@@ -1,3 +1,4 @@
+# %% Import modules and define functions
 """Calculate and plot absorption cross sections."""
 import re
 
@@ -179,6 +180,7 @@ def calculate_absxsec(
     ws.abs_lines_per_speciesLineShapeType(option=lineshape)
     ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
     ws.abs_lines_per_speciesNormalization(option=normalization)
+    ws.abs_lines_per_speciesTurnOffLineMixing()
     if lines_off:
         ws.abs_lines_per_speciesSetEmpty()
 
