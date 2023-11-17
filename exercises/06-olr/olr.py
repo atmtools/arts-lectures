@@ -16,7 +16,7 @@ def calc_olr_from_profiles(
     surface_altitude=0.0,
     nstreams=10,
     fnum=300,
-    fmin=1.0,
+    fmin=1e6,
     fmax=75e12,
     verbosity=0,
 ):
@@ -44,6 +44,9 @@ def calc_olr_from_profiles(
         ndarray, ndarray: Frequency grid [Hz], OLR [Wm^-2]
 
     """
+
+    if fmin < 1e6:
+        raise RuntimeError('fmin must be >= 1e6 Hz')
 
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
