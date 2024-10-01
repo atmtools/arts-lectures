@@ -19,6 +19,7 @@ def calc_olr_from_profiles(
     fmin=1e6,
     fmax=75e12,
     verbosity=0,
+    version='2.6.8'
 ):
     """Calculate the outgoing-longwave radiation for a given atmosphere profiles.
 
@@ -44,6 +45,8 @@ def calc_olr_from_profiles(
         ndarray, ndarray: Frequency grid [Hz], OLR [Wm^-2]
 
     """
+    
+    pyarts.cat.download.retrieve(verbose=True, version=version)
 
     if fmin < 1e6:
         raise RuntimeError('fmin must be >= 1e6 Hz')
@@ -161,8 +164,6 @@ def calc_olr_from_profiles(
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
-
-    pyarts.cat.download.retrieve(verbose=True)
 
     # generate example atmosphere
     # This atmosphere is not intended to be fully realistic, but to be simply

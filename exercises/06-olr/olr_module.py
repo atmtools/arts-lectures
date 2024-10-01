@@ -243,6 +243,7 @@ def calc_olr_from_atmfield(
     fmax=75e12,
     species="default",
     verbosity=0,
+    version='2.6.8',
 ):
     """Calculate the outgoing-longwave radiation for a given atmosphere.
 
@@ -259,6 +260,9 @@ def calc_olr_from_atmfield(
     Returns:
         ndarray, ndarray: Frequency grid [Hz], OLR [Wm^-2]
     """
+
+    pyarts.cat.download.retrieve(verbose=True, version=version)
+
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
     ws.gas_scattering_agendaSet()

@@ -4,7 +4,7 @@ import pyarts.workspace
 
 
 def calc_spectral_irradiance(
-    atmfield, nstreams=4, fnum=300, fmin=1.0, fmax=97e12, verbosity=0
+    atmfield, nstreams=4, fnum=300, fmin=1.0, fmax=97e12, verbosity=0, version='2.6.8'
 ):
     """Calculate the spectral downward and upward irradiance for a given atmosphere.
     Irradiandce is defined as positive quantity independent of direction.
@@ -24,6 +24,9 @@ def calc_spectral_irradiance(
         spectral downward irradiance [Wm^-2 Hz^-1],
         spectral upward irradiance [Wm^-2 Hz^-1].
     """
+
+    pyarts.cat.download.retrieve(verbose=True, version=version)
+    
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
     ws.gas_scattering_agendaSet()
@@ -165,6 +168,6 @@ def integrate_spectral_irradiance(f, spectral_flux, fmin=-np.inf, fmax=np.inf):
 
     logic = np.logical_and(fmin <= f, f < fmax)
 
-    flux = np.trapz(spectral_flux[logic, :], f[logic], axis=0)
+    flux = np.trapezoid(spectral_flux[logic, :], f[logic], axis=0)
 
     return flux
