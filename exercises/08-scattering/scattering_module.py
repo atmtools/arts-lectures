@@ -79,7 +79,7 @@ def setup_doit_agendas(ws):
 
 
 def scattering(
-    ice_water_path=2.0, num_viewing_angles=19, phase="ice", radius=1.5e2, verbosity=0
+    ice_water_path=2.0, num_viewing_angles=19, phase="ice", radius=1.5e2, verbosity=0, version='2.6.8'
 ):
     """Perform a radiative transfer simulation with a simple cloud.
 
@@ -99,6 +99,9 @@ def scattering(
             Radiation field clear-sky [K].
 
     """
+
+    pyarts.cat.download.retrieve(verbose=True, version=version)
+
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")

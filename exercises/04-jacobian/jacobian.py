@@ -123,7 +123,7 @@ def plot_opacity_profile(height, opacity, ax=None):
 
 
 def calc_jacobians(
-    jacobian_quantity="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=0
+    jacobian_quantity="H2O", fmin=150e9, fmax=200e9, fnum=200, verbosity=0, version='2.6.8'
 ):
     """Calculate jacobians for a given species and frequency range and
        save the result as arts-xml-files.
@@ -137,6 +137,9 @@ def calc_jacobians(
         verbosity (int): ARTS verbosity level.
 
     """
+
+    pyarts.cat.download.retrieve(verbose=True, version=version)
+
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
@@ -261,7 +264,6 @@ def calc_jacobians(
 # %% Calculate and plot Jacobians
 if __name__ == "__main__":
     makedirs("results", exist_ok=True)
-    pyarts.cat.download.retrieve(verbose=True)
 
     # Calculate Jacobians (ARTS)
     jacobian_quantity = "H2O"

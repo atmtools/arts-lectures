@@ -18,6 +18,7 @@ def run_arts(
     fmax=250e9,
     fnum=1_000,
     verbosity=0,
+    version='2.6.8'
 ):
     """Perform a radiative transfer simulation.
 
@@ -34,6 +35,10 @@ def run_arts(
           Frequency grid [Hz], Brightness temperature [K], Optical depth [1]
     """
     ws = pyarts.workspace.Workspace(verbosity=0)
+    
+    pyarts.cat.download.retrieve(verbose=True, version=version)
+    
+    
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
     ws.iy_main_agendaSet(option="Emission")
@@ -117,7 +122,7 @@ def run_arts(
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    pyarts.cat.download.retrieve(verbose=True)
+    # pyarts.cat.download.retrieve(verbose=True)
 
     species = ["N2", "O2", "H2O"]
     height = 0.0  # m

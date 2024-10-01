@@ -1,9 +1,10 @@
 """Perform an OEM retrieval and plot the results."""
 import numpy as np
 import pyarts.workspace
+from pyarts import xml
 
 
-def forward_model(f_grid, atm_fields_compact, verbosity=0):
+def forward_model(f_grid, atm_fields_compact, verbosity=0, version='2.6.8'):
     """Perform a radiative transfer simulation.
 
     Parameters:
@@ -15,6 +16,9 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0):
     Returns:
         ndarray, ndarray: Frequency grid [Hz], Jacobian [K/1]
     """
+    
+    pyarts.cat.download.retrieve(verbose=True, version=version)
+    
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
@@ -123,3 +127,34 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0):
     ws.yCalc()
 
     return ws.y.value[:].copy(), ws.jacobian.value[:].copy()
+
+# %% 
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+
+    
+    # Load the (simulated) measurement.
+    measurement = xml.load("input/measurement.xml")
+    f_grid = measurement.grids[0]
+    y_measurement = measurement.data
+    
+    # Load the a priori atmospheric state.
+    atm_fields = xml.load("input/x_apriori.xml")
+    z = atm_fields.get("z", keep_dims=False)
+    x_apriori = atm_fields.get("abs_species-H2O", keep_dims=False)
+    
+    # Load the covariance matrices.
+    S_xa = xml.load("input/S_xa.xml")
+    S_y = 2.5e-3 * np.eye(f_grid.size)  # in [K^2]
+    
+    
+    y, K = forward_model(f_grid, atm_fields)
+
+
+    # Plot absorption cross sections
+    fig, ax = plt.subplots()
+    ax.plot(f_grid, y)
+    ax.set_xlabel("Frequency [Hz]")
+    ax.set_ylabel(r"Brightness Temperature [$\sf K$]")
+    plt.show()

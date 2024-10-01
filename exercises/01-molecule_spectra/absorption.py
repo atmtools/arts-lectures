@@ -23,6 +23,7 @@ def calculate_absxsec(
     verbosity=0,
     vmr=0.01,
     lines_off=0,
+    version='2.6.8'
 ):
     """Calculate absorption cross sections.
 
@@ -55,6 +56,9 @@ def calculate_absxsec(
     Returns:
         ndarray, ndarray: Frequency grid [Hz], Abs. cross sections [m^2]
     """
+
+    pyarts.cat.download.retrieve(verbose=True, version=version)
+
     # Create ARTS workspace and load default settings
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
@@ -114,7 +118,7 @@ def calculate_absxsec(
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    pyarts.cat.download.retrieve(verbose=True)
+    pyarts.cat.download.retrieve(verbose=True, version='2.6.8')
 
     # Define parameters
     species = "N2O"

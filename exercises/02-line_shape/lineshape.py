@@ -111,6 +111,7 @@ def calculate_absxsec(
     ws=None,
     vmr=0.05,
     lines_off=0,
+    version='2.6.8'
 ):
     """Calculate absorption cross sections.
 
@@ -145,17 +146,14 @@ def calculate_absxsec(
     """
     # Create ARTS workspace and load default settings
     reload = False
+    pyarts.cat.download.retrieve(verbose=True, version=version)
 
     if ws is not None:
         # check if species fits to cached species
-        temp = str(ws.abs_species.value.data[0][0])
+        temp = str(ws.abs_species.value[0][0])
         species_cache = temp.split("-")[0]
 
-        if species == species_cache:
-            ws.Copy(ws.abs_species, ws.abs_species_cache)
-            ws.Copy(ws.abs_lines_per_species, ws.abs_lines_per_species_cache)
-
-        else:
+        if species != species_cache:
             print(
                 f"Cached species:{species_cache} \n"
                 f"Desired species:{species} \n"
@@ -177,6 +175,7 @@ def calculate_absxsec(
         # Define absorption species
         ws.abs_speciesSet(species=[species])
         ws.abs_lines_per_speciesReadSpeciesSplitCatalog(basename="lines/")
+
     ws.abs_lines_per_speciesLineShapeType(option=lineshape)
     ws.abs_lines_per_speciesCutoff(option="ByLine", value=750e9)
     ws.abs_lines_per_speciesNormalization(option=normalization)
@@ -224,15 +223,13 @@ def calculate_absxsec(
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    pyarts.cat.download.retrieve(verbose=True)
-
     species = "H2O"
     temperature = 300  # [K]
     pressure = 101325  # [Pa]
     cache = None  # cache for ARTS workspace
 
     # Call ARTS to calculate absorption cross sections
-    freq, abs_xsec, cache = calculate_absxsec(species, pressure, temperature, ws=cache)
+    freq, abs_xsec, cache = calculate_absxsec(species, pressure, temperature, fnum=1000, ws=cache)
 
     fig, ax = plt.subplots()
     ax.plot(freq, abs_xsec)
@@ -240,3 +237,33 @@ if __name__ == "__main__":
     ax.set_xlabel("Frequency [GHz]")
     ax.set_ylabel(r"Abs. cross section [$\sf m^2$]")
     plt.show()
+
+    # recall ARTS to calculate absorption cross sections at another pressure
+    species = "H2O"
+    temperature = 300  # [K]
+    pressure = 10132.5  # [Pa]
+
+    freq, abs_xsec, cache = calculate_absxsec(species, pressure, temperature, fnum=1000, ws=cache)
+
+    fig, ax = plt.subplots()
+    ax.plot(freq, abs_xsec)
+    ax.set_ylim(bottom=0)
+    ax.set_xlabel("Frequency [GHz]")
+    ax.set_ylabel(r"Abs. cross section [$\sf m^2$]")
+    plt.show()
+    
+    # recall ARTS to calculate absorption cross sections for another species
+    species = "O3"
+    temperature = 300  # [K]
+    pressure = 10132.5  # [Pa]
+
+    freq, abs_xsec, cache = calculate_absxsec(species, pressure, temperature, fnum=1000, ws=cache)
+
+    fig, ax = plt.subplots()
+    ax.plot(freq, abs_xsec)
+    ax.set_ylim(bottom=0)
+    ax.set_xlabel("Frequency [GHz]")
+    ax.set_ylabel(r"Abs. cross section [$\sf m^2$]")
+    plt.show()
+    
+
