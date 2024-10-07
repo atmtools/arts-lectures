@@ -2,11 +2,9 @@ name: arts-lectures
 channels:
   - rttools
   - conda-forge
-  - defaults
+  - nodefaults
 dependencies:
   - ipympl
   - jupyterlab
-  - pyarts=2.5.12
-  - python=3.10
-  
+  - pyarts=2.6.8
 
