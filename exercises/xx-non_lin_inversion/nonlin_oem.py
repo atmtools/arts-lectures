@@ -193,7 +193,7 @@ def create_apriori_covariance_matrix(x, z, delta_x, correlation_length):
 
     Returns:
         ndarray: A priori covariance matrix.
-    """    
+    """
 
     # check if x and z have the same length
     if len(x) != len(z):
@@ -225,6 +225,26 @@ def create_apriori_covariance_matrix(x, z, delta_x, correlation_length):
     return S_x
 
 
+def set_correlation_length(z, len_sfc, len_toa=None):
+    """Set the correlation length.
+
+    Parameters:
+        z (ndarray): Altitude grid [m].
+        len_sfc (float): Correlation length at the surface.
+        len_toa (float): Correlation length at the top of the atmosphere.
+
+    Returns:
+        ndarray: Correlation length.
+    """
+
+
+    if len_toa is None:
+        len_toa = len_sfc
+    correlation_length = np.linspace(len_sfc, len_toa, len(z))
+
+    return correlation_length
+
+
 # %%
 
 # %%
@@ -237,6 +257,9 @@ if __name__ == "__main__":
     fmax = 121e9
     fnum = 41
     f_grid = np.linspace(fmin, fmax, fnum)
+    ws = basic_setup(f_grid)
+
+    N_channels = np.size(f_grid)
 
     sensor_pos = np.array([[800e3]])
     sensor_los = np.array([[180.0]])
@@ -256,19 +279,196 @@ if __name__ == "__main__":
     idx = 1234
 
     # this will be the a priori state
-    atm = atms[idx]
+    atm_apr = atms[idx]
     sfc = sfcs[idx, :]
 
     # create a pertuberation, this ww want to retrieve
-    atm_perturbed = create_pertuberation(atm, ["T"], [10.0])
+    atm_perturbed = create_pertuberation(atm_apr, ["T"], [10.0])
 
     surface_reflectivity = 0.4
 
-    ws = basic_setup(f_grid)
-    y_apr = forward_model(ws, atm, surface_reflectivity, sensor_pos, sensor_los)
+    # perform observation
+
     y = forward_model(ws, atm_perturbed, surface_reflectivity, sensor_pos, sensor_los)
+    rng = np.random.default_rng(12345)
+    y_obs = y + rng.normal(scale=NeDT, size=N_channels)
+
+    # perform a priori simulation
+    y_apr = forward_model(ws, atm_apr, surface_reflectivity, sensor_pos, sensor_los)
 
     # %% set covariance matrices
 
     # measurement covariance
-    S_y = np.diag(np.pnes(len(f_grid)) * NeDT)
+    S_y = np.diag(np.ones(len(f_grid)) * NeDT)
+
+    # a priori covariance
+    delta_T = 5.0  # K
+    correlation_length = set_correlation_length(atm_apr.get("z", keep_dims=False), 1000.0, 10000.0)
+    S_apr = create_apriori_covariance_matrix(
+        atm_apr.get("T", keep_dims=False), atm_apr.get("z", keep_dims=False), delta_T, correlation_length
+    )
+
+
+
+    # %% set the retrieval
+
+    # Start on retrieval specific part
+    #
+
+    # Some vaiables
+    #
+    VectorCreate(vars)
+    SparseCreate(sparse_block)
+    MatrixCreate(dense_block)
+
+
+    # Start definition of retrieval quantities
+    #
+    ws.retrievalDefInit()
+    #
+    nelemGet( nelem, p_ret_grid )
+
+
+    # Add ozone as retrieval quantity
+    #
+    retrievalAddAbsSpecies(
+        species = "T",
+        unit = "K",
+        g1 = p_ret_grid,
+        g2 = lat_grid,
+        g3 = lon_grid
+    )
+    #
+    VectorSetConstant( vars, nelem, 1e-12 )
+    DiagonalMatrix( sparse_block, vars )
+    covmat_sxAddBlock( block = sparse_block )
+
+
+    # Add a frquency shift retrieval
+    #
+    retrievalAddFreqShift(
+      df = 50e3
+    )
+    #
+    VectorSetConstant( vars, 1, 1e10 )
+    DiagonalMatrix( sparse_block, vars )
+    covmat_sxAddBlock( block = sparse_block )
+
+
+    # Add a baseline fit
+    #
+    retrievalAddPolyfit(
+      poly_order = 0
+    )
+    #
+    VectorSetConstant( vars, 1, 0.5 )
+    DiagonalMatrix( sparse_block, vars )
+    covmat_sxAddBlock( block = sparse_block )
+
+
+    # Define Se and its invers
+    #
+    VectorSetConstant( vars, nf, 1e-2 )
+    DiagonalMatrix( sparse_block, vars )
+    covmat_seAddBlock( block = sparse_block )
+    #
+    VectorSetConstant( vars, nf, 1e+2 )
+    DiagonalMatrix( dense_block, vars )
+    covmat_seAddInverseBlock( block = dense_block )
+
+
+    # End definition of retrieval quantities
+    #
+    retrievalDefClose
+
+
+    # x, jacobian and yf must be initialised (or pre-calculated as shown below)
+    #
+    VectorSet( x, [] )
+    VectorSet( yf, [] )
+    MatrixSet( jacobian, [] )
+
+
+    # Or to pre-set x, jacobian and yf
+    #
+    #Copy( x, xa )
+    #MatrixSet( jacobian, [] )
+    #AgendaExecute( inversion_iterate_agenda )
+
+
+    # Iteration agenda
+    #
+    AgendaSet( inversion_iterate_agenda ){
+
+      Ignore(inversion_iteration_counter)
+
+      # Map x to ARTS' variables
+      x2artsAtmAndSurf
+      x2artsSensor   # No need to call this WSM if no sensor variables retrieved
+
+      # To be safe, rerun some checks
+      atmfields_checkedCalc
+      atmgeom_checkedCalc
+
+      # Calculate yf and Jacobian matching x.
+      yCalc( y=yf )
+
+      # Add baseline term (no need to call this WSM if no sensor variables retrieved)
+      VectorAddElementwise( yf, yf, y_baseline )
+
+      # This method takes cares of some "fixes" that are needed to get the Jacobian
+      # right for iterative solutions. No need to call this WSM for linear inversions.
+      jacobianAdjustAndTransform
+    }
+
+
+    # Let a priori be off with 0.5 ppm
+    #
+    Tensor4Add( vmr_field, vmr_field, 0.5e-6 )
+
+
+    # Add a baseline
+    #
+    VectorAdd( y, y, 1 )
+
+
+    # Introduce a frequency error
+    #
+    VectorAdd( f_backend, f_backend, -150e3 )
+
+
+    # Calculate sensor_reponse (this time with assumed f_backend)
+    #
+    AgendaExecute( sensor_response_agenda )
+
+
+    # Create xa
+    #
+    xaStandard
+
+
+    # Run OEM
+    OEM(          method = "gn",
+                max_iter = 5,
+        display_progress = 1,
+                 stop_dx = 0.1,
+          lm_ga_settings = [10,2,2,100,1,99])
+    #
+    Print( oem_errors, 0 )
+    Print( x, 0 )
+
+    # Compute averaging kernel matrix
+    #
+    avkCalc
+
+    # Compute smoothing error covariance matrix
+    #
+    covmat_ssCalc
+
+    # Compute observation system error covariance matrix
+    #
+    covmat_soCalc
+
+    # Extract observation errors
+    #
+    retrievalErrorsExtract
