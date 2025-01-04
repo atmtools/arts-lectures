@@ -91,13 +91,14 @@ def basic_setup(f_grid, version="2.6.8", verbosity=0):
     return ws
 
 
-def forward_model(ws, atm_fields_compact, surface_reflectivity, sensor_pos, sensor_los):
+def forward_model(ws, atm_fields_compact, surface_reflectivity, surface_temperature, sensor_pos, sensor_los):
     """Perform a forward model calculation.
 
     Parameters:
         ws (pyarts.workspace.Workspace): ARTS workspace.
         atm_fields_compact (pyarts.workspace.Field): ARTS field object.
         surface_reflectivity (float): Surface reflectivity.
+        surface_temperature (float): Surface temperature [K].
         sensor_pos (ndarray): Sensor position [m].
         sensor_los (ndarray): Sensor line of sight [deg].
 
@@ -110,16 +111,18 @@ def forward_model(ws, atm_fields_compact, surface_reflectivity, sensor_pos, sens
     # Atmosphere and surface
 
     ws.atm_fields_compact = atm_fields_compact
-    ws.atm_fields_compactAddConstant(
-        ws.atm_fields_compact, "abs_species-N2", 0.78, 0, ["abs_species-H2O"]
-    )
-    ws.atm_fields_compactAddConstant(
-        ws.atm_fields_compact, "abs_species-O2", 0.21, 0, ["abs_species-H2O"]
-    )
+
+    # ws.atm_fields_compactAddConstant(
+    #     ws.atm_fields_compact, "abs_species-N2", 0.78, 0, ["abs_species-H2O"]
+    # )
+    # ws.atm_fields_compactAddConstant(
+    #     ws.atm_fields_compact, "abs_species-O2", 0.21, 0, ["abs_species-H2O"]
+    # )
     ws.AtmFieldsAndParticleBulkPropFieldFromCompact()
 
     ws.Extract(ws.z_surface, ws.z_field, 0)
-    ws.Extract(ws.t_surface, ws.t_field, 0)
+    # ws.Extract(ws.t_surface, ws.t_field, 0)
+    ws.t_surface=[[surface_temperature]]
 
     #########################################################################
 
@@ -247,6 +250,37 @@ def set_correlation_length(z, len_sfc, len_toa=None):
 
 # %%
 
+def Hamp_channels_simplified(Band):
+    '''
+    Function to return the frequency grid and noise equivalent delta temperature
+    of a simplified version of the HAMP radiometer
+
+    Parameters:
+
+    Band (str): Band to be used. Options are "H2O", "O2_low" and "O2_high"
+
+    Returns:
+
+    f_grid (ndarray): Frequency grid [Hz]
+    NeDT (float): Noise equivalent delta temperature [K]
+
+    '''
+
+    if Band=="H2O":
+        f_grid= np.array([22.24,23.04, 23.84,25.44, 26.24, 27.84, 31.40])*1e9 # Hz
+        NeDT=0.1 # K
+    elif Band=="O2_low":
+        f_grid= np.array([50.3, 51.76, 52.8, 53.75,54.94, 56.66, 58.00])*1e9
+        NeDT=0.2 # K
+    elif Band=="O2_high":
+        f_grid=(118.75+np.array([1.3,2.3,4.2,8.5]))*1e9
+        NeDT=0.6
+    else:
+        raise ValueError("Band not defined")
+
+    return f_grid, NeDT
+
+
 # %%
 if __name__ == "__main__":
 
@@ -310,165 +344,165 @@ if __name__ == "__main__":
 
 
 
-    # %% set the retrieval
+    # # %% set the retrieval
 
-    # Start on retrieval specific part
-    #
+    # # Start on retrieval specific part
+    # #
 
-    # Some vaiables
-    #
-    VectorCreate(vars)
-    SparseCreate(sparse_block)
-    MatrixCreate(dense_block)
-
-
-    # Start definition of retrieval quantities
-    #
-    ws.retrievalDefInit()
-    #
-    nelemGet( nelem, p_ret_grid )
+    # # Some vaiables
+    # #
+    # VectorCreate(vars)
+    # SparseCreate(sparse_block)
+    # MatrixCreate(dense_block)
 
 
-    # Add ozone as retrieval quantity
-    #
-    retrievalAddAbsSpecies(
-        species = "T",
-        unit = "K",
-        g1 = p_ret_grid,
-        g2 = lat_grid,
-        g3 = lon_grid
-    )
-    #
-    VectorSetConstant( vars, nelem, 1e-12 )
-    DiagonalMatrix( sparse_block, vars )
-    covmat_sxAddBlock( block = sparse_block )
+    # # Start definition of retrieval quantities
+    # #
+    # ws.retrievalDefInit()
+    # #
+    # nelemGet( nelem, p_ret_grid )
 
 
-    # Add a frquency shift retrieval
-    #
-    retrievalAddFreqShift(
-      df = 50e3
-    )
-    #
-    VectorSetConstant( vars, 1, 1e10 )
-    DiagonalMatrix( sparse_block, vars )
-    covmat_sxAddBlock( block = sparse_block )
+    # # Add ozone as retrieval quantity
+    # #
+    # retrievalAddAbsSpecies(
+    #     species = "T",
+    #     unit = "K",
+    #     g1 = p_ret_grid,
+    #     g2 = lat_grid,
+    #     g3 = lon_grid
+    # )
+    # #
+    # VectorSetConstant( vars, nelem, 1e-12 )
+    # DiagonalMatrix( sparse_block, vars )
+    # covmat_sxAddBlock( block = sparse_block )
 
 
-    # Add a baseline fit
-    #
-    retrievalAddPolyfit(
-      poly_order = 0
-    )
-    #
-    VectorSetConstant( vars, 1, 0.5 )
-    DiagonalMatrix( sparse_block, vars )
-    covmat_sxAddBlock( block = sparse_block )
+    # # Add a frquency shift retrieval
+    # #
+    # retrievalAddFreqShift(
+    #   df = 50e3
+    # )
+    # #
+    # VectorSetConstant( vars, 1, 1e10 )
+    # DiagonalMatrix( sparse_block, vars )
+    # covmat_sxAddBlock( block = sparse_block )
 
 
-    # Define Se and its invers
-    #
-    VectorSetConstant( vars, nf, 1e-2 )
-    DiagonalMatrix( sparse_block, vars )
-    covmat_seAddBlock( block = sparse_block )
-    #
-    VectorSetConstant( vars, nf, 1e+2 )
-    DiagonalMatrix( dense_block, vars )
-    covmat_seAddInverseBlock( block = dense_block )
+    # # Add a baseline fit
+    # #
+    # retrievalAddPolyfit(
+    #   poly_order = 0
+    # )
+    # #
+    # VectorSetConstant( vars, 1, 0.5 )
+    # DiagonalMatrix( sparse_block, vars )
+    # covmat_sxAddBlock( block = sparse_block )
 
 
-    # End definition of retrieval quantities
-    #
-    retrievalDefClose
+    # # Define Se and its invers
+    # #
+    # VectorSetConstant( vars, nf, 1e-2 )
+    # DiagonalMatrix( sparse_block, vars )
+    # covmat_seAddBlock( block = sparse_block )
+    # #
+    # VectorSetConstant( vars, nf, 1e+2 )
+    # DiagonalMatrix( dense_block, vars )
+    # covmat_seAddInverseBlock( block = dense_block )
 
 
-    # x, jacobian and yf must be initialised (or pre-calculated as shown below)
-    #
-    VectorSet( x, [] )
-    VectorSet( yf, [] )
-    MatrixSet( jacobian, [] )
+    # # End definition of retrieval quantities
+    # #
+    # retrievalDefClose
 
 
-    # Or to pre-set x, jacobian and yf
-    #
-    #Copy( x, xa )
-    #MatrixSet( jacobian, [] )
-    #AgendaExecute( inversion_iterate_agenda )
+    # # x, jacobian and yf must be initialised (or pre-calculated as shown below)
+    # #
+    # VectorSet( x, [] )
+    # VectorSet( yf, [] )
+    # MatrixSet( jacobian, [] )
 
 
-    # Iteration agenda
-    #
-    AgendaSet( inversion_iterate_agenda ){
-
-      Ignore(inversion_iteration_counter)
-
-      # Map x to ARTS' variables
-      x2artsAtmAndSurf
-      x2artsSensor   # No need to call this WSM if no sensor variables retrieved
-
-      # To be safe, rerun some checks
-      atmfields_checkedCalc
-      atmgeom_checkedCalc
-
-      # Calculate yf and Jacobian matching x.
-      yCalc( y=yf )
-
-      # Add baseline term (no need to call this WSM if no sensor variables retrieved)
-      VectorAddElementwise( yf, yf, y_baseline )
-
-      # This method takes cares of some "fixes" that are needed to get the Jacobian
-      # right for iterative solutions. No need to call this WSM for linear inversions.
-      jacobianAdjustAndTransform
-    }
+    # # Or to pre-set x, jacobian and yf
+    # #
+    # #Copy( x, xa )
+    # #MatrixSet( jacobian, [] )
+    # #AgendaExecute( inversion_iterate_agenda )
 
 
-    # Let a priori be off with 0.5 ppm
-    #
-    Tensor4Add( vmr_field, vmr_field, 0.5e-6 )
+    # # Iteration agenda
+    # #
+    # AgendaSet( inversion_iterate_agenda ){
+
+    #   Ignore(inversion_iteration_counter)
+
+    #   # Map x to ARTS' variables
+    #   x2artsAtmAndSurf
+    #   x2artsSensor   # No need to call this WSM if no sensor variables retrieved
+
+    #   # To be safe, rerun some checks
+    #   atmfields_checkedCalc
+    #   atmgeom_checkedCalc
+
+    #   # Calculate yf and Jacobian matching x.
+    #   yCalc( y=yf )
+
+    #   # Add baseline term (no need to call this WSM if no sensor variables retrieved)
+    #   VectorAddElementwise( yf, yf, y_baseline )
+
+    #   # This method takes cares of some "fixes" that are needed to get the Jacobian
+    #   # right for iterative solutions. No need to call this WSM for linear inversions.
+    #   jacobianAdjustAndTransform
+    # }
 
 
-    # Add a baseline
-    #
-    VectorAdd( y, y, 1 )
+    # # Let a priori be off with 0.5 ppm
+    # #
+    # Tensor4Add( vmr_field, vmr_field, 0.5e-6 )
 
 
-    # Introduce a frequency error
-    #
-    VectorAdd( f_backend, f_backend, -150e3 )
+    # # Add a baseline
+    # #
+    # VectorAdd( y, y, 1 )
 
 
-    # Calculate sensor_reponse (this time with assumed f_backend)
-    #
-    AgendaExecute( sensor_response_agenda )
+    # # Introduce a frequency error
+    # #
+    # VectorAdd( f_backend, f_backend, -150e3 )
 
 
-    # Create xa
-    #
-    xaStandard
+    # # Calculate sensor_reponse (this time with assumed f_backend)
+    # #
+    # AgendaExecute( sensor_response_agenda )
 
 
-    # Run OEM
-    OEM(          method = "gn",
-                max_iter = 5,
-        display_progress = 1,
-                 stop_dx = 0.1,
-          lm_ga_settings = [10,2,2,100,1,99])
-    #
-    Print( oem_errors, 0 )
-    Print( x, 0 )
+    # # Create xa
+    # #
+    # xaStandard
 
-    # Compute averaging kernel matrix
-    #
-    avkCalc
 
-    # Compute smoothing error covariance matrix
-    #
-    covmat_ssCalc
+    # # Run OEM
+    # OEM(          method = "gn",
+    #             max_iter = 5,
+    #     display_progress = 1,
+    #              stop_dx = 0.1,
+    #       lm_ga_settings = [10,2,2,100,1,99])
+    # #
+    # Print( oem_errors, 0 )
+    # Print( x, 0 )
 
-    # Compute observation system error covariance matrix
-    #
-    covmat_soCalc
+    # # Compute averaging kernel matrix
+    # #
+    # avkCalc
 
-    # Extract observation errors
-    #
-    retrievalErrorsExtract
+    # # Compute smoothing error covariance matrix
+    # #
+    # covmat_ssCalc
+
+    # # Compute observation system error covariance matrix
+    # #
+    # covmat_soCalc
+
+    # # Extract observation errors
+    # #
+    # retrievalErrorsExtract
