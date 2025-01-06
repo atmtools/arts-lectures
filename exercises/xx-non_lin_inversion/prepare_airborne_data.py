@@ -10,6 +10,27 @@ a simulation of an airborne radiometer observation.
 
 To keep it simple the slice will be simply the center in x of the data.
 
+It also creates a dropsonde data set by selecting one of the profiles.
+
+The data will be saved in ARTS XML format.
+
+The data is also plotted for a quick check.
+
+The data is saved in the folder 'observation' in the current directory.
+
+The data is saved in the following files:
+- atmospheres_true.xml
+- aux1d_true.xml
+- aux2d_true.xml
+- dropsonde.xml
+
+The plots are saved in the folder 'check_plots' in the current directory.
+
+The plots are saved in the following files:
+- profiles.pdf
+- columns.pdf
+- dropsonde.pdf
+
 @author: u242031
 """
 
@@ -29,7 +50,9 @@ from typhon.constants import gas_constant_water_vapor
 
 # %% paths / constants
 
-data_folder = "/ceph_pool/ec/scratch/u237/user_data/mbrath/EarthCARE_Scenes/39320_test_data/"
+data_folder = (
+    "/ceph_pool/ec/scratch/u237/user_data/mbrath/EarthCARE_Scenes/39320_test_data/"
+)
 
 lat_range = [15.5, 16.5]  # °
 alt_max = 15e3  # m
@@ -51,9 +74,7 @@ files = [file for file in file_list if ".nc" in file]
 
 # estimate common prefix
 idx = [
-    i
-    for i in range(min(len(files[0]), len(files[1])))
-    if files[0][i] == files[1][i]
+    i for i in range(min(len(files[0]), len(files[1]))) if files[0][i] == files[1][i]
 ]
 
 
@@ -155,9 +176,7 @@ for var in variable_names:
         # must be ordered from high to low
 
     elif temp.ndim == 2:
-        rawdata[varname] = np.float64(
-            temp[central_idx, lat_range_idx].to_numpy()
-        )
+        rawdata[varname] = np.float64(temp[central_idx, lat_range_idx].to_numpy())
     else:
         raise ValueError("There should be only 2d and 3d data...mmmh")
 
@@ -169,19 +188,21 @@ N_profiles = len(rawdata["latitude"])
 z_default = np.mean(rawdata["z"], axis=1)
 z_default = z_default[z_default < alt_max]
 
-z_org=rawdata["z"]*1.
+z_org = rawdata["z"] * 1.0
 
 for key in rawdata:
 
     if rawdata[key].ndim == 2:
 
-        if np.size(rawdata[key],axis=0)>=len(z_default):
+        if np.size(rawdata[key], axis=0) >= len(z_default):
 
             print(f"reinterpolating {key}")
 
             data = np.zeros((len(z_default), N_profiles))
             for i in range(N_profiles):
-                F_int = interp1d(z_org[:, i], rawdata[key][:, i], fill_value="extrapolate")
+                F_int = interp1d(
+                    z_org[:, i], rawdata[key][:, i], fill_value="extrapolate"
+                )
                 data[:, i] = F_int(z_default)
 
             rawdata[key] = data
@@ -308,9 +329,7 @@ for i in range(N_profiles):
                 / gas_constant_water_vapor
             )
 
-            columns[name][i] = np.trapezoid(
-                density, x=batch_atms[i].data[1, :, 0, 0]
-            )
+            columns[name][i] = np.trapezoid(density, x=batch_atms[i].data[1, :, 0, 0])
         else:
 
             # breakpoint()
@@ -329,7 +348,7 @@ fig, ax = plt.subplots(4, 2, figsize=(16, 10))
 
 for i, name in enumerate(col_names):
     ax_k = ax[i // 2, i % 2]
-    ax_k.plot(lat,columns[name], label=name)
+    ax_k.plot(lat, columns[name], label=name)
     ax_k.set_title(name)
     ax_k.set_xlabel("latitude / °")
     ax_k.set_ylabel("column / kg m$^{-1}$ ")
@@ -377,8 +396,7 @@ for i, name in enumerate(plot_vars):
         data = np.log10(data)
         cmap = "Blues"
         pcm = ax_k.pcolormesh(
-            lat, p_grid / 1e3, data.T, cmap=cmap, clim=[-6, 1],
-            rasterized=True
+            lat, p_grid / 1e3, data.T, cmap=cmap, clim=[-6, 1], rasterized=True
         )
 
     ax_k.set_title(name)
@@ -402,32 +420,33 @@ ax_k.invert_yaxis()
 # simply select one of these profiles
 # to keep it simple we simply take the middle
 
-idx_selected = N_profiles//2
+idx_selected = N_profiles // 2
 
-dropsonde = pa.arts.GriddedField2()
-dropsonde.set_grid(0, ["T", "abs_species-H2O"])
+dropsonde = pa.arts.GriddedField4()
+dropsonde.set_grid(0, ["T", "z", "abs_species-H2O"])
 dropsonde.set_grid(1, batch_atms[idx_selected].grids[1][:])
-dropsonde.data = np.zeros((2, len(dropsonde.grids[1])))
-dropsonde.data[0, :] = batch_atms[idx_selected].data[0, :, 0, 0]
-dropsonde.data[1, :] = batch_atms[idx_selected].data[14, :, 0, 0]
+dropsonde.data = np.zeros((3, len(dropsonde.grids[1]), 1, 1))
+dropsonde.data[0, :, 0, 0] = batch_atms[idx_selected].data[0, :, 0, 0]
+dropsonde.data[1, :, 0, 0] = batch_atms[idx_selected].data[1, :, 0, 0]
+dropsonde.data[2, :, 0, 0] = batch_atms[idx_selected].data[14, :, 0, 0]
 
-#add some noise
+# add some noise
 rng = np.random.default_rng(12345)
-T_noise_free=dropsonde.data[0, :]*1.
-dropsonde.data[0, :] += rng.normal(0, .5, len(dropsonde.grids[1]))
+T_noise_free = dropsonde.data[0, :, 0, 0] * 1.0
+dropsonde.data[0, :, 0, 0] += rng.normal(0, 0.5, len(dropsonde.grids[1]))
 
-vmr_noise_free=dropsonde.data[1, :]*1.
-temp=np.log10(dropsonde.data[1, :])
-temp+=rng.normal(0, 0.2, len(dropsonde.grids[1]))
-dropsonde.data[1, :]= 10**temp
+vmr_noise_free = dropsonde.data[2, :, 0, 0] * 1.0
+temp = np.log10(dropsonde.data[2, :, 0, 0])
+temp += rng.normal(0, 0.2, len(dropsonde.grids[1]))
+dropsonde.data[2, :, 0, 0] = 10**temp
 # dropsonde.data[1, :] += rng.lognormal(0, , len(dropsonde.grids[1]))
 
 
 # plot dropsonde data
 fig2, ax2 = plt.subplots(1, 2, figsize=(10, 5))
 
-ax2[0].plot(dropsonde.data[0, :], dropsonde.grids[1] / 1e3, label='obs')  # T
-ax2[0].plot(T_noise_free, dropsonde.grids[1] / 1e3, label='true')
+ax2[0].plot(dropsonde.data[0, :, 0, 0], dropsonde.grids[1] / 1e3, label="obs")  # T
+ax2[0].plot(T_noise_free, dropsonde.grids[1] / 1e3, label="true")
 ax2[0].set_title("Temperature")
 ax2[0].set_xlabel("T / K")
 ax2[0].set_ylabel("p / hPa")
@@ -435,8 +454,8 @@ ax2[0].set_yscale("log")
 ax2[0].invert_yaxis()
 ax2[0].legend()
 
-ax2[1].loglog(dropsonde.data[1, :], dropsonde.grids[1] / 1e3, label='obs')  # H2O
-ax2[1].loglog(vmr_noise_free, dropsonde.grids[1] / 1e3, label='true')
+ax2[1].loglog(dropsonde.data[2, :, 0, 0], dropsonde.grids[1] / 1e3, label="obs")  # H2O
+ax2[1].loglog(vmr_noise_free, dropsonde.grids[1] / 1e3, label="true")
 ax2[1].set_title("H2O")
 ax2[1].set_xlabel("H2O / vmr")
 ax2[1].set_ylabel("p / hPa")
@@ -444,16 +463,13 @@ ax2[1].invert_yaxis()
 ax2[1].legend()
 
 
-
-
-
 # %% save data
 
-batch_atms.savexml('input/atmospheres_true.xml')
-batch_aux1d.savexml('input/aux1d_true.xml')
-batch_aux2d.savexml('input/aux2d_true.xml')
+batch_atms.savexml("atmosphere/atmospheres_true.xml")
+batch_aux1d.savexml("atmosphere/aux1d_true.xml")
+batch_aux2d.savexml("atmosphere/aux2d_true.xml")
 
-dropsonde.savexml('input/dropsonde.xml')
+dropsonde.savexml("observation/dropsonde.xml")
 
 # %% save figures
 
