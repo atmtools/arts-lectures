@@ -1,8 +1,44 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jan  4 00:42:52 2025
+Simulate airborne radiometric measurements from a HALO-like airplane.
 
+This script simulates radiometric measurements of atmospheric radiation in three frequency bands:
+- H2O (22 GHz)
+- O2_low (50 GHz)  
+- O2_high (118 GHz)
+
+The simulation assumes:
+- Aircraft altitude of 15 km
+- Nadir-looking geometry (180 degree line of sight)
+- Known constant surface reflectivity of 0.4
+- Known constant surface temperature of 300K
+
+The script:
+1. Loads atmospheric data and auxiliary information
+2. Simulates clean measurements for each frequency band
+3. Adds random measurement noise based on specified NeDT
+4. Saves results as XML files
+5. Generates plots of simulated measurements vs latitude
+
+Files:
+    Input:
+        - atmosphere/atmospheres_true.xml: Atmospheric profiles
+        - atmosphere/aux1d_true.xml: Auxiliary data including latitudes
+    
+    Output:
+        - observation/y_obs_*.xml: Simulated noisy measurements
+        - observation/f_grid_*.xml: Frequency grids
+        - observation/lat.xml: Latitude points
+        - check_plots/airborne_measurement.pdf: Visualization of results
+
+Dependencies:
+    - numpy: For numerical operations
+    - matplotlib: For plotting
+    - pyarts: For XML handling
+    - nonlin_oem: Custom module for radiative transfer calculations
+
+Created on Sat Jan  4 00:42:52 2025
 @author: u242031
 """
 

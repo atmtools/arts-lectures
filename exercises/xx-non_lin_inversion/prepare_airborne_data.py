@@ -3,7 +3,7 @@
 """
 Created on Thu Jan  2 19:53:32 2025
 
-Prepare data for exercise 09 - Non-linear inversion
+Prepare data for exercise - Non-linear inversion
 Read in data from GEM tropical pacific scene and extract
 a slice of the data for given latitude and altitude range for
 a simulation of an airborne radiometer observation.
@@ -51,10 +51,11 @@ from typhon.constants import gas_constant_water_vapor
 # %% paths / constants
 
 data_folder = (
-    "/ceph_pool/ec/scratch/u237/user_data/mbrath/EarthCARE_Scenes/39320_test_data/"
+    "/scratch/u237/user_data/mbrath/EarthCARE_Scenes/39320_test_data/"
 )
 
-lat_range = [15.5, 16.5]  # °
+# lat_range = [15.5, 16.5]  # °
+lat_range = [16, 17]
 alt_max = 15e3  # m
 
 # Amount of Oxygen
@@ -63,6 +64,8 @@ O2vmr = 0.2095
 # Amount of Nitrogen
 N2vmr = 0.7808
 
+#T emperature offset of dropsonde
+T_offset=1. #K
 
 # %% load data
 
@@ -123,17 +126,6 @@ atm_fieldnames = [
     "abs_species-O2",
     "abs_species-N2",
 ]
-
-# # Variable list
-# varlist = [
-#     'longitude', 'latitude', 'pressure_thermodynamic', 'height_thermodynamic',
-#     'temperature', 'relative_humidity', 'water_content_cloud', 'water_content_ice',
-#     'water_content_rain', 'water_content_snow', 'water_content_graupel', 'water_content_hail',
-#     'number_concentration_cloud', 'number_concentration_ice', 'number_concentration_rain',
-#     'number_concentration_snow', 'number_concentration_graupel', 'number_concentration_hail',
-#     'surface_temperature', 'surface_pressure', 'orography', 'wind_horizontal_speed',
-#     'wind_horizontal_direction', 'water_land_fraction', 'ice_fraction'
-# ]
 
 # %%
 
@@ -276,12 +268,11 @@ for i in range(N_profiles):
             atm.data[j, :, 0, 0] = temp
 
         if var == "abs_species-O2":
-            atm.data[j, :, 0, 0] = atm.data[j, :, 0, 0] * O2vmr
+            atm.data[j, :, 0, 0] = O2vmr
 
         if var == "abs_species-N2":
-            atm.data[j, :, 0, 0] = atm.data[j, :, 0, 0] * N2vmr
+            atm.data[j, :, 0, 0] = N2vmr
 
-    # breakpoint()
 
     batch_atms.append(deepcopy(atm))
 
@@ -344,7 +335,10 @@ for i in range(N_profiles):
 
 lat = np.array([a.data[0] for a in batch_aux1d])
 
+
+# plt.style.use('ggplot')
 fig, ax = plt.subplots(4, 2, figsize=(16, 10))
+
 
 for i, name in enumerate(col_names):
     ax_k = ax[i // 2, i % 2]
@@ -352,6 +346,53 @@ for i, name in enumerate(col_names):
     ax_k.set_title(name)
     ax_k.set_xlabel("latitude / °")
     ax_k.set_ylabel("column / kg m$^{-1}$ ")
+
+
+# %% Create 'dropsonde data'
+# simply select one of these profiles
+# to keep it simple we simply take the middle
+
+idx_selected = N_profiles // 2
+
+dropsonde = pa.arts.GriddedField4()
+dropsonde.set_grid(0, ["T", "z", "abs_species-H2O"])
+dropsonde.set_grid(1, batch_atms[idx_selected].grids[1][:])
+dropsonde.data = np.zeros((3, len(dropsonde.grids[1]), 1, 1))
+dropsonde.data[0, :, 0, 0] = batch_atms[idx_selected].data[0, :, 0, 0]
+dropsonde.data[1, :, 0, 0] = batch_atms[idx_selected].data[1, :, 0, 0]
+dropsonde.data[2, :, 0, 0] = batch_atms[idx_selected].data[14, :, 0, 0]
+
+# add some noise
+rng = np.random.default_rng(12345)
+T_noise_free = dropsonde.data[0, :, 0, 0] * 1.0
+dropsonde.data[0, :, 0, 0] += rng.normal(0, 0.5, len(dropsonde.grids[1]))+T_offset
+
+vmr_noise_free = dropsonde.data[2, :, 0, 0] * 1.0
+temp = np.log10(dropsonde.data[2, :, 0, 0])
+temp += rng.normal(0, 0.05, len(dropsonde.grids[1]))
+dropsonde.data[2, :, 0, 0] = 10**temp
+
+
+# plot dropsonde data
+fig2, ax2 = plt.subplots(1, 2, figsize=(10, 5))
+
+ax2[0].plot(dropsonde.data[0, :, 0, 0], dropsonde.grids[1] / 1e3, label="obs")  # T
+ax2[0].plot(T_noise_free, dropsonde.grids[1] / 1e3, label="true")
+ax2[0].set_title("Temperature")
+ax2[0].set_xlabel("T / K")
+ax2[0].set_ylabel("p / hPa")
+ax2[0].set_yscale("log")
+ax2[0].invert_yaxis()
+ax2[0].legend()
+
+ax2[1].loglog(dropsonde.data[2, :, 0, 0], dropsonde.grids[1] / 1e3, label="obs")  # H2O
+ax2[1].loglog(vmr_noise_free, dropsonde.grids[1] / 1e3, label="true")
+ax2[1].set_title("H2O")
+ax2[1].set_xlabel("H2O / vmr")
+ax2[1].set_ylabel("p / hPa")
+ax2[1].invert_yaxis()
+ax2[1].legend()
+
 
 
 # %% now plot profles for check
@@ -381,6 +422,7 @@ for i, name in enumerate(plot_vars):
 
     if name == "T":
         data -= np.mean(data, axis=0)
+        # data -= dropsonde.data[0,:,0,0]
         cmap = "YlOrRd"
         pcm = ax_k.pcolormesh(
             lat,
@@ -416,51 +458,6 @@ for i, name in enumerate(plot_vars):
 
 ax_k.invert_yaxis()
 
-# %% Create 'dropsonde data'
-# simply select one of these profiles
-# to keep it simple we simply take the middle
-
-idx_selected = N_profiles // 2
-
-dropsonde = pa.arts.GriddedField4()
-dropsonde.set_grid(0, ["T", "z", "abs_species-H2O"])
-dropsonde.set_grid(1, batch_atms[idx_selected].grids[1][:])
-dropsonde.data = np.zeros((3, len(dropsonde.grids[1]), 1, 1))
-dropsonde.data[0, :, 0, 0] = batch_atms[idx_selected].data[0, :, 0, 0]
-dropsonde.data[1, :, 0, 0] = batch_atms[idx_selected].data[1, :, 0, 0]
-dropsonde.data[2, :, 0, 0] = batch_atms[idx_selected].data[14, :, 0, 0]
-
-# add some noise
-rng = np.random.default_rng(12345)
-T_noise_free = dropsonde.data[0, :, 0, 0] * 1.0
-dropsonde.data[0, :, 0, 0] += rng.normal(0, 0.5, len(dropsonde.grids[1]))
-
-vmr_noise_free = dropsonde.data[2, :, 0, 0] * 1.0
-temp = np.log10(dropsonde.data[2, :, 0, 0])
-temp += rng.normal(0, 0.2, len(dropsonde.grids[1]))
-dropsonde.data[2, :, 0, 0] = 10**temp
-# dropsonde.data[1, :] += rng.lognormal(0, , len(dropsonde.grids[1]))
-
-
-# plot dropsonde data
-fig2, ax2 = plt.subplots(1, 2, figsize=(10, 5))
-
-ax2[0].plot(dropsonde.data[0, :, 0, 0], dropsonde.grids[1] / 1e3, label="obs")  # T
-ax2[0].plot(T_noise_free, dropsonde.grids[1] / 1e3, label="true")
-ax2[0].set_title("Temperature")
-ax2[0].set_xlabel("T / K")
-ax2[0].set_ylabel("p / hPa")
-ax2[0].set_yscale("log")
-ax2[0].invert_yaxis()
-ax2[0].legend()
-
-ax2[1].loglog(dropsonde.data[2, :, 0, 0], dropsonde.grids[1] / 1e3, label="obs")  # H2O
-ax2[1].loglog(vmr_noise_free, dropsonde.grids[1] / 1e3, label="true")
-ax2[1].set_title("H2O")
-ax2[1].set_xlabel("H2O / vmr")
-ax2[1].set_ylabel("p / hPa")
-ax2[1].invert_yaxis()
-ax2[1].legend()
 
 
 # %% save data
