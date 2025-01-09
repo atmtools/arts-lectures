@@ -33,7 +33,7 @@ Dependencies:
     pyarts
     nonlin_oem
 
-Author: u242031
+@author: Manfred Brath
 Created: Tue Jan 7 12:13:59 2025
 
 """

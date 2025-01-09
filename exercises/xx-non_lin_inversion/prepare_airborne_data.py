@@ -31,7 +31,7 @@ The plots are saved in the following files:
 - columns.pdf
 - dropsonde.pdf
 
-@author: u242031
+@author: Manfred Brath
 """
 
 import os

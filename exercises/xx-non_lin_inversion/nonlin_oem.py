@@ -50,7 +50,7 @@ implemented in ARTS, with options for diagnostic output and convergence
 monitoring.
 
 created: Tue Jan 7 12:13:59 2025
-@author: u242031
+@author: Manfred Brath
 """
 
 

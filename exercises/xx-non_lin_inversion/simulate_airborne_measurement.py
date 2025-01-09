@@ -39,7 +39,7 @@ Dependencies:
     - nonlin_oem: Custom module for radiative transfer calculations
 
 Created on Sat Jan  4 00:42:52 2025
-@author: u242031
+@author: Manfred Brath
 """
 
 import numpy as np
