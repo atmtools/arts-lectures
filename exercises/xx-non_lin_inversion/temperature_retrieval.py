@@ -96,9 +96,7 @@ S_a = nlo.create_apriori_covariance_matrix(
 # Define Se and its invers
 S_y = pa.arts.Sparse(np.diag(np.ones(len(f_grid)) * NeDT))
 
-# ws = nlo.basic_setup(f_grid)
-# result = nlo.retrieval_T(ws,y, dropsonde, S_y, S_a)
-
+#Temperature retrieval for selected observation
 T_ret, DeltaT, y_fit, A, G = nlo.temperature_retrieval(
     y,
     f_grid,
@@ -114,7 +112,8 @@ T_ret, DeltaT, y_fit, A, G = nlo.temperature_retrieval(
 )
 
 
-# %% plot results
+# %% plot results for the single observation
+
 T_apr = dropsonde.get("T", keep_dims=False)
 T_true = atms[idx].get("T", keep_dims=False)
 z_true = atms[idx].get("z", keep_dims=False)
@@ -124,6 +123,7 @@ DeltaT_apriori = np.sqrt(np.diag(S_a))
 
 fig, ax = plt.subplots(1, 3, figsize=(14.14, 10))
 
+#plot difference to true temperature
 ax[0].plot(T_ret - T_true, z_ret, "s-", color="r", label="ret")
 ax[0].fill_betweenx(
     z_ret, T_ret - T_true - DeltaT, T_ret - T_true + DeltaT, alpha=0.3, color="r"
@@ -137,11 +137,11 @@ ax[0].fill_betweenx(
     color="g",
 )
 ax[0].set_title("Difference to T$_{true}$")
-
 ax[0].set_xlabel("Temperature [K]")
 ax[0].set_ylabel("Altitude [m]")
 ax[0].legend()
 
+# Plot true temperature profile
 ax[1].plot(T_true, z_true, "x-", label="truth")
 ax[1].set_xlabel("Temperature [K]")
 ax[1].set_ylabel("Altitude [m]")
@@ -154,8 +154,11 @@ ax[2].set_ylabel("Brightness temperature [K]")
 ax[2].legend()
 fig.tight_layout()
 
+
+#new figure
 fig2, ax2 = plt.subplots(1, 2, figsize=(14.14, 10))
 
+#plot averaging kernels
 colormap = plt.cm.YlOrRd
 colors = [colormap(i) for i in np.linspace(0, 1, np.size(A, 1))]
 for i in range(np.size(A, 1)):
@@ -172,9 +175,9 @@ ax2[0].set_ylabel("Altitude [m]")
 ax2[0].set_title("Averaging Kernels")
 
 
+#plot gain matrix
 for i in range(np.size(G, 1)):
     ax2[1].plot(G[:, i], z_ret, label=f"{f_grid[i]/1e9:.2f}GHz")
-
 ax2[1].set_title("Gain Matrix")
 ax2[1].legend()
 ax2[1].set_xlabel("Contributions / KK$^{-1}$")
@@ -184,14 +187,15 @@ fig.tight_layout()
 
 # %% now do the retrieval for the whole segment
 
-
+#allocate
 DeltaT_all = np.zeros((np.size(y_obs, 0), dropsonde.get("z", keep_dims=False).size))
 T_all = np.zeros((np.size(y_obs, 0), dropsonde.get("z", keep_dims=False).size))
 y_fit_all = np.zeros((np.size(y_obs, 0), len(f_grid)))
 A_summed_all = np.zeros((np.size(y_obs, 0), dropsonde.get("z", keep_dims=False).size))
 G_summed_all = np.zeros((np.size(y_obs, 0), dropsonde.get("z", keep_dims=False).size))
-G_summed_all2 = np.zeros((np.size(y_obs, 0), len(f_grid)))
 
+
+#loop over the observations
 for i in range(np.size(y_obs, 0)):
 
     print(f"...retrieving profile {i} of {np.size(y_obs, 0)}")
@@ -210,19 +214,20 @@ for i in range(np.size(y_obs, 0)):
         Diagnostics=True,
     )
 
+
     DeltaT_all[i, :] = DeltaT
     T_all[i, :] = T_ret
     y_fit_all[i, :] = y_fit
     A_summed_all[i, :] = np.sum(A, axis=1)
     G_summed_all[i, :] = np.sum(G, axis=1)
-    G_summed_all2[i, :] = np.sum(G, axis=0)
 
 
-# %% plot it
+
+# %% plot the whole segment
 
 fig, ax = plt.subplots(2, 2, figsize=(14.14, 10))
 
-
+#plot difference to a priori
 cmap = "YlOrRd"
 data = T_all - T_apr  # T_all.mean(0)
 data_max = np.max(np.abs(data))
@@ -244,23 +249,26 @@ pcm = ax[0, 1].pcolormesh(
     rasterized=True,
 )
 
+#plot retrieved terperature uncertainty
 fig.colorbar(pcm, ax=ax[0, 1], label="$\Delta T$ [K]")
 ax[0, 1].set_xlabel("Latitude [deg]")
 ax[0, 1].set_ylabel("Altitude [km]")
 ax[0, 1].set_title("Retrieved Temperature uncertainty")
 
+#plot observed and fitted brightness temperatures
 for i in range(np.size(y_obs, 1)):
     ax[1, 0].plot(lat, y_obs[:, i], label=f"{f_grid[i]/1e9:.2f}$\,$GHz, obs")
 ax[1, 0].set_prop_cycle(None)
 for i in range(np.size(y_fit_all, 1)):
     ax[1, 0].plot(
         lat, y_fit_all[:, i], "--"
-    ) 
+    )
 ax[1, 0].set_prop_cycle(None)
 ax[1, 0].set_xlabel("Latitude [deg]")
 ax[1, 0].set_ylabel("Brightness temperature [K]")
 ax[1, 0].legend()
 
+#plot residuals
 ax[1, 1].plot(lat, y_obs - y_fit_all, "-", label="residual")
 ax[1, 1].set_xlabel("Latitude [deg]")
 ax[1, 1].set_ylabel("Brightness temperature [K]")

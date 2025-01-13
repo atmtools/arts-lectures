@@ -54,7 +54,6 @@ created: Tue Jan 7 12:13:59 2025
 """
 
 
-from copy import deepcopy
 import numpy as np
 import pyarts.workspace
 import pyarts as pa
@@ -169,8 +168,6 @@ def forward_model(
     atm_fields_compact,
     surface_reflectivity,
     surface_temperature,
-    sensor_pos,
-    sensor_los,
     retrieval_quantity="",
 ):
     """
@@ -187,10 +184,6 @@ def forward_model(
         Surface reflectivity value (between 0 and 1).
     surface_temperature : float
         Surface temperature value in Kelvin.
-    sensor_pos : list or numpy.ndarray
-        Sensor position coordinates.
-    sensor_los : list or numpy.ndarray
-        Sensor line of sight angles.
     retrieval_quantity : str, optional
         Specifies the quantity to be retrieved. Must be either 'H2O' or 'T'.
         If empty, no Jacobian is calculated.
@@ -248,10 +241,6 @@ def forward_model(
 
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, surface_reflectivity)
 
-    # Definition of sensor position and line of sight (LOS)
-    ws.MatrixSet(ws.sensor_pos, sensor_pos)
-    ws.MatrixSet(ws.sensor_los, sensor_los)
-
     # Jacobian calculation
     if len(retrieval_quantity) > 0:
         ws.jacobianInit()
@@ -294,7 +283,7 @@ def Forward_model(
     atm_fields_compact,
     surface_reflectivity,
     surface_temperature,
-    sensor_pos,
+    sensor_altitude,
     sensor_los,
     retrieval_quantity="",
 ):
@@ -313,10 +302,10 @@ def Forward_model(
         Surface reflectivity value(s).
     surface_temperature : float
         Surface temperature [K].
-    sensor_pos : array-like
-        Sensor position coordinates [m].
+    sensor_altitude : array-like
+        Position vector of the sensor [m]
     sensor_los : array-like
-        Sensor line-of-sight angles [degrees].
+        Line of sight vector of the sensor
     retrieval_quantity : str, optional
         Specifies the quantity to be retrieved. Must be either 'H2O' or 'T'.
         If empty, no Jacobian is calculated.
@@ -336,13 +325,13 @@ def Forward_model(
 
     ws = basic_setup(f_grid)
 
+    set_sensor(ws, sensor_altitude, sensor_los)
+
     y, jacobian = forward_model(
         ws,
         atm_fields_compact,
         surface_reflectivity,
         surface_temperature,
-        sensor_pos,
-        sensor_los,
         retrieval_quantity=retrieval_quantity,
     )
 
@@ -350,8 +339,8 @@ def Forward_model(
 
 
 def set_sensor(ws, sensor_pos, sensor_los):
-    ws.MatrixSet(ws.sensor_pos, np.array([[sensor_pos]]))
-    ws.MatrixSet(ws.sensor_los, np.array([[sensor_los]]))
+    ws.sensor_pos=np.array([[sensor_pos]])
+    ws.sensor_los=np.array([[sensor_los]])
 
 
 def prepare_initial_conditions(
@@ -429,7 +418,7 @@ def retrieval_T(
     -----
     The function assumes that the ARTS workspace is properly initialized with all
     necessary atmospheric and sensor parameters before the retrieval starts.
-    """    
+    """
 
     # Copy the measeurement vector to the ARTS workspace
     ws.y = y
@@ -630,7 +619,7 @@ def create_apriori_covariance_matrix(x, z, delta_x, correlation_length):
     ----------
     x : array-like
         Horizontal coordinate grid points (must have same length as z)
-    z : array-like 
+    z : array-like
         Vertical coordinate grid points
     delta_x : float or array-like
         Standard deviation(s) of the a priori knowledge. Can be either:
@@ -803,9 +792,6 @@ if __name__ == "__main__":
     # load frequency data for 50 GHz channels
     f_grid = xml.load("observation/f_grid_50GHz.xml")[:]
 
-    # ws = basic_setup(f_grid)
-    # y, jacobian = forward_model(ws, dropsonde, surface_reflectivity, surface_temperature, sensor_pos, sensor_los,retrieval_quantity="T")
-
     # load observation data
     y_obs = xml.load("observation/y_obs_50GHz.xml")[:]
 
@@ -845,3 +831,5 @@ if __name__ == "__main__":
     ax[1].set_ylabel("Jacobian")
     ax[1].set_xlabel("Altitude [km]")
     ax[1].set_title("Temperature jacbian")
+
+    fig.tight_layout()
