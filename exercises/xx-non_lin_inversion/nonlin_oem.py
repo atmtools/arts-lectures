@@ -945,11 +945,16 @@ def Hamp_channels(band_selection, rel_mandatory_grid_spacing=1./4.):
         for key in channels.keys():
             print(f'{key} =====================================================')
             print(f'f_grid: {channels[key]["f_center"]} Hz')
-            print(f'Offset: {channels[key]["Offset"]} Hz')
+            print(f'Offset1: {channels[key]["Offset1"]} Hz')
+            print(f'Offset2: {channels[key]["Offset2"]} Hz')            
             print(f'NeDT: {channels[key]["NeDT"]} K')
             print(f'Accuracy: {channels[key]["Accuracy"]} K')
             print(f'Bandwidth: {channels[key]["Bandwidth"]} Hz')
-            print(f'FWHM_Antenna: {channels[key]["FWHM_Antenna"]} deg\n')
+            print(f'FWHM_Antenna: {channels[key]["FWHM_Antenna"]} deg')
+            print(f'df: {channels[key]["df"]}')
+            print('=====================================================\n')
+        return
+
 
 
     else:
