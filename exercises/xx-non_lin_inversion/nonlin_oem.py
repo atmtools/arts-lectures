@@ -61,48 +61,50 @@ from pyarts import xml
 
 # %% ARTS functions
 
-def basic_setup(f_grid, version="2.6.8", verbosity=0):
-    """Set up a basic ARTS workspace configuration for radiative transfer calculations.
+def basic_setup(f_grid, sensor_description=[], version="2.6.8", verbosity=0):
+    """
+    Sets up a basic ARTS workspace configuration for radiative transfer calculations.
     This function initializes an ARTS workspace with standard settings for atmospheric
-    radiative transfer calculations, particularly focused on emission-based calculations
-    in Earth's atmosphere.
+    radiative transfer calculations, particularly focused on microwave sensors and
+    tropospheric applications.
     Parameters
     ----------
     f_grid : numpy.ndarray
-        Frequency grid for calculations [Hz]
+        Frequency grid for calculations. Must be provided if sensor_description is not used.
+    sensor_description : list, optional
+        AMSU sensor description parameters. Cannot be used simultaneously with f_grid.
+        Default is empty list.
     version : str, optional
-        Version of ARTS catalog to use (default is "2.6.8")
+        Version of ARTS catalogue to be downloaded. Default is "2.6.8".
     verbosity : int, optional
-        Level of output verbosity (default is 0)
+        Level of output verbosity. Default is 0 (minimal output).
     Returns
     -------
-    pyarts.workspace.Workspace
-        Configured ARTS workspace with:
-        - Earth as planet
-        - Emission-based radiative transfer
-        - Cosmic background radiation
-        - No refraction
-        - Non-reflecting surface
-        - Single Stokes component
-        - Basic absorption species (H2O, O2, N2)
-        - Planck brightness temperature as output unit
-        - Clear-sky conditions
+    ws : pyarts.workspace.Workspace
+        Configured ARTS workspace instance.
+    Raises
+    ------
+    ValueError
+        If both f_grid and sensor_description are provided simultaneously,
+        or if neither f_grid nor sensor_description is provided.
     Notes
     -----
-    The function performs the following main steps:
-    1. Set up emission-based calculations
-    2. Include cosmic background radiation
-    3. Use Earth as planet
-    4. Set up non-reflecting surface
-    5. Set up single Stokes component
-    6. Define basic absorption species
-    7. Set up Planck brightness temperature as output unit
-    8. Set up clear-sky conditions
+    The function sets up:
+    - Standard emission calculation
+    - Cosmic background radiation
+    - Surface properties (non-reflecting surface)
+    - Absorption species (H2O, O2, N2 using Rosenkranz models)
+    - Planck brightness temperature as output unit
+    - 1D atmosphere
+    - Path calculation without refraction
+    For sensor description, the function includes an iterative adjustment mechanism
+    that modifies the frequency spacing if initial sensor response generation fails.
     """
 
-    pyarts.cat.download.retrieve(verbose=True, version=version)
 
-    ws = pyarts.workspace.Workspace(verbosity=verbosity)
+    pa.cat.download.retrieve(verbose=True, version=version)
+
+    ws = pa.workspace.Workspace(verbosity=verbosity)
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
     ws.verbositySetScreen(ws.verbosity, verbosity)
@@ -143,22 +145,47 @@ def basic_setup(f_grid, version="2.6.8", verbosity=0):
 
     ws.abs_lines_per_speciesSetEmpty()
 
-    # Set the frequency grid
-    ws.f_grid = f_grid
-
-    # on-the-fly absorption
-    ws.propmat_clearsky_agendaAuto()
-
-    # No sensor properties
-    ws.sensorOff()
-
-    # no jacobian
-    ws.jacobianOff()
-
     # We select here to use Planck brightness temperatures
     ws.StringSet(ws.iy_unit, "PlanckBT")
 
     ws.AtmosphereSet1D()
+
+    it_max=5
+
+    if np.size(f_grid)==0 and np.size(sensor_description)>0:
+        iterate=True
+        N_it=0
+        while iterate and N_it<it_max:
+            N_it+=1
+            try:
+                ws.sensor_description_amsu=sensor_description
+                ws.sensor_responseGenericAMSU(spacing=1e12)
+                iterate=False
+            except RuntimeError:
+                rel_change=0.9
+
+                print(f'adjusting relative mandatory minimum frequency spacing by factor {rel_change}')
+
+                #adjust relative mandatory minimum frequency spacing
+                sensor_description[:,-1]*=rel_change
+
+
+    elif np.size(f_grid)>0 and np.size(sensor_description)>0:
+
+        raise ValueError("f_grid and sensor_description cannot be provided simultaneously")
+
+    elif np.size(f_grid)>0 and np.size(sensor_description)==0:
+
+        # Set the frequency grid
+        ws.f_grid = f_grid
+        ws.sensorOff()
+    else:
+        raise ValueError("f_grid or sensor_description must be provided")
+
+    # on-the-fly absorption
+    ws.propmat_clearsky_agendaAuto()
+
+    ws.abs_lines_per_speciesSetEmpty()
 
     return ws
 
@@ -286,46 +313,50 @@ def Forward_model(
     sensor_altitude,
     sensor_los,
     retrieval_quantity="",
+    sensor_description=[],
 ):
     """
-    Computes the forward model and its Jacobian for atmospheric radiative transfer.
-    This function sets up and runs a radiative transfer calculation using the ARTS model,
-    computing both simulated measurements and their derivatives with respect to the
-    retrieval parameters.
+    Forward radiative transfer model for atmospheric observations.
+    This function computes the radiative transfer and optionally its Jacobian for given
+    atmospheric conditions and sensor specifications.
     Parameters
     ----------
     f_grid : array-like
-        Frequency grid for the radiative transfer calculation [Hz].
+        Frequency grid for calculations [Hz]. Ignored if sensor_description is provided.
     atm_fields_compact : dict
-        Dictionary containing atmospheric fields (temperature, humidity, etc.).
+        Dictionary containing atmospheric fields (temperature, humidity etc.)
     surface_reflectivity : float or array-like
-        Surface reflectivity value(s).
+        Surface reflectivity value(s)
     surface_temperature : float
-        Surface temperature [K].
-    sensor_altitude : array-like
-        Position vector of the sensor [m]
-    sensor_los : array-like
-        Line of sight vector of the sensor
+        Surface temperature [K]
+    sensor_altitude : float
+        Altitude of the sensor [m]
+    sensor_los : float
+        Line of sight angle of the sensor [degrees]
     retrieval_quantity : str, optional
-        Specifies the quantity to be retrieved. Must be either 'H2O' or 'T'.
-        If empty, no Jacobian is calculated.
+        Quantity for which to calculate Jacobian. Default is empty string.
+    sensor_description : list, optional
+        Sensor channel specifications. If provided, f_grid is ignored.
     Returns
     -------
     tuple
         - y : array-like
-            Simulated measurements (e.g., brightness temperatures).
+            Simulated radiances/brightness temperatures
         - jacobian : array-like
-            Jacobian matrix containing the derivatives of measurements
-            with respect to retrieval parameters.
+            Jacobian matrix if retrieval_quantity is specified, otherwise None
     Notes
     -----
-    This function serves as a wrapper around the ARTS radiative transfer model,
-    providing a simplified interface for forward model calculations.
+    The function uses a workspace (ws) with either frequency grid or sensor description
+    for radiative transfer calculations.
     """
 
-    ws = basic_setup(f_grid)
+    if np.size(sensor_description)>0:
+        print('Ignoring f_grid annd output will be sensor channels')
+        ws = basic_setup([],sensor_description=sensor_description)
+    else:
+        ws = basic_setup(f_grid)
 
-    set_sensor(ws, sensor_altitude, sensor_los)
+    set_sensor_position_and_view(ws, sensor_altitude, sensor_los)
 
     y, jacobian = forward_model(
         ws,
@@ -338,7 +369,24 @@ def Forward_model(
     return y, jacobian
 
 
-def set_sensor(ws, sensor_pos, sensor_los):
+def set_sensor_position_and_view(ws, sensor_pos, sensor_los):
+    """Set sensor position and line-of-sight direction in workspace.
+    This function sets the sensor position and line-of-sight (viewing direction)
+    in the workspace for radiative transfer calculations.
+    Parameters
+    ----------
+    ws : Workspace
+        ARTS workspace object where sensor parameters will be set
+    sensor_pos : array-like
+        Sensor position coordinates (e.g., [x,y,z])
+    sensor_los : array-like
+        Line-of-sight direction vector (e.g., [dx,dy,dz])
+    Returns
+    -------
+    None
+        Modifies workspace in-place by setting sensor_pos and sensor_los variables
+    """
+
     ws.sensor_pos=np.array([[sensor_pos]])
     ws.sensor_los=np.array([[sensor_los]])
 
@@ -351,6 +399,31 @@ def prepare_initial_conditions(
     O2vmr=0.2095,
     N2vmr=0.7808,
 ):
+    """Prepare initial atmospheric conditions for radiative transfer calculations.
+    This function sets up the atmospheric state, including the addition of N2 and O2
+    if not present in the atmospheric data, and configures surface properties.
+    Parameters
+    ----------
+    ws : Workspace
+        ARTS workspace object.
+    atmosphere_apr : GriddedField4
+        A priori atmospheric state containing species and their concentrations.
+    surface_temperature : float
+        Surface temperature in Kelvin.
+    surface_reflectivity : float or list
+        Surface reflectivity value(s).
+    O2vmr : float, optional
+        Volume mixing ratio of O2. Defaults to 0.2095.
+    N2vmr : float, optional
+        Volume mixing ratio of N2. Defaults to 0.7808.
+    Notes
+    -----
+    The function performs the following operations:
+    1. Sets the atmospheric fields from the input atmosphere
+    2. Adds N2 and O2 if not present in the atmosphere
+    3. Converts compact fields to full atmospheric fields
+    4. Sets surface temperature and reflectivity
+    """
 
     ws.atm_fields_compact = atmosphere_apr
     # check if N2 and O2 in background atmosphere
@@ -587,7 +660,7 @@ def temperature_retrieval(
         ws, background_atmosphere, surface_temperature, surface_reflectivity
     )
 
-    set_sensor(ws, sensor_altitude, sensor_los)
+    set_sensor_position_and_view(ws, sensor_altitude, sensor_los)
 
     result = retrieval_T(
         ws, y_obs, S_y, S_a, Diagnostics=Diagnostics, Verbosity=Verbosity
@@ -764,6 +837,153 @@ def Hamp_channels_simplified(Band):
         raise ValueError("Band not defined")
 
     return f_grid, NeDT
+
+
+def Hamp_channels(band_selection, rel_mandatory_grid_spacing=1./4.):
+    """Provides sensor specifications for the HAMP (HALO Microwave Package) instrument.
+
+    This function returns the specifications of selected frequency bands of the HAMP
+    instrument, including frequencies, bandwidth, noise equivalent differential
+    temperature (NeDT), accuracy and antenna characteristics.
+
+    Parameters
+    ----------
+    band_selection : list of str
+        List of bands to select. Valid options are:
+        - 'K': K-band (22-31 GHz, 7 channels)
+        - 'V': V-band (50-58 GHz, 7 channels)
+        - 'W': W-band (90 GHz, 1 channel)
+        - 'F': F-band (118.75 GHz, 4 channels with double sideband)
+        - 'G': G-band (183.31 GHz, 6 channels with double sideband)
+        If empty list is provided, prints specifications for all available bands.
+
+    Returns
+    -------
+    tuple
+        Returns a tuple of numpy arrays containing:
+        - sensor_description : ndarray, shape (n_channels, 3)
+            Array containing [frequency, offset, bandwidth] for each channel
+        - NeDT : ndarray, shape (n_channels,)
+            Noise equivalent differential temperature in Kelvin
+        - Accuracy : ndarray, shape (n_channels,)
+            Accuracy in Kelvin
+        - FWHM_Antenna : ndarray, shape (n_channels,)
+            Full Width at Half Maximum of antenna beam pattern in degrees
+
+    Raises
+    ------
+    ValueError
+        If a selected band is not available in the instrument specifications.
+
+    Notes
+    -----
+    All frequencies, offsets and bandwidths are in Hz.
+    NeDT and Accuracy are in Kelvin.
+    FWHM_Antenna is in degrees.
+    """
+
+
+    channels = {}
+    channels["K"] = {
+        "f_center": np.array([22.24, 23.04, 23.84, 25.44, 26.24, 27.84, 31.40]) * 1e9,
+        "Offset1": np.zeros(7),
+        "Offset2": np.zeros(7),
+        "NeDT": 0.1,
+        "Accuracy": 0.5,
+        "Bandwidth": 230e6,
+        "FWHM_Antenna": 5.0,
+        "df": rel_mandatory_grid_spacing,
+    }
+    channels["V"] = {
+        "f_center": np.array([50.3, 51.76, 52.8, 53.75, 54.94, 56.66, 58.00]) * 1e9,
+        "Offset1": np.zeros(7),
+        "Offset2": np.zeros(7),
+        "NeDT": 0.2,
+        "Accuracy": 0.5,
+        "Bandwidth": 230e6,
+        "FWHM_Antenna": 3.5,
+        "df": rel_mandatory_grid_spacing,
+    }
+    channels["W"] = {
+        "f_center": np.array([90])* 1e9,
+        "Offset1": np.zeros(1),
+        "Offset2": np.zeros(1),
+        "NeDT": 0.25,
+        "Accuracy": 1.5,
+        "Bandwidth": 2e9,
+        "FWHM_Antenna": 3.3,
+        "df": rel_mandatory_grid_spacing,
+    }
+
+    channels["F"] = {
+        "f_center": np.ones(4) * 118.75e9,
+        "Offset1": np.array([1.3, 2.3, 4.2, 8.5]) * 1e9,
+        "Offset2": np.zeros(4),
+        "NeDT": 0.6,
+        "Accuracy": 1.5,
+        "Bandwidth": 400e6,
+        "FWHM_Antenna": 3.3,
+        "df": rel_mandatory_grid_spacing,
+
+    }
+
+    channels["G"] = {
+        "f_center": np.ones(6) * 183.31e9,
+        "Offset1": np.array([0.6, 1.5, 2.5, 3.5, 5.0, 7.5]) * 1e9,
+        "Offset2": np.zeros(6),
+        "NeDT": 0.6,
+        "Accuracy": 1.5,
+        "Bandwidth": np.array([200e6, 200e6, 200e6, 200e6, 200e6, 1000e6]),
+        "FWHM_Antenna": 2.7,
+        "df": rel_mandatory_grid_spacing,
+    }
+
+
+    if len(band_selection) == 0:
+        print("No band selected")
+        print("Following bands are available:\n")
+        for key in channels.keys():
+            print(f'{key} =====================================================')
+            print(f'f_grid: {channels[key]["f_center"]} Hz')
+            print(f'Offset: {channels[key]["Offset"]} Hz')
+            print(f'NeDT: {channels[key]["NeDT"]} K')
+            print(f'Accuracy: {channels[key]["Accuracy"]} K')
+            print(f'Bandwidth: {channels[key]["Bandwidth"]} Hz')
+            print(f'FWHM_Antenna: {channels[key]["FWHM_Antenna"]} deg\n')
+
+
+    else:
+
+        sensor_description = []
+        NeDT = []
+        Accuracy = []
+        FWHM_Antenna = []
+
+        for band in band_selection:
+
+            if band in channels.keys():
+
+                for i in range(len(channels[band]["f_center"])):
+                    freq = channels[band]["f_center"][i]
+                    offset1 = channels[band]["Offset1"][i]
+                    offset2 = channels[band]["Offset2"][i]
+
+                    if isinstance(channels[band]["Bandwidth"], float):
+                        bandwidth = channels[band]["Bandwidth"]
+                    else:
+                        bandwidth = channels[band]["Bandwidth"][i]
+
+                    desc_i = [freq, offset1, offset2, bandwidth, bandwidth*channels[band]["df"]]
+
+                    sensor_description.append(desc_i)
+                    NeDT.append(channels[band]["NeDT"])
+                    Accuracy.append(channels[band]["Accuracy"])
+                    FWHM_Antenna.append(channels[band]["FWHM_Antenna"])
+
+            else:
+                raise   ValueError(f"Band {band} not available")
+
+        return np.array(sensor_description), np.array(NeDT), np.array(Accuracy), np.array(FWHM_Antenna)
 
 
 # %%
