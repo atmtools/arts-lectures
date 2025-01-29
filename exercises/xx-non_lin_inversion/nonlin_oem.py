@@ -184,8 +184,10 @@ def basic_setup(f_grid, sensor_description=[], version="2.6.8", verbosity=0):
 
     # on-the-fly absorption
     ws.propmat_clearsky_agendaAuto()
-
     ws.abs_lines_per_speciesSetEmpty()
+
+    #switch off jacobian calculation by default
+    ws.jacobianOff()
 
     return ws
 
@@ -843,7 +845,7 @@ def Hamp_channels(band_selection, rel_mandatory_grid_spacing=1./4.):
     """
     Returns sensor description and characteristics for HAMP (Humidity And Temperature Profiler) channels.
 
-    This function provides frequency specifications and sensor characteristics for different 
+    This function provides frequency specifications and sensor characteristics for different
     frequency bands (K, V, W, F, G) of the HAMP instrument. Each band contains multiple channels
     with specific center frequencies, offsets, and other parameters.
 
@@ -881,7 +883,7 @@ def Hamp_channels(band_selection, rel_mandatory_grid_spacing=1./4.):
     -----
     Frequency bands:
     - K band: 7 channels around 22-31 GHz
-    - V band: 7 channels around 50-58 GHz  
+    - V band: 7 channels around 50-58 GHz
     - W band: 1 channel at 90 GHz
     - F band: 4 channels around 118.75 GHz
     - G band: 6 channels around 183.31 GHz
@@ -952,7 +954,7 @@ def Hamp_channels(band_selection, rel_mandatory_grid_spacing=1./4.):
             print(f'{key} =====================================================')
             print(f'f_grid: {channels[key]["f_center"]} Hz')
             print(f'Offset1: {channels[key]["Offset1"]} Hz')
-            print(f'Offset2: {channels[key]["Offset2"]} Hz')            
+            print(f'Offset2: {channels[key]["Offset2"]} Hz')
             print(f'NeDT: {channels[key]["NeDT"]} K')
             print(f'Accuracy: {channels[key]["Accuracy"]} K')
             print(f'Bandwidth: {channels[key]["Bandwidth"]} Hz')
