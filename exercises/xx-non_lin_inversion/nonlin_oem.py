@@ -840,47 +840,53 @@ def Hamp_channels_simplified(Band):
 
 
 def Hamp_channels(band_selection, rel_mandatory_grid_spacing=1./4.):
-    """Provides sensor specifications for the HAMP (HALO Microwave Package) instrument.
+    """
+    Returns sensor description and characteristics for HAMP (Humidity And Temperature Profiler) channels.
 
-    This function returns the specifications of selected frequency bands of the HAMP
-    instrument, including frequencies, bandwidth, noise equivalent differential
-    temperature (NeDT), accuracy and antenna characteristics.
+    This function provides frequency specifications and sensor characteristics for different 
+    frequency bands (K, V, W, F, G) of the HAMP instrument. Each band contains multiple channels
+    with specific center frequencies, offsets, and other parameters.
 
     Parameters
     ----------
-    band_selection : list of str
-        List of bands to select. Valid options are:
-        - 'K': K-band (22-31 GHz, 7 channels)
-        - 'V': V-band (50-58 GHz, 7 channels)
-        - 'W': W-band (90 GHz, 1 channel)
-        - 'F': F-band (118.75 GHz, 4 channels with double sideband)
-        - 'G': G-band (183.31 GHz, 6 channels with double sideband)
-        If empty list is provided, prints specifications for all available bands.
+    band_selection : list
+        List of strings indicating which frequency bands to include.
+        Valid options are 'K', 'V', 'W', 'F', and 'G'.
+        If empty list is provided, prints available bands and their specifications.
+    rel_mandatory_grid_spacing : float, optional
+        Relative mandatory frequency grid spacing for the passbands.
+        Default is 0.25 (1/4). This means that the mandatory grid spacing is 1/4 of the
+        passbands bandwidth.
 
     Returns
     -------
-    tuple
-        Returns a tuple of numpy arrays containing:
-        - sensor_description : ndarray, shape (n_channels, 3)
-            Array containing [frequency, offset, bandwidth] for each channel
-        - NeDT : ndarray, shape (n_channels,)
-            Noise equivalent differential temperature in Kelvin
-        - Accuracy : ndarray, shape (n_channels,)
-            Accuracy in Kelvin
-        - FWHM_Antenna : ndarray, shape (n_channels,)
-            Full Width at Half Maximum of antenna beam pattern in degrees
+    tuple or None
+        If band_selection is empty, returns None and prints available bands.
+        Otherwise returns tuple of (sensor_description, NeDT, Accuracy, FWHM_Antenna):
+            - sensor_description : ndarray
+                Array of [frequency, offset1, offset2, bandwidth, df] for each channel
+            - NeDT : ndarray
+                Noise equivalent differential temperature for each channel
+            - Accuracy : ndarray
+                Accuracy in Kelvin for each channel
+            - FWHM_Antenna : ndarray
+                Full Width at Half Maximum of antenna beam pattern in degrees
 
     Raises
     ------
     ValueError
-        If a selected band is not available in the instrument specifications.
+        If an invalid band is specified in band_selection.
 
     Notes
     -----
-    All frequencies, offsets and bandwidths are in Hz.
-    NeDT and Accuracy are in Kelvin.
-    FWHM_Antenna is in degrees.
+    Frequency bands:
+    - K band: 7 channels around 22-31 GHz
+    - V band: 7 channels around 50-58 GHz  
+    - W band: 1 channel at 90 GHz
+    - F band: 4 channels around 118.75 GHz
+    - G band: 6 channels around 183.31 GHz
     """
+
 
 
     channels = {}
