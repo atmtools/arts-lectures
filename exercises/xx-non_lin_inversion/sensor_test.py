@@ -40,20 +40,15 @@ atm = atms[226]
 
 sensor_description, NeDT, Accuracy, FWHM_Antenna=nlo.Hamp_channels(['K','V','W','F','G'], rel_mandatory_grid_spacing=1./1.)
 
-ws = nlo.basic_setup([],sensor_description=sensor_description)
-
-print(len(ws.f_grid.value))
-
-nlo.set_sensor_position_and_view(ws, sensor_altitude, sensor_los)
-
-y_coarse, jacobian = nlo.forward_model(
-    ws,
+y_coarse, _ = nlo.Forward_model(
+    [],
     atm,
     surface_reflectivity,
     surface_temperature,
-    retrieval_quantity="H2O",
+    sensor_altitude,
+    sensor_los,
+    sensor_description=sensor_description
 )
-
 
 # =============================================================================
 # %%
@@ -62,17 +57,61 @@ y_coarse, jacobian = nlo.forward_model(
 
 sensor_description, NeDT, Accuracy, FWHM_Antenna=nlo.Hamp_channels(['K','V','W','F','G'], rel_mandatory_grid_spacing=1./60.)
 
-ws = nlo.basic_setup([],sensor_description=sensor_description)
 
-print(len(ws.f_grid.value))
-
-nlo.set_sensor_position_and_view(ws, sensor_altitude, sensor_los)
-
-y, jacobian = nlo.forward_model(
-    ws,
+y_fine, _= nlo.Forward_model(
+    [],
     atm,
     surface_reflectivity,
     surface_temperature,
-    retrieval_quantity="H2O",
+    sensor_altitude,
+    sensor_los,
+    sensor_description=sensor_description
 )
+
+
+# =============================================================================
+# %%
+# =============================================================================
+
+# Create subplot grid
+bands = ['K','V','W','F','G']
+
+
+
+# Create subplot grid with band definitions
+fig2, axs2 = plt.subplots(len(bands), 1, figsize=(10, 3*len(bands)), sharex=False)
+
+for i, band in enumerate(bands):
+
+    # Get band definitions from Hamp_channels
+    sensor_description_ref, _, _, _ = nlo.Hamp_channels([band])
+
+    print(band)
+
+    freqs_ref=sensor_description_ref[:,0]+sensor_description_ref[:,1]+sensor_description_ref[:,2]
+    freqs=sensor_description[:,0]+sensor_description[:,1]+sensor_description[:,2]
+
+    band_idx=[]
+    for j, f in enumerate(freqs_ref):
+        for k, g in enumerate(freqs):
+            if f==g:
+                band_idx.append(k)
+
+
+    # Plot data for current band
+
+    axs2[i].plot(freqs_ref, y_fine[band_idx], 'x-', label='high res',linewidth=2, markersize=10)
+    axs2[i].plot(freqs_ref, y_coarse[band_idx], '+', label='low res', markersize=10)
+
+    # Customize plot
+    axs2[i].legend()
+    axs2[i].set_ylabel('TB [K]')
+    axs2[i].grid(True)
+    axs2[i].set_title(f'Band {band}')
+    axs2[i].set_xticks(freqs_ref)
+    axs2[i].set_xticklabels([f'{x/1e9:.2f}' for x in freqs_ref], rotation=45)
+
+# Set common x-axis labels
+plt.xlabel('Frequency [GHz]')
+plt.tight_layout()
 
