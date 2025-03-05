@@ -3,12 +3,31 @@
 Based on a script by Jakob Doerr.
 """
 import numpy as np
-import typhon as ty
 import pyarts
 
 
+"function taken from typhon.physics"
+
+
+def radiance2planckTb(f, r):
+    """Convert spectral radiance to Planck brightness temperture.
+
+    Parameters:
+        f (float or ndarray): Frequency [Hz].
+        r (float or ndarray): Spectral radiance [W/(m2*Hz*sr)].
+
+    Returns:
+        float or ndarray: Planck brightness temperature [K].
+    """
+    c = pyarts.arts.constants.c
+    k = pyarts.arts.constants.k
+    h = pyarts.arts.constants.h
+
+    return h / k * f / np.log(np.divide((2 * h / c**2) * f**3, r) + 1)
+
+
 def argclosest(array, value, retvalue=False):
-    """Returns the index of the closest value in array.  """
+    """Returns the index of the closest value in array."""
     idx = np.abs(array - value).argmin()
 
     return (idx, array[idx]) if retvalue else idx
@@ -40,9 +59,9 @@ def setup_doit_agendas(ws):
 
     @pyarts.workspace.arts_agenda(ws=ws, set_agenda=True)
     def doit_conv_test_agenda(ws):
-        ws.doit_conv_flagAbsBT(epsilon=np.array([0.01]),
-                               max_iterations=100,
-                               nonconv_return_nan=1)
+        ws.doit_conv_flagAbsBT(
+            epsilon=np.array([0.01]), max_iterations=100, nonconv_return_nan=1
+        )
         ws.Print(ws.doit_iteration_counter, 0)
 
     ws.doit_conv_test_agenda = doit_conv_test_agenda
@@ -59,11 +78,9 @@ def setup_doit_agendas(ws):
     ws.iy_cloudbox_agendaSet(option="LinInterpField")
 
 
-def scattering(ice_water_path=2.0,
-               num_viewing_angles=19,
-               phase="ice",
-               radius=1.5e2,
-               verbosity=0):
+def scattering(
+    ice_water_path=2.0, num_viewing_angles=19, phase="ice", radius=1.5e2, verbosity=0, version='2.6.8'
+):
     """Perform a radiative transfer simulation with a simple cloud.
 
     Parameters:
@@ -82,6 +99,9 @@ def scattering(ice_water_path=2.0,
             Radiation field clear-sky [K].
 
     """
+
+    pyarts.cat.download.retrieve(verbose=True, version=version)
+
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
@@ -120,20 +140,20 @@ def scattering(ice_water_path=2.0,
 
     # Set absorption species
     ws.abs_speciesSet(
-        species=["H2O-PWR98", "O3", "O2-PWR98", "N2-SelfContStandardType"])
+        species=["H2O-PWR98", "O3", "O2-PWR98", "N2-SelfContStandardType"]
+    )
 
     # Read atmospheric data
-    ws.ReadXML(ws.batch_atm_fields_compact,
-               "input/chevallierl91_all_extract.xml")
+    ws.ReadXML(ws.batch_atm_fields_compact, "input/chevallierl91_all_extract.xml")
     ws.Extract(ws.atm_fields_compact, ws.batch_atm_fields_compact, 1)
 
     # Add constant profiles for O2 and N2
-    ws.atm_fields_compactAddConstant(name="abs_species-O2",
-                                     value=0.2095,
-                                     condensibles=["abs_species-H2O"])
-    ws.atm_fields_compactAddConstant(name="abs_species-N2",
-                                     value=0.7808,
-                                     condensibles=["abs_species-H2O"])
+    ws.atm_fields_compactAddConstant(
+        name="abs_species-O2", value=0.2095, condensibles=["abs_species-H2O"]
+    )
+    ws.atm_fields_compactAddConstant(
+        name="abs_species-N2", value=0.7808, condensibles=["abs_species-H2O"]
+    )
 
     ws.AtmFieldsAndParticleBulkPropFieldFromCompact()
     ws.atmfields_checkedCalc()
@@ -156,8 +176,7 @@ def scattering(ice_water_path=2.0,
     ws.propmat_clearsky_agenda_checkedCalc()
 
     # Set surface reflectivity (= 1 - emissivity)
-    ws.surface_rtprop_agendaSet(
-        option="Specular_NoPol_ReflFix_SurfTFromt_surface")
+    ws.surface_rtprop_agendaSet(option="Specular_NoPol_ReflFix_SurfTFromt_surface")
     ws.VectorSetConstant(ws.surface_scalar_reflectivity, 1, 0.0)
 
     # Extract particle mass from scattering meta data.
@@ -169,23 +188,20 @@ def scattering(ice_water_path=2.0,
     # Load scattering data and PND field.
     ws.ScatSpeciesInit()
     ws.ScatElementsPndAndScatAdd(
-        scat_data_files=[scat_xml],
-        pnd_field_files=["./input/pndfield_input.xml"])
+        scat_data_files=[scat_xml], pnd_field_files=["./input/pndfield_input.xml"]
+    )
     ws.scat_dataCalc()
     ws.scat_data_checkedCalc()
 
     # Set the extent of the cloud box.
-    ws.cloudboxSetManually(p1=101300.0,
-                           p2=1000.0,
-                           lat1=0.0,
-                           lat2=0.0,
-                           lon1=0.0,
-                           lon2=0.0)
+    ws.cloudboxSetManually(
+        p1=101300.0, p2=1000.0, lat1=0.0, lat2=0.0, lon1=0.0, lon2=0.0
+    )
 
     # Trim pressure grid to match cloudbox.
     bottom, top = ws.cloudbox_limits.value
-    p = ws.p_grid.value[bottom:top + 1].copy()
-    z = ws.z_field.value[bottom:top + 1, 0, 0].copy()
+    p = ws.p_grid.value[bottom : top + 1].copy()
+    z = ws.z_field.value[bottom : top + 1, 0, 0].copy()
 
     ws.pnd_fieldCalcFrompnd_field_raw()
 
@@ -207,9 +223,9 @@ def scattering(ice_water_path=2.0,
 
     ws.doit_za_interpSet(interp_method="linear")
 
-    ws.DOAngularGridsSet(N_za_grid=num_viewing_angles,
-                         N_aa_grid=37,
-                         za_grid_opt_file="")
+    ws.DOAngularGridsSet(
+        N_za_grid=num_viewing_angles, N_aa_grid=37, za_grid_opt_file=""
+    )
 
     # Use lookup table for absorption calculation
     ws.propmat_clearsky_agendaAuto(use_abs_lookup=1)
@@ -221,13 +237,13 @@ def scattering(ice_water_path=2.0,
     ws.DoitCalc()
 
     ifield = np.squeeze(ws.cloudbox_field.value[:].squeeze())
-    ifield = ty.physics.radiance2planckTb(ws.f_grid.value, ifield)
+    ifield = radiance2planckTb(ws.f_grid.value, ifield)
 
     # Clear-sky
     ws.Tensor4Multiply(ws.pnd_field, ws.pnd_field, 0.0)
     ws.DoitCalc()
 
     ifield_clear = np.squeeze(ws.cloudbox_field.value[:].squeeze())
-    ifield_clear = ty.physics.radiance2planckTb(ws.f_grid.value, ifield_clear)
+    ifield_clear = radiance2planckTb(ws.f_grid.value, ifield_clear)
 
     return p, ws.za_grid.value[:].copy(), ifield, ifield_clear
