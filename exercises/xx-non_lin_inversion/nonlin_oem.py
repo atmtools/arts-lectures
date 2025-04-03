@@ -182,6 +182,8 @@ def basic_setup(f_grid, sensor_description=[], version="2.6.8", verbosity=0):
     else:
         raise ValueError("f_grid or sensor_description must be provided")
 
+    ws.jacobianOff()
+
     # on-the-fly absorption
     ws.propmat_clearsky_agendaAuto()
     ws.abs_lines_per_speciesSetEmpty()
@@ -286,6 +288,8 @@ def forward_model(
         else:
             raise ValueError("only H2O or T are allowed as retrieval quantity")
         ws.jacobianClose()
+    else:
+        ws.jacobianOff()
 
     # Clearsky = No scattering
     ws.cloudboxOff()
