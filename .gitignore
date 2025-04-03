@@ -2,7 +2,7 @@
 **/results
 .DS_Store
 .ipynb_checkpoints
-.vscode/settings.json
+.vscode/*
 __pycache__
 script/AdvRaRe_script_print.aux
 script/AdvRaRe_script_print.fdb_latexmk
