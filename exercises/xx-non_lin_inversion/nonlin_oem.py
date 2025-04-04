@@ -102,7 +102,7 @@ def basic_setup(f_grid, sensor_description=[], verbosity=0):
     """
 
 
-    pa.cat.download.retrieve(verbose=True)
+    pa.cat.download.retrieve(verbose=False)
 
     ws = pa.workspace.Workspace(verbosity=verbosity)
     ws.water_p_eq_agendaSet()
@@ -320,6 +320,7 @@ def Forward_model(
     sensor_los,
     retrieval_quantity="",
     sensor_description=[],
+    verbose=False,
 ):
     """
     Forward radiative transfer model for atmospheric observations.
@@ -357,7 +358,8 @@ def Forward_model(
     """
 
     if np.size(sensor_description)>0:
-        print('Ignoring f_grid annd output will be sensor channels')
+        if verbose:
+            print('Ignoring f_grid\n output will be sensor channels')
         ws = basic_setup([],sensor_description=sensor_description)
     else:
         ws = basic_setup(f_grid)
@@ -371,6 +373,7 @@ def Forward_model(
         surface_temperature,
         retrieval_quantity=retrieval_quantity,
     )
+
 
     return y, jacobian
 
@@ -612,6 +615,7 @@ def temperature_retrieval(
     surface_reflectivity,
     S_y,
     S_a,
+    sensor_description=[],
     Diagnostics=False,
     Verbosity=False,
 ):
@@ -660,7 +664,11 @@ def temperature_retrieval(
     implemented in the retrieval_T function.
     """
 
-    ws = basic_setup(f_grid)
+    if np.size(sensor_description)>0:
+        print('Ignoring f_grid\n output will be sensor channels')
+        ws = basic_setup([],sensor_description=sensor_description)
+    else:
+        ws = basic_setup(f_grid)
 
     prepare_initial_conditions(
         ws, background_atmosphere, surface_temperature, surface_reflectivity

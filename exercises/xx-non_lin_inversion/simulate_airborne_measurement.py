@@ -82,7 +82,7 @@ lat = np.array([auxs[i].data[0] for i in range(len(auxs))])
 # %% simulate the observation
 
 
-bands = ["H2O", "O2_low", "O2_high"]
+bands = ["K", "V", "F"]
 suffixes = ["22GHz", "50GHz", "118GHz"]
 
 
@@ -92,12 +92,12 @@ for band, suffix in zip(bands, suffixes):
     print(f"\n{band}\n")
 
     # set the "channels" (freqquency grid) for the simulation
-    f_grid, NeDT = nlo.Hamp_channels_simplified(band)
+    sensor_description_fine, NeDT, Accuracy, FWHM_Antenna=nlo.Hamp_channels([band], rel_mandatory_grid_spacing=1./1.)
 
     # # setup the basics
     # ws = nlo.basic_setup(f_grid)
 
-    y = np.zeros((len(atms), len(f_grid)))
+    y = np.zeros((len(atms), np.size(sensor_description_fine,0)))
 
     for i in range(len(atms)):
         if i % 10 == 0:
@@ -105,12 +105,13 @@ for band, suffix in zip(bands, suffixes):
 
         atm = atms[i]
         y[i, :], _ = nlo.Forward_model(
-            f_grid,
+            [],
             atm,
             surface_reflectivity,
             surface_temperature,
             sensor_altitude,
             sensor_los,            
+            sensor_description=sensor_description_fine
         )
     
 
@@ -119,16 +120,19 @@ for band, suffix in zip(bands, suffixes):
 
     results[("y_" + band)] = y
     results[("y_obs_" + band)] = y_obs
-    results[("f_grid_" + band)] = f_grid
-    # results[('NeDT_'+band)]=NeDT
+    results[("f_grid_" + band)] = sensor_description_fine[:,0]+sensor_description_fine[:,1]+sensor_description_fine[:,2]
+    results[('NeDT_'+band)]=NeDT
     results[(band + "_suffix")] = suffix
+    results[('sensor_description_' + band)] = sensor_description_fine
 
     Y = nlo.pa.arts.Matrix(y)
     Y_obs = nlo.pa.arts.Matrix(y_obs)
-    F_grid = nlo.pa.arts.Vector(f_grid)
+    SensorCharacteristics = nlo.pa.arts.Matrix(sensor_description_fine)
 
     Y_obs.savexml(f"observation/y_obs_{suffix}.xml")
-    F_grid.savexml(f"observation/f_grid_{suffix}.xml")
+    SensorCharacteristics.savexml(
+        f"observation/SensorCharacteristics_{suffix}.xml"
+    )
 
     print("ddd")
 
@@ -157,15 +161,24 @@ fig, ax = plt.subplots(3, 1, figsize=(16, 10))
 for i, band in enumerate(bands):
 
     ax[i].set_prop_cycle(color=cmap)
+    sen_desc=results[f"sensor_description_{band}"]
 
-    for j, f in enumerate(results[(f"f_grid_{band}")]):
-        ax[i].plot(lat, results[(f"y_{band}")][:, j], label=f"{f/1e9:0.2f} GHz")
+    for j in range(np.size(sen_desc,0)):
+        if sen_desc[j,1]+sen_desc[j,2]>0:
+            label=f"{sen_desc[j,0]/1e9:0.2f}"+" $\pm$ "+f"{(sen_desc[j,1]+sen_desc[j,2])/1e9:0.2f} GHz"
+        else:
+            label=f"{sen_desc[j,0]/1e9:0.2f}"
+                      
+        ax[i].plot(lat, results[(f"y_{band}")][:, j], label=label)   
 
-    # ax[i].set_prop_cycle(None)
     ax[i].set_prop_cycle(color=cmap)
-    for j, f in enumerate(results[(f"f_grid_{band}")]):
+    for j in range(np.size(sen_desc,0)):
+        if sen_desc[j,1]+sen_desc[j,2]>0:
+            label=f"{sen_desc[j,0]/1e9:0.2f}"+" $\pm$ "+f"{(sen_desc[j,1]+sen_desc[j,2])/1e9:0.2f} GHz"
+        else:
+            label=f"{sen_desc[j,0]/1e9:0.2f}"
         ax[i].plot(
-            lat, results[(f"y_obs_{band}")][:, j], "--", label=f"{f/1e9:0.2f} GHz (obs)"
+            lat, results[(f"y_obs_{band}")][:, j], "--", label=f"{label} (obs)"
         )
 
     ax[i].set_title(band)

@@ -23,7 +23,7 @@ Key Features:
 Required Data Files:
 - atmosphere/atmospheres_true.xml: True atmospheric profiles
 - observation/dropsonde.xml: A priori and background data
-- observation/f_grid_50GHz.xml: Frequency grid data
+- observation/SensorCharacteristics_50GHz.xml: Sensor characteristics
 - observation/y_obs_50GHz.xml: Observation vector
 - observation/lat.xml: Latitude information
 
@@ -66,7 +66,7 @@ atms = pa.xml.load("atmosphere/atmospheres_true.xml")
 dropsonde = pa.xml.load("observation/dropsonde.xml")
 
 # load frequency data for 50 GHz channels
-f_grid = pa.xml.load("observation/f_grid_50GHz.xml")[:]
+sensor_characteristics=pa.xml.load("observation/SensorCharacteristics_50GHz.xml")[:]
 
 # load measurement vector
 y_obs = pa.xml.load("observation/y_obs_50GHz.xml")
@@ -94,12 +94,12 @@ S_a = nlo.create_apriori_covariance_matrix(
 )
 
 # Define Se and its invers
-S_y = pa.arts.Sparse(np.diag(np.ones(len(f_grid)) * NeDT))
+S_y = pa.arts.Sparse(np.diag(np.ones(np.size(sensor_characteristics,0)) * NeDT))
 
 #Temperature retrieval for selected observation
 T_ret, DeltaT, y_fit, A, G = nlo.temperature_retrieval(
     y,
-    f_grid,
+    [],
     sensor_pos,
     sensor_los,
     dropsonde,
@@ -109,6 +109,7 @@ T_ret, DeltaT, y_fit, A, G = nlo.temperature_retrieval(
     S_a,
     Diagnostics=True,
     Verbosity=True,
+    sensor_description=sensor_characteristics
 )
 
 
@@ -120,6 +121,8 @@ z_true = atms[idx].get("z", keep_dims=False)
 z_ret = dropsonde.get("z", keep_dims=False)
 DeltaT_apriori = np.sqrt(np.diag(S_a))
 
+# Frequencies of the channels
+f_grid=sensor_characteristics[:,0]+sensor_characteristics[:,1]+sensor_characteristics[:,2]
 
 fig, ax = plt.subplots(1, 3, figsize=(14.14, 10))
 
@@ -203,7 +206,7 @@ for i in range(np.size(y_obs, 0)):
     y = y_obs[i, :]
     T_ret, DeltaT, y_fit, A, G = nlo.temperature_retrieval(
         y,
-        f_grid,
+        [],
         sensor_pos,
         sensor_los,
         dropsonde,
@@ -212,6 +215,7 @@ for i in range(np.size(y_obs, 0)):
         S_y,
         S_a,
         Diagnostics=True,
+        sensor_description=sensor_characteristics
     )
 
 
