@@ -3,6 +3,9 @@
 """
 Created on Thu Jan  2 19:53:32 2025
 
+THIS SCRIPT IS NOT INTENDED TO BE USED FOR THE EXERCISE!
+ITS ONLY PURPOSE IS TO CREATE THE DATA FOR THE EXERCISE BY THE DEVELOPER!
+
 Prepare data for exercise - Non-linear inversion
 Read in data from GEM tropical pacific scene and extract
 a slice of the data for given latitude and altitude range for

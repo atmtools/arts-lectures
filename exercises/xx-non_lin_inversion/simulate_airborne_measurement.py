@@ -68,8 +68,8 @@ surface_temperature = 300.0  # K
 
 # define sensor positions and line of sight
 # we assume a HALO like airplane with a sensor at 15 km altitude and a line of sight of 180 degrees
-sensor_pos = np.array([[15e3]])
-sensor_los = np.array([[180.0]])
+sensor_altitude = 15000.
+sensor_los = 180.
 
 # set the random number generator
 rng = np.random.default_rng(12345)
@@ -94,8 +94,8 @@ for band, suffix in zip(bands, suffixes):
     # set the "channels" (freqquency grid) for the simulation
     f_grid, NeDT = nlo.Hamp_channels_simplified(band)
 
-    # setup the basics
-    ws = nlo.basic_setup(f_grid)
+    # # setup the basics
+    # ws = nlo.basic_setup(f_grid)
 
     y = np.zeros((len(atms), len(f_grid)))
 
@@ -104,14 +104,18 @@ for band, suffix in zip(bands, suffixes):
             print(f"Simulating measurement for atm {i}")
 
         atm = atms[i]
-        y[i, :], _ = nlo.forward_model(
-            ws, atm, surface_reflectivity, surface_temperature, sensor_pos, sensor_los
+        y[i, :], _ = nlo.Forward_model(
+            f_grid,
+            atm,
+            surface_reflectivity,
+            surface_temperature,
+            sensor_altitude,
+            sensor_los,            
         )
+    
 
     y_obs = y + rng.normal(0, NeDT, y.shape)
 
-    # delete ws
-    del ws
 
     results[("y_" + band)] = y
     results[("y_obs_" + band)] = y_obs

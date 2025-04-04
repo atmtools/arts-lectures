@@ -38,7 +38,7 @@ atm = atms[226]
 # =============================================================================
 
 
-sensor_description, NeDT, Accuracy, FWHM_Antenna=nlo.Hamp_channels(['K','V','W','F','G'], rel_mandatory_grid_spacing=1./1.)
+sensor_description_coarse, NeDT, Accuracy, FWHM_Antenna=nlo.Hamp_channels(['K','V','W','F','G'], rel_mandatory_grid_spacing=1./1.)
 
 y_coarse, _ = nlo.Forward_model(
     [],
@@ -47,7 +47,7 @@ y_coarse, _ = nlo.Forward_model(
     surface_temperature,
     sensor_altitude,
     sensor_los,
-    sensor_description=sensor_description
+    sensor_description=sensor_description_coarse
 )
 
 # =============================================================================
@@ -55,7 +55,7 @@ y_coarse, _ = nlo.Forward_model(
 # =============================================================================
 
 
-sensor_description, NeDT, Accuracy, FWHM_Antenna=nlo.Hamp_channels(['K','V','W','F','G'], rel_mandatory_grid_spacing=1./60.)
+sensor_description_fine, NeDT, Accuracy, FWHM_Antenna=nlo.Hamp_channels(['K','V','W','F','G'], rel_mandatory_grid_spacing=1./60.)
 
 
 y_fine, _= nlo.Forward_model(
@@ -65,7 +65,7 @@ y_fine, _= nlo.Forward_model(
     surface_temperature,
     sensor_altitude,
     sensor_los,
-    sensor_description=sensor_description
+    sensor_description=sensor_description_fine
 )
 
 
@@ -89,7 +89,7 @@ for i, band in enumerate(bands):
     print(band)
 
     freqs_ref=sensor_description_ref[:,0]+sensor_description_ref[:,1]+sensor_description_ref[:,2]
-    freqs=sensor_description[:,0]+sensor_description[:,1]+sensor_description[:,2]
+    freqs=sensor_description_fine[:,0]+sensor_description_fine[:,1]+sensor_description_fine[:,2]
 
     band_idx=[]
     for j, f in enumerate(freqs_ref):

@@ -61,7 +61,7 @@ from pyarts import xml
 
 # %% ARTS functions
 
-def basic_setup(f_grid, sensor_description=[], version="2.6.8", verbosity=0):
+def basic_setup(f_grid, sensor_description=[], verbosity=0):
     """
     Sets up a basic ARTS workspace configuration for radiative transfer calculations.
     This function initializes an ARTS workspace with standard settings for atmospheric
@@ -102,7 +102,7 @@ def basic_setup(f_grid, sensor_description=[], version="2.6.8", verbosity=0):
     """
 
 
-    pa.cat.download.retrieve(verbose=True, version=version)
+    pa.cat.download.retrieve(verbose=True)
 
     ws = pa.workspace.Workspace(verbosity=verbosity)
     ws.water_p_eq_agendaSet()
