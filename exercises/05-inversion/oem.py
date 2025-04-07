@@ -4,7 +4,7 @@ import pyarts.workspace
 from pyarts import xml
 
 
-def forward_model(f_grid, atm_fields_compact, verbosity=0, version='2.6.8'):
+def forward_model(f_grid, atm_fields_compact, retrieval_quantity='H2O',verbosity=0):
     """Perform a radiative transfer simulation.
 
     Parameters:
@@ -16,10 +16,10 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0, version='2.6.8'):
     Returns:
         ndarray, ndarray: Frequency grid [Hz], Jacobian [K/1]
     """
-    
-    pyarts.cat.download.retrieve(verbose=True, version=version)
-    
-    ws = pyarts.workspace.Workspace(verbosity=0)
+
+    pyarts.cat.download.retrieve(verbose=bool(verbosity))
+
+    ws = pyarts.workspace.Workspace(verbosity=verbosity)
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
     ws.verbositySetScreen(ws.verbosity, verbosity)
@@ -102,13 +102,22 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0, version='2.6.8'):
 
     # Jacobian calculation
     ws.jacobianInit()
-    ws.jacobianAddAbsSpecies(
-        g1=ws.p_grid,
-        g2=ws.lat_grid,
-        g3=ws.lon_grid,
-        species="H2O, H2O-SelfContCKDMT400, H2O-ForeignContCKDMT400",
-        unit="vmr",
-    )
+    if retrieval_quantity=='H2O':
+        ws.jacobianAddAbsSpecies(
+            g1=ws.p_grid,
+            g2=ws.lat_grid,
+            g3=ws.lon_grid,
+            species="H2O, H2O-SelfContCKDMT400, H2O-ForeignContCKDMT400",
+            unit="vmr",
+        )
+    elif retrieval_quantity=='Temperature':
+        ws.jacobianAddTemperature(
+            g1=ws.p_grid,
+            g2=ws.lat_grid,
+            g3=ws.lon_grid
+            )
+    else:
+        raise ValueError('only H2O or Temperature are allowed as retrieval quantity')
     ws.jacobianClose()
 
     # Clearsky = No scattering
@@ -128,27 +137,27 @@ def forward_model(f_grid, atm_fields_compact, verbosity=0, version='2.6.8'):
 
     return ws.y.value[:].copy(), ws.jacobian.value[:].copy()
 
-# %% 
+# %%
 if __name__ == "__main__":
 
     import matplotlib.pyplot as plt
 
-    
+
     # Load the (simulated) measurement.
     measurement = xml.load("input/measurement.xml")
     f_grid = measurement.grids[0]
     y_measurement = measurement.data
-    
+
     # Load the a priori atmospheric state.
     atm_fields = xml.load("input/x_apriori.xml")
     z = atm_fields.get("z", keep_dims=False)
     x_apriori = atm_fields.get("abs_species-H2O", keep_dims=False)
-    
+
     # Load the covariance matrices.
     S_xa = xml.load("input/S_xa.xml")
     S_y = 2.5e-3 * np.eye(f_grid.size)  # in [K^2]
-    
-    
+
+
     y, K = forward_model(f_grid, atm_fields)
 
 
@@ -158,3 +167,4 @@ if __name__ == "__main__":
     ax.set_xlabel("Frequency [Hz]")
     ax.set_ylabel(r"Brightness Temperature [$\sf K$]")
     plt.show()
+    fig.savefig('forward_spectra.pdf')

@@ -5,7 +5,7 @@ _Atmospheric Radiative Transfer Simulator_ ([ARTS][arts]).
 
 The exercises make use of the ARTS Python API.
 
-Required ARTS version is release 2.6.8.
+Required ARTS version is release 2.6.14.
 
 ARTS requires the Miniforge3 Python environment.
 Installers can be downloaded from the [Miniforge Github project][conda] page.
