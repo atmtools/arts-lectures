@@ -22,8 +22,7 @@ def calculate_absxsec(
     normalization="VVH",
     verbosity=0,
     vmr=0.01,
-    lines_off=0,
-    version='2.6.8'
+    lines_off=0
 ):
     """Calculate absorption cross sections.
 
@@ -57,10 +56,10 @@ def calculate_absxsec(
         ndarray, ndarray: Frequency grid [Hz], Abs. cross sections [m^2]
     """
 
-    pyarts.cat.download.retrieve(verbose=True, version=version)
+    pyarts.cat.download.retrieve(verbose=bool(verbosity))
 
     # Create ARTS workspace and load default settings
-    ws = pyarts.workspace.Workspace(verbosity=0)
+    ws = pyarts.workspace.Workspace(verbosity=verbosity)
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
 
