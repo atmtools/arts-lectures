@@ -110,8 +110,7 @@ def calculate_absxsec(
     verbosity=0,
     ws=None,
     vmr=0.05,
-    lines_off=0,
-    version='2.6.8'
+    lines_off=0
 ):
     """Calculate absorption cross sections.
 
@@ -146,7 +145,7 @@ def calculate_absxsec(
     """
     # Create ARTS workspace and load default settings
     reload = False
-    pyarts.cat.download.retrieve(verbose=True, version=version)
+    pyarts.cat.download.retrieve(verbose=bool(verbosity))
 
     if ws is not None:
         # check if species fits to cached species

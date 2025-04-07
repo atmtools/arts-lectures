@@ -102,7 +102,7 @@ def basic_setup(f_grid, sensor_description=[], verbosity=0):
     """
 
 
-    pa.cat.download.retrieve(verbose=False)
+    pa.cat.download.retrieve(verbose=bool(verbosity))
 
     ws = pa.workspace.Workspace(verbosity=verbosity)
     ws.water_p_eq_agendaSet()
@@ -360,9 +360,9 @@ def Forward_model(
     if np.size(sensor_description)>0:
         if verbose:
             print('Ignoring f_grid\n output will be sensor channels')
-        ws = basic_setup([],sensor_description=sensor_description)
+        ws = basic_setup([],sensor_description=sensor_description, verbosity=verbose)
     else:
-        ws = basic_setup(f_grid)
+        ws = basic_setup(f_grid, verbosity=verbose)
 
     set_sensor_position_and_view(ws, sensor_altitude, sensor_los)
 

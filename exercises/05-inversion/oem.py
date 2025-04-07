@@ -17,9 +17,9 @@ def forward_model(f_grid, atm_fields_compact, retrieval_quantity='H2O',verbosity
         ndarray, ndarray: Frequency grid [Hz], Jacobian [K/1]
     """
 
-    pyarts.cat.download.retrieve(verbose=verbosity)
+    pyarts.cat.download.retrieve(verbose=bool(verbosity))
 
-    ws = pyarts.workspace.Workspace(verbosity=0)
+    ws = pyarts.workspace.Workspace(verbosity=verbosity)
     ws.water_p_eq_agendaSet()
     ws.PlanetSet(option="Earth")
     ws.verbositySetScreen(ws.verbosity, verbosity)

@@ -17,8 +17,7 @@ def run_arts(
     fmin=10e9,
     fmax=250e9,
     fnum=1_000,
-    verbosity=0,
-    version='2.6.8'
+    verbosity=0
 ):
     """Perform a radiative transfer simulation.
 
@@ -34,9 +33,9 @@ def run_arts(
         ndarray, ndarray, ndarray:
           Frequency grid [Hz], Brightness temperature [K], Optical depth [1]
     """
-    ws = pyarts.workspace.Workspace(verbosity=0)
+    ws = pyarts.workspace.Workspace(verbosity=verbosity)
     
-    pyarts.cat.download.retrieve(verbose=True, version=version)
+    pyarts.cat.download.retrieve(verbose=bool(verbosity))
     
     
     ws.water_p_eq_agendaSet()
