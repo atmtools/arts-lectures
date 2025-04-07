@@ -4,7 +4,7 @@ import pyarts.workspace
 from pyarts import xml
 
 
-def forward_model(f_grid, atm_fields_compact, retrieval_quantity='H2O',verbosity=0, version='2.6.8'):
+def forward_model(f_grid, atm_fields_compact, retrieval_quantity='H2O',verbosity=0):
     """Perform a radiative transfer simulation.
 
     Parameters:
@@ -17,7 +17,7 @@ def forward_model(f_grid, atm_fields_compact, retrieval_quantity='H2O',verbosity
         ndarray, ndarray: Frequency grid [Hz], Jacobian [K/1]
     """
 
-    pyarts.cat.download.retrieve(verbose=True, version=version)
+    pyarts.cat.download.retrieve(verbose=verbosity)
 
     ws = pyarts.workspace.Workspace(verbosity=0)
     ws.water_p_eq_agendaSet()
