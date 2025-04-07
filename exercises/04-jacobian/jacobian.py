@@ -139,6 +139,7 @@ def calc_jacobians(
     """
 
     pyarts.cat.download.retrieve(verbose=bool(verbosity))
+    makedirs("results", exist_ok=True)
 
     ws = pyarts.workspace.Workspace(verbosity=verbosity)
     ws.water_p_eq_agendaSet()
@@ -263,8 +264,6 @@ def calc_jacobians(
 
 # %% Calculate and plot Jacobians
 if __name__ == "__main__":
-    makedirs("results", exist_ok=True)
-
     # Calculate Jacobians (ARTS)
     jacobian_quantity = "H2O"
     calc_jacobians(jacobian_quantity=jacobian_quantity)
