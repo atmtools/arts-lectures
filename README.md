@@ -1,3 +1,6 @@
+> [!CAUTION]
+> The repo has moved to https://github.com/atmtools/arts2.6-lectures
+
 # Advanced Radiation and Remote Sensing
 
 A practical introduction to remote sensing using the
